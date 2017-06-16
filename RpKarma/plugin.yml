@@ -13,5 +13,10 @@ commands:
   negate:
     description: GameMaster commands that allows a player to be negated for failRp
     usage: /negate first last offense desc
-    permissions: rp.karma.negate
+    permissions: rp.negate
+    permission-message: You feel a strong force denying you.
+  karma:
+    description: GameMaster commands that allows a player to be negated for failRp
+    usage: /karma first last
+    permissions: rp.karma
     permission-message: You feel a strong force denying you.

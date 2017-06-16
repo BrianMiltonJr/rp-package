@@ -7,9 +7,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import com.johnwillikers.rp.enums.Codes;
 
 public class KarmaBase {
 
@@ -17,17 +18,17 @@ public class KarmaBase {
 		
 		public static void createKarmaBaseDir(){
 			File pb = new File(dir);
-			Core.debug(Core.name, Codes.STARTUP.toString(), "Checking Whether Karma Base Location Exists.");
+			Core.debug(Karma.name, Codes.STARTUP.toString(), "Checking Whether Karma Base Location Exists.");
 			if(!pb.exists()){
-				Core.debug(Core.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location Doesn't Exist. Attempting to create Location.");
+				Core.debug(Karma.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location Doesn't Exist. Attempting to create Location.");
 				boolean status = pb.mkdirs();
 				if(status){
-					Core.debug(Core.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location created.");
+					Core.debug(Karma.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location created.");
 				}else{
-					Core.debug(Core.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location creation failed.");
+					Core.debug(Karma.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location creation failed.");
 				}
 			}else{
-				Core.debug(Core.name, Codes.STARTUP.toString(), "Karma Base Location Exists.");
+				Core.debug(Karma.name, Codes.STARTUP.toString(), "Karma Base Location Exists.");
 			}
 		}
 		
@@ -111,8 +112,8 @@ public class KarmaBase {
 			}
 		}
 		
-		public static JSONObject getKarmaInfo(Player player){
-			File user = new File(dir + player.getUniqueId().toString() + ".json");
+		public static JSONObject getKarmaInfo(String uuid){
+			File user = new File(dir + uuid + ".json");
 			try{
 				FileReader fr = new FileReader(user);
 				BufferedReader br = new BufferedReader(fr);

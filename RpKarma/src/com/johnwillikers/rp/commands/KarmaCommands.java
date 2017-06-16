@@ -7,12 +7,13 @@ import org.bukkit.conversations.Conversable;
 import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Player;
 
-import com.johnwillikers.rp.Codes;
 import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.Karma;
 import com.johnwillikers.rp.KarmaBase;
+import com.johnwillikers.rp.KarmaLogic;
 import com.johnwillikers.rp.PlayerBase;
 import com.johnwillikers.rp.conversations.NegateConfirmPrompt;
+import com.johnwillikers.rp.enums.Codes;
 
 public class KarmaCommands implements CommandExecutor{
 	
@@ -35,18 +36,18 @@ public class KarmaCommands implements CommandExecutor{
 			}else{
 				String desc = String.join(" ", args);
 				int length = args[0].length() + args[1].length() + args[2].length() + 3;
-				Core.debug(Karma.name, Codes.DEBUG + "KarmaCommands.onCommand.negate", "Length = " + length);
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaCommands.onCommand.negate", "Length = " + length);
 				desc = desc.substring(length);
-				Core.debug(Karma.name, Codes.DEBUG + "KarmaCommands.onCommand.negate", "desc = " + desc);
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaCommands.onCommand.negate", "desc = " + desc);
 				//Get offender's UUID
-				Core.debug(Karma.name, Codes.DEBUG, msg);
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaCommands.onCommand.negate", "First: " + args[0] + " Last: " + args[1]);
 				String[] uuidRaw = PlayerBase.checkMasteFile(args[0] + "_" + args[1]);
-				Core.debug(Karma.name, Codes.DEBUG + "KarmaCommands.onCommand.negate", "uuidRaw = " + String.join(" ", uuidRaw));
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaCommands.onCommand.negate", "uuidRaw = " + String.join(" ", uuidRaw));
 				if(uuidRaw[0] == String.valueOf(0)){
 					player.sendMessage("[Karma] You have entered an invalid name.");
 					return true;
 				}else{
-					Core.debug(Karma.name, Codes.DEBUG + "KarmaCommands.onCommand.negate", "UUID = " + uuidRaw[1]);
+					Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaCommands.onCommand.negate", "UUID = " + uuidRaw[1]);
 					String uuid = uuidRaw[1];
 					//Check if offender exists
 					if(KarmaBase.exists(uuid)){
@@ -55,6 +56,7 @@ public class KarmaCommands implements CommandExecutor{
 								 "Offense: " + args[2] + "\n" + 
 								 "Description: " + desc +
 								 "[y/n]";
+						Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaCommands.onCommand.negate", "User exists, starting converation with new NegateConfirmPrompt()");
 						//Confirm with Gm that the information is correct
 						Conversation conv = plugin.factory.withFirstPrompt(new NegateConfirmPrompt(msg, args[2], uuid, desc, player, args[0] + " " + args[1])).thatExcludesNonPlayersWithMessage("Get away, or be BURNED MORTAL.").buildConversation(((Conversable) sender));
 						conv.begin();
@@ -62,6 +64,23 @@ public class KarmaCommands implements CommandExecutor{
 					}
 				}
 				return false;
+			}
+		}else if(cmd.getName().equalsIgnoreCase("karma")){
+			if(!(args.length <= 1)){
+				String[] payload = PlayerBase.checkMasteFile(args[0] + "_" + args[1]);
+				if(!(Integer.valueOf(payload[0]) == 0)){
+					if(KarmaBase.exists(payload[1])){
+						//JSONObject kfile = KarmaBase.getKarmaInfo(payload[1]);
+						String msg = KarmaLogic.lookUp(payload[1]);
+						player.sendMessage(msg);
+					}else{
+						player.sendMessage("Are you sure " + args[0] + " " + args[1] + " is spelled correctly?");
+					}
+					return true;
+				}else{
+					player.sendMessage("Are you sure " + args[0] + " " + args[1] + " is spelled correctly?");
+					return true;
+				}
 			}
 		}
 		return false;

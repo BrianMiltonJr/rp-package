@@ -4,6 +4,7 @@ import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.johnwillikers.rp.commands.KarmaCommands;
+import com.johnwillikers.rp.enums.Codes;
 
 
 public class Karma extends JavaPlugin{
@@ -24,6 +25,7 @@ public class Karma extends JavaPlugin{
 		Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");
 		this.getCommand("0e812e08h02v8he0182vhe1").setExecutor(new KarmaCommands(this));
 		this.getCommand("negate").setExecutor(new KarmaCommands(this));
+		this.getCommand("karma").setExecutor(new KarmaCommands(this));
 		Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
 	}
 	
