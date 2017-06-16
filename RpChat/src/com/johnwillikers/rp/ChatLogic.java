@@ -1,5 +1,7 @@
 package com.johnwillikers.rp;
 
+import com.johnwillikers.rp.enums.Codes;
+
 public class ChatLogic {
 	
 	public static int whisperDistance = 5;

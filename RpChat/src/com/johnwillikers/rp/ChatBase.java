@@ -9,6 +9,8 @@ import java.io.PrintWriter;
 import org.bukkit.entity.Player;
 import org.json.JSONObject;
 
+import com.johnwillikers.rp.enums.Codes;
+
 public class ChatBase {
 	
 	public static File chatBase = new File(Chat.chatBase);

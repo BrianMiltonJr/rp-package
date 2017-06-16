@@ -3,6 +3,7 @@ package com.johnwillikers.rp;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.johnwillikers.rp.commands.ChatCommands;
+import com.johnwillikers.rp.enums.Codes;
 import com.johnwillikers.rp.listeners.ChatListener;
 
 public class Chat extends JavaPlugin{

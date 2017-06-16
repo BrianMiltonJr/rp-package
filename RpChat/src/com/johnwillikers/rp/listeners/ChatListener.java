@@ -11,8 +11,8 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import com.johnwillikers.rp.Chat;
 import com.johnwillikers.rp.ChatBase;
 import com.johnwillikers.rp.ChatLogic;
-import com.johnwillikers.rp.Codes;
 import com.johnwillikers.rp.Core;
+import com.johnwillikers.rp.enums.Codes;
 
 import net.md_5.bungee.api.ChatColor;
 
