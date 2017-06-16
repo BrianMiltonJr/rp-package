@@ -15,20 +15,47 @@ import com.johnwillikers.rp.enums.Codes;
 public class KarmaBase {
 
 	public static String dir = Karma.dir + "/KarmaBase/";
+	public static File settings = new File(Utilities.settingsDir + "/karma_settings.json");
 		
 		public static void createKarmaBaseDir(){
 			File pb = new File(dir);
-			Core.debug(Karma.name, Codes.STARTUP.toString(), "Checking Whether Karma Base Location Exists.");
+			Core.log(Karma.name, Codes.STARTUP.toString(), "Checking Whether Karma Base Location Exists.");
 			if(!pb.exists()){
-				Core.debug(Karma.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location Doesn't Exist. Attempting to create Location.");
+				Core.log(Karma.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location Doesn't Exist. Attempting to create Location.");
 				boolean status = pb.mkdirs();
 				if(status){
-					Core.debug(Karma.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location created.");
+					Core.log(Karma.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location created.");
 				}else{
-					Core.debug(Karma.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location creation failed.");
+					Core.log(Karma.name, Codes.FIRST_LAUNCH.toString(), "Karma Base Location creation failed.");
+				}
+				Core.log(Karma.name, Codes.FIRST_LAUNCH.toString(), "Attempting to create karma_settings.json");
+				JSONObject settingsDefault = new JSONObject().put("startTime", 5).put("delayTime", 2).put("karmaUpAmount", 50);
+				try{
+					PrintWriter writer = new PrintWriter(settings);
+					writer.println(settingsDefault.toString());
+					writer.close();
+				}catch(IOException e){
+					e.printStackTrace();
 				}
 			}else{
-				Core.debug(Karma.name, Codes.STARTUP.toString(), "Karma Base Location Exists.");
+				Core.log(Karma.name, Codes.STARTUP.toString(), "Karma Base Location Exists.");
+			}
+		}
+		
+		public static JSONObject getSettings(){
+			try{
+				FileReader fr = new FileReader(settings);
+				BufferedReader br = new BufferedReader(fr);
+				String json = br.readLine();
+				br.close();
+				fr.close();
+				JSONObject payload = new JSONObject(json);
+				payload.put("status", 1);
+				return payload;
+			}catch(IOException e){
+				e.printStackTrace();
+				JSONObject payload = new JSONObject().put("status", 0);
+				return payload;
 			}
 		}
 		

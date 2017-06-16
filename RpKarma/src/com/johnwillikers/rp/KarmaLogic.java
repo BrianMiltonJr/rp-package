@@ -12,11 +12,42 @@ import net.md_5.bungee.api.ChatColor;
 
 public class KarmaLogic {
 	
+	public static void karmaCheck(Player player, int karma){
+		switch(karma){
+		case(-500):
+			//Recommend for ban
+			break;
+		case(-250):
+			//Recommend for kick
+			break;
+		case(0):
+			//Recommend for admin review
+			break;
+		case(250):
+			//miniscule reward
+			break;
+		case(500):
+			//give permission to color name
+			break;
+		case(600):
+			//medium reward
+			break;
+		case(700):
+			//medium reward
+			break;
+		case(800):
+			//large reward
+			break;
+		}
+	}
 	
-	
-	public static void aid(Player player, int amount) throws IOException{
+	public static void aid(Player player, int amount){
 		JSONObject derp = null;
-		KarmaBase.updateKarma(player.getUniqueId().toString(), amount, derp);
+		try {
+			KarmaBase.updateKarma(player.getUniqueId().toString(), amount, derp);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void negate(String uuid, int amount, JSONObject incident) throws IOException{

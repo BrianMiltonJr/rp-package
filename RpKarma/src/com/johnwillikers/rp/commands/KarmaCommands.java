@@ -68,11 +68,11 @@ public class KarmaCommands implements CommandExecutor{
 		}else if(cmd.getName().equalsIgnoreCase("karma")){
 			if(!(args.length <= 1)){
 				String[] payload = PlayerBase.checkMasteFile(args[0] + "_" + args[1]);
-				if(!(Integer.valueOf(payload[0]) == 0)){
+			if(Integer.valueOf(payload[0]) == 1){
 					if(KarmaBase.exists(payload[1])){
 						//JSONObject kfile = KarmaBase.getKarmaInfo(payload[1]);
 						String msg = KarmaLogic.lookUp(payload[1]);
-						player.sendMessage(msg);
+						player.sendMessage("Name: " + args[0] + " " + args[1] + "\n" + msg);
 					}else{
 						player.sendMessage("Are you sure " + args[0] + " " + args[1] + " is spelled correctly?");
 					}
