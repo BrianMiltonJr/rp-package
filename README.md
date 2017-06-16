@@ -46,8 +46,10 @@ Rp Chat:
 
 Rp Karma((Still Under heavy development, Will be released with V0.0.2)):
   * /negate - Usage: /negate first last offense description | Registers an offense on the offender's karma negating its total.
-q3r
+
+
 Other Need to know information:
+  
   This plugin package is still in the most alpha of development. I decided to release this plugin for good pointers and 
   community criticism. If this plugin crashes for any reason look inside ./plugins/RP_Core/Settings/core_settings.json and 
   locate debugState and change it from false to true. You will notice a bunch of debug messages pop up in the console. If 
