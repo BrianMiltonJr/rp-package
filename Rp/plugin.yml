@@ -1,0 +1,16 @@
+name: Rp_Core
+version: 0.0.1
+author: John_Willikers
+main: com.johnwillikers.rp.Core
+description: The Core for John Williker's Custom RP Server
+commands:
+  ae356784901ldnvld0-083lwe:
+    description: DO NOT EVER SHARE THIS WITH THE PLAYERS OR YOU WILL BE DEMOTED/BANNED. I MEAN IT GUYS.
+    usage: /ae356784901ldnvld0-083lwe
+    permissions: rp.name
+    permission-message: Oh silly mortal, that's not for you.
+  player:
+    description: Check for a Player's Information
+    usage: /player <first name> <last name>
+    permissions: rp.player
+    permission-message: Oh silly mortal, that's not for you

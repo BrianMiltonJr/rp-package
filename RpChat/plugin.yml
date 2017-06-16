@@ -1,0 +1,34 @@
+name: Rp_Chat
+version: 0.0.1
+author: John_Willikers
+main: com.johnwillikers.rp.Chat
+depend: [Rp_Core]
+commands:
+  whisper:
+    description: Whisper when you talk. Only people a Short distance will be able to hear you.
+    usage: /whisper, /w
+    aliases: [w]
+    permissions: rp.whisper
+    permission-message: use /gamemaster to request a GM.
+  talk:
+    description: Talk at a normal volume, people across the room can hear you most of the time.
+    usage: /talk, /t
+    aliases: [t]
+    permissions: rp.talk
+    permission-message: use /gamemaster to request a GM.
+  yell:
+    description: Yell when you talk. Don't be surprised if you wake up the neighbors.
+    usage: /yell, /y
+    aliases: [y]
+    permissions: rp.yell
+    permission-message: use /gamemaster to request a GM.
+  uujdj123123412o458f1nd1:
+    description: Enters the player into the ChatBase.
+    usage: /uujdj123123412o458f1nd1
+    permissions: rp.chat
+    permission-message: Stop.
+  color:
+    description: Change your name color
+    usage: /name <color> <first name> <last name> | Available Colors Blue, Red, Gold, Gray, Yellow
+    permissions: rp.color
+    permission-message: Oh mortal, I don't know what's the problem. Get in touch with an admin in PM
