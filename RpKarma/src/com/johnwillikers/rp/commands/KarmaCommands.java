@@ -15,6 +15,8 @@ import com.johnwillikers.rp.PlayerBase;
 import com.johnwillikers.rp.conversations.NegateConfirmPrompt;
 import com.johnwillikers.rp.enums.Codes;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class KarmaCommands implements CommandExecutor{
 	
 	Karma plugin;
@@ -72,7 +74,7 @@ public class KarmaCommands implements CommandExecutor{
 					if(KarmaBase.exists(payload[1])){
 						//JSONObject kfile = KarmaBase.getKarmaInfo(payload[1]);
 						String msg = KarmaLogic.lookUp(payload[1]);
-						player.sendMessage("Name: " + args[0] + " " + args[1] + "\n" + msg);
+						player.sendMessage(ChatColor.GOLD + "Name: " + args[0] + " " + args[1] + "\n" + msg);
 					}else{
 						player.sendMessage("Are you sure " + args[0] + " " + args[1] + " is spelled correctly?");
 					}
