@@ -61,25 +61,34 @@ public class KarmaLogic {
 	public static String lookUp(String uuid){
 		Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "lookUp() was triggered.");
 		JSONObject info = KarmaBase.getKarmaInfo(uuid);
+		Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "JSONObject info loaded");
+		Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning Karma Coloring");
 		if(info.getInt("status") == 1){
 			ChatColor karmaColor = null;
 			if(info.getInt("karma") > 0){
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.GREEN + " Green");
 				karmaColor = ChatColor.GREEN;
 			}else if(info.getInt("karma") < 0){
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.RED + " Red");
 				karmaColor = ChatColor.RED;
 			}else{
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.YELLOW + " YELLOW");
 				karmaColor = ChatColor.YELLOW;
 			}
 			String success = ChatColor.GOLD + "Karma: " + karmaColor + info.getInt("karma") + ChatColor.GOLD + "\nIncidents: \n";
+			Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning incidents into JSONArray");
 			JSONArray incidents = info.getJSONArray("incidents");
 			int index = 0;
-			while(index <= incidents.length()){
+			Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Looping over incidents JSONArray");
+			while(index < incidents.length()){
 				JSONObject contents = incidents.getJSONObject(index);
 				String date = contents.getString("Date");
 				String desc = contents.getString("desc");
 				String actions = contents.getString("actions");
 				String gm = contents.getString("gm");
 				success = success + "Date: " + date + "\nDescription: " + desc + "\nActions: " + actions + "GameMaster: " + gm;
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "End of Incident loop number " + index);
+				index++;
 			}
 			Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookup", "Success = " + success);
 			return success;

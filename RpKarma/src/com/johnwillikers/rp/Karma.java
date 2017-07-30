@@ -22,7 +22,7 @@ public class Karma extends JavaPlugin{
 	public long startModifier = startTime * 1000;
 	//How long between karma checks on the server
 	public long delayTime = 1;
-	public long delayModifier = delayTime * 1000 * 120;
+	public long delayModifier = delayTime * 1000 * 60 * 60;
 	public Timer karmaUpdate = new Timer("karma-update", true);
 	public static int karmaUpAmount = 50;
 	
