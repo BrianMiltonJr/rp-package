@@ -5,6 +5,7 @@ import net.md_5.bungee.api.ChatColor;
 public enum Codes {
 	FIRST_LAUNCH(ChatColor.GREEN + "First Launch"),
 	STARTUP(ChatColor.LIGHT_PURPLE + "Startup"),
+	SHUTDOWN(ChatColor.LIGHT_PURPLE + "Shutdown"),
 	COMMANDS(ChatColor.GOLD + "Commands"),
 	ERROR(ChatColor.DARK_RED + "Error"),
 	LISTENERS(ChatColor.RED + "Listeners"),

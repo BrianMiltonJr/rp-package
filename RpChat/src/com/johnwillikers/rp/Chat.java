@@ -10,7 +10,7 @@ public class Chat extends JavaPlugin{
 	
 	public static Chat plugin;
 	public static String name = Codes.CHAT.toString();
-	public static String dir = Core.dir + "RP_Chat";
+	public static String dir = Core.dir + "Rp_Chat";
 	public static String chatBase = dir + "/ChatBase";
 	
 	@Override

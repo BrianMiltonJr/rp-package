@@ -15,15 +15,15 @@ public class Karma extends JavaPlugin{
 	
 	public static Karma plugin;
 	public static String name = Codes.KARMA.toString();
-	public static String dir = Core.dir + "RP_Karma";
+	public static String dir = Core.dir + "Rp_Karma";
 	public ConversationFactory factory = new ConversationFactory(this);
 	//How many seconds should the timer start after the server starting
 	public long startTime = 5;
 	public long startModifier = startTime * 1000;
 	//How long between karma checks on the server
-	public long delayTime = 3;
-	public long delayModifier = delayTime * 1000 * 60 * 60;
-	public Timer karmaCheck = new Timer();
+	public long delayTime = 1;
+	public long delayModifier = delayTime * 1000 * 120;
+	public Timer karmaUpdate = new Timer("karma-update", true);
 	public static int karmaUpAmount = 50;
 	
 	@Override
@@ -44,12 +44,14 @@ public class Karma extends JavaPlugin{
 		this.getCommand("negate").setExecutor(new KarmaCommands(this));
 		this.getCommand("karma").setExecutor(new KarmaCommands(this));
 		Core.log(name, Codes.STARTUP.toString(), "Starting up Timers");
-		//karmaCheck.schedule(new KarmaTask(), this.startModifier , this.delayModifier);
+		karmaUpdate.schedule(new KarmaTask(), this.startModifier , this.delayModifier);
 		Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
 	}
 	
 	@Override
 	public void onDisable(){
-		
+		Core.log(name, Codes.SHUTDOWN.toString(), "Disabling Timers");
+		karmaUpdate.cancel();
+		karmaUpdate.purge();
 	}
 }
