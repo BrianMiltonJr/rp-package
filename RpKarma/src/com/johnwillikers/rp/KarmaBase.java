@@ -73,7 +73,7 @@ public class KarmaBase {
 				e.printStackTrace();
 			}
 			}else{
-				JSONObject incident = new JSONObject().put("Date", Utilities.getDate()).put("desc", "Player enrolled in karma system.")
+				JSONObject incident = new JSONObject().put("date", Utilities.getDate()).put("desc", "Player enrolled in karma system.")
 						.put("actions", "Karma + 100").put("gm", "Server");
 				JSONObject kfile = new JSONObject().put("karma", 100).put("incidents", new JSONArray().put(incident));
 				PrintWriter write;

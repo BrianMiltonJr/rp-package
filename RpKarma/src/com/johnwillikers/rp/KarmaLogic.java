@@ -82,11 +82,11 @@ public class KarmaLogic {
 			Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Looping over incidents JSONArray");
 			while(index < incidents.length()){
 				JSONObject contents = incidents.getJSONObject(index);
-				String date = contents.getString("Date");
+				String date = contents.getString("date");
 				String desc = contents.getString("desc");
 				String actions = contents.getString("actions");
 				String gm = contents.getString("gm");
-				success = success + "Date: " + date + "\nDescription: " + desc + "\nActions: " + actions + "GameMaster: " + gm;
+				success = success + "--------------------------------------------------\n    Date: " + date + "\n    Description: " + desc + "\n    Actions: " + actions + "    GameMaster: " + gm + "\n";
 				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "End of Incident loop number " + index);
 				index++;
 			}
