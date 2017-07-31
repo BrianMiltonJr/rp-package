@@ -26,7 +26,7 @@ public static File master_file = new File(dir + "master_file.json");
 /**
  * Creates the masterfile
  * 
- * @throws IOException
+ * @throws IOException MasterFile creation errored
  * @since 0.0.1
  */
 	public static void createMasterFile() throws IOException{
@@ -45,7 +45,7 @@ public static File master_file = new File(dir + "master_file.json");
 	 * Saves the masterfile
 	 * 
 	 * @param json The json string to save the masterfile
-	 * @throws IOException
+	 * @throws IOException Error saving the Masterfile
 	 * @since 0.0.1
 	 */
 	public static void saveMasterFile(String json) throws IOException{
@@ -58,7 +58,7 @@ public static File master_file = new File(dir + "master_file.json");
 	 * Loads the masterfile
 	 * 
 	 * @return Returns a JSONObject
-	 * @throws IOException
+	 * @throws IOException Error loading the MasterFile
 	 * @since 0.0.1
 	 */
 	public static JSONObject loadMasterFile() throws IOException{
@@ -76,7 +76,7 @@ public static File master_file = new File(dir + "master_file.json");
 	 * 
 	 * @param UUID The Player's UUID
 	 * @param name The Players new rp name
-	 * @throws IOException
+	 * @throws IOException Error Appending MasterFile
 	 * @since 0.0.1
 	 */
 	public static void appendMasterFile(String UUID, String name) throws IOException{
@@ -153,7 +153,7 @@ public static File master_file = new File(dir + "master_file.json");
 	 * @param gender The Players gender
 	 * @param originalIp The Players Original Ip
 	 * @param lastIp The Players Last Ip
-	 * @throws IOException
+	 * @throws IOException Error Writing player to playerbase
 	 * @since 0.0.1
 	 */
 	public static void writePlayer(String UUID, String first, String last, String playerName, String gender, String originalIp, String lastIp) throws IOException{
@@ -170,7 +170,7 @@ public static File master_file = new File(dir + "master_file.json");
 	 * @param UUID The Players UUID
 	 * @param newIp The Players new latest ip
 	 * @param playerName The Players current Minecraft account name
-	 * @throws IOException
+	 * @throws IOException Error updating player to playerbase
 	 * @since 0.0.1
 	 */
 	public static void updatePlayer(String UUID, String newIp, String playerName) throws IOException{

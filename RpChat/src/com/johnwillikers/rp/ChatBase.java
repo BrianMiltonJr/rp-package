@@ -13,11 +13,28 @@ import com.johnwillikers.rp.enums.Codes;
 
 public class ChatBase {
 	
+	/**
+	 * ChatBase file location
+	 */
 	public static File chatBase = new File(Chat.chatBase);
+	/**
+	 * Rp_Chat's settings dir
+	 */
 	public static File settings = new File(Utilities.settingsDir + "/chat_settings.json");
+	/**
+	 * Rp_Chat's settings default
+	 */
 	public static String settingsDefault = "{\"whisper\":5,\"talk\":10,\"yell\":20}";
+	/**
+	 * Rp_Chat's distance default
+	 */
 	public static String distanceDefault = "\"distance\":\"talk\"";
 	
+	/**
+	 * Creates ChatBase
+	 * 
+	 * @since 0.0.1
+	 */
 	public static void createFilePath(){
 		Core.log(Chat.name, Codes.STARTUP.toString(), "Checking if ChatBase exists.");
 		if(!chatBase.exists()){
@@ -35,6 +52,11 @@ public class ChatBase {
 		}
 	}
 	
+	/**
+	 * Creates Rp_Chat's Settings file
+	 * 
+	 * @since 0.0.1
+	 */
 	public static void createFiles(){
 		Core.log(Chat.name, Codes.STARTUP.toString(), "Checking if settings.json exists.");
 		if(!settings.exists()){
@@ -51,6 +73,12 @@ public class ChatBase {
 		}
 	}
 	
+	/**
+	 * Returns Talk distance values
+	 * 
+	 * @return {@code int[]}
+	 * @since 0.0.1
+	 */
 	public static int[] getSettings(){
 		try{
 			Core.debug(Chat.name, Codes.DEBUG.toString() + "ChatBase.getSettings", "Attempting to read settings.json");
@@ -75,6 +103,13 @@ public class ChatBase {
 		}
 	}
 	
+	/**
+	 * Gets the players current talking distance
+	 * 
+	 * @param p the player
+	 * @return {@code String}
+	 * @since 0.0.1
+	 */
 	public static String getPlayerDistance(Player p){
 		File pfile = new File(Chat.chatBase + "/" + p.getUniqueId().toString() + ".json");
 		try{
@@ -94,6 +129,13 @@ public class ChatBase {
 		}
 	}
 	
+	/**
+	 * Sets the players current talking distance
+	 * 
+	 * @param p the player
+	 * @param distance the desired distance
+	 * @since 0.0.1
+	 */
 	public static void setPlayerTalkDistance(Player p, String distance){
 		File pfile = new File(Chat.chatBase + "/" + p.getUniqueId().toString() + ".json");
 		if(!pfile.exists()){

@@ -9,8 +9,17 @@ import com.johnwillikers.rp.listeners.ChatListener;
 public class Chat extends JavaPlugin{
 	
 	public static Chat plugin;
+	/**
+	 * Rp_Chat's name
+	 */
 	public static String name = Codes.CHAT.toString();
+	/**
+	 * Rp_Chat's dir
+	 */
 	public static String dir = Core.dir + "Rp_Chat";
+	/**
+	 * Rp_Chat's Chatbase
+	 */
 	public static String chatBase = dir + "/ChatBase";
 	
 	@Override

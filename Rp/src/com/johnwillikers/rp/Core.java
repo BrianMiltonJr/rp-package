@@ -27,7 +27,7 @@ public class Core extends JavaPlugin{
 	 */
 	public static String[] settings;
 	/**
-	 * This String determines wheter debug logs are printed or not
+	 * This String determines whether debug logs are printed or not
 	 */
 	public static String debugState = "true";
 	/**
