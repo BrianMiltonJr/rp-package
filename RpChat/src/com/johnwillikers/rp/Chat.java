@@ -37,6 +37,7 @@ public class Chat extends JavaPlugin{
 		this.getCommand("yell").setExecutor(new ChatCommands(this));
 		this.getCommand("color").setExecutor(new ChatCommands(this));
 		this.getCommand("uujdj123123412o458f1nd1").setExecutor(new ChatCommands(this));
+		this.getCommand("ooc").setExecutor(new ChatCommands(this));
 		Core.log(name, Codes.LISTENERS.toString(), "Registering Listeners");
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");

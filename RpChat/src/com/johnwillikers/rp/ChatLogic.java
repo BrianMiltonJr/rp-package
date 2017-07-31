@@ -1,5 +1,9 @@
 package com.johnwillikers.rp;
 
+import java.io.IOException;
+
+import org.bukkit.entity.Player;
+
 import com.johnwillikers.rp.enums.Codes;
 
 public class ChatLogic {
@@ -66,5 +70,15 @@ public class ChatLogic {
 		yellDistance = yell;
 		Core.log(Chat.name, Codes.STARTUP.toString(), "Yell Distance = " + yellDistance);
 		Core.log(Chat.name, Codes.STARTUP.toString(), "Distance values succesfully assigned");
+	}
+	
+	public static boolean isOOC(Player player) {
+		try {
+			return ChatBase.checkOoc(player);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return true;
+		}
 	}
 }

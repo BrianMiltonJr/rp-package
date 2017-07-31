@@ -28,7 +28,7 @@ public class ChatBase {
 	/**
 	 * Rp_Chat's distance default
 	 */
-	public static String distanceDefault = "\"distance\":\"talk\"";
+	public static String distanceDefault = "\"distance\":\"talk\",\"ooc\":\"true\"";
 	
 	/**
 	 * Creates ChatBase
@@ -175,6 +175,58 @@ public class ChatBase {
 		}catch(IOException e){
 			e.printStackTrace();
 			Core.log(Chat.name, Codes.ERROR.toString(), "Something went wrong when setting the distance for " + p.getDisplayName() + ". Check the Stacktrace above or report it.");
+		}
+	}
+	
+	/**
+	 * Checks for the players Ooc state
+	 * 
+	 * @param p The player
+	 * @return a boolean
+	 * @throws IOException if the file is no found
+	 */
+	public static boolean checkOoc(Player p) throws IOException{
+		File pfile = new File(Chat.chatBase + "/" + p.getUniqueId().toString() + ".json");
+		try{
+			FileReader fr = new FileReader(pfile);
+			BufferedReader br = new BufferedReader(fr);
+			String json = br.readLine();
+			br.close();
+			fr.close();
+			JSONObject pData = new JSONObject(json);
+			return pData.getBoolean("ooc");
+		}catch(IOException e){
+			e.printStackTrace();
+			Core.log(Chat.name, Codes.ERROR.toString(), "Tried to retrieve " + p.getDisplayName() + " talk distance, but Failed. Read StackTrace above or report it.");
+			Core.log(Chat.name, Codes.ERROR.toString(), "Sending talk to keep plugin from crashing, fix immediately.");
+		}
+		return true;
+	}
+	
+	/**
+	 * Sets the players Ooc state
+	 * 
+	 * @param p the player
+	 * @param state Whether the player is or isnt in Ooc
+	 * @throws IOException Cant write the .json file
+	 */
+	public static void setOoc(Player p, boolean state) throws IOException{
+		File pfile = new File(Chat.chatBase + "/" + p.getUniqueId().toString() + ".json");
+		try{
+			FileReader fr = new FileReader(pfile);
+			BufferedReader br = new BufferedReader(fr);
+			String json = br.readLine();
+			br.close();
+			fr.close();
+			JSONObject pData = new JSONObject(json);
+			pData.put("ooc", state);
+			pfile.delete();
+			PrintWriter pr = new PrintWriter(pfile);
+			pr.println(pData.toString());
+			pr.close();
+		}catch(IOException e){
+			e.printStackTrace();
+			Core.log(Chat.name, Codes.ERROR.toString(), "Something went wrong when setting the state for ooc for " + p.getDisplayName() + ". Check the Stacktrace above or report it.");
 		}
 	}
 }

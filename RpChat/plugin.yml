@@ -32,3 +32,8 @@ commands:
     usage: /name <color> <first name> <last name> | Available Colors Blue, Red, Gold, Gray, Yellow
     permissions: rp.color
     permission-message: Oh mortal, I don't know what's the problem. Get in touch with an admin in PM
+  ooc:
+    description: Switched chat between in game and out of character (OOC is global)
+    usage: /ooc
+    permissions: rp.ooc
+    permission-message: DERP

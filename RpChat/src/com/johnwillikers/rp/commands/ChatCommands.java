@@ -1,5 +1,7 @@
 package com.johnwillikers.rp.commands;
 
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import com.johnwillikers.rp.Chat;
 import com.johnwillikers.rp.ChatBase;
+import com.johnwillikers.rp.ChatLogic;
 import com.johnwillikers.rp.PlayerBase;
 import com.johnwillikers.rp.Utilities;
 
@@ -112,8 +115,21 @@ public class ChatCommands implements CommandExecutor {
 				}
 			}
 		}else if(cmd.getName().equalsIgnoreCase("ooc")){
-			String msg = String.join(" ", args);
-			Bukkit.broadcastMessage("[OOC] " + msg);
+			if(ChatLogic.isOOC(player)) {
+				try {
+					ChatBase.setOoc(player, false);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}else {
+				try {
+					ChatBase.setOoc(player, true);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
 		}
 		return false;
 	}
