@@ -7,6 +7,7 @@ what I should do. What I want to create in the end is a completely modular rp ex
 Current Features:
   * First & Last Names with genders
   * A chat system that goes by distance with the ability to whisper, talk or yell
+  * A Out of Character chat system that can be toggle to talk into by using /ooc or using /ooc on | /ooc off to display ooc chat
   * Full JSON support
 
 What I'm Working on:
@@ -29,6 +30,7 @@ Rp Chat:
   * rp.talk - Allows the user to talk.
   * rp.yell - Allows the user to yell.
   * rp.color - Allows the user to color their own name.
+  * rp.ooc
 
 Rp Karma (Still Under heavy development, Will be released with V0.0.2):
   *rp.negate - allows an admin to negate karma from a player that is performing badly on the server.
@@ -44,6 +46,7 @@ Rp Chat:
   * /talk or /t - Sets your chat distance to talk
   * /yell or /y - Sets your chat distance to yell
   * /color - Usage: /color color or /color name color | Colors your name
+  * /ooc - Usage: /ooc switches between talking in ooc or in game chat. /ooc [on/off or 1/0] toggles ooc chat displaying
 
 Rp Karma((Still Under heavy development, Will be released with V0.0.2)):
   * /negate - Usage: /negate first last offense description | Registers an offense on the offender's karma negating its total.
