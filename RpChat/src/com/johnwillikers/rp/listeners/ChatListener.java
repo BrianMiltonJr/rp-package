@@ -61,6 +61,11 @@ public class ChatListener implements Listener{
 				e.setMessage(newMsg);
 			}
 		}else {
+			for (Player r : e.getRecipients()) {
+				if (!ChatLogic.isOOCToggled(r)) {
+					e.getRecipients().remove(r);
+				}
+			}
 			String msg = e.getMessage();
 			String newMsg = "[OOC] " + msg;
 			e.setMessage(newMsg);

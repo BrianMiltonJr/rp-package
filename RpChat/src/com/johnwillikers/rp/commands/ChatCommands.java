@@ -115,23 +115,45 @@ public class ChatCommands implements CommandExecutor {
 				}
 			}
 		}else if(cmd.getName().equalsIgnoreCase("ooc")){
-			if(ChatLogic.isOOC(player)) {
-				try {
-					ChatBase.setOoc(player, false);
-					player.sendMessage("You are now talking In game. Keep this in mind.");
-					return true;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			if(args.length == 0) {
+				if(ChatLogic.isOOC(player)) {
+					try {
+						ChatBase.setOoc(player, false);
+						player.sendMessage(ChatColor.GOLD + "You are now talking In game. Keep this in mind.");
+						return true;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else {
+					try {
+						ChatBase.setOoc(player, true);
+						player.sendMessage(ChatColor.GOLD + "You are now talking out of character, keep in mind you can still be muted.");
+						return true;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}else {
-				try {
-					ChatBase.setOoc(player, true);
-					player.sendMessage("You are now talking out of character, keep in mind you can still be muted.");
-					return true;
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				if (args[0].equalsIgnoreCase("on") || args[0].equalsIgnoreCase("1")) {
+					try {
+						ChatBase.setOocToggle(player, true);
+						player.sendMessage(ChatColor.GOLD + "Out of character chat will now be displayed");
+						return true;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}else if(args[0].equalsIgnoreCase("off") || args[0].equalsIgnoreCase("0")) {
+					try {
+						ChatBase.setOocToggle(player, false);
+						player.sendMessage(ChatColor.GOLD + "Out of character chat will now be hidden");
+						return true;
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 		}

@@ -73,9 +73,31 @@ public class ChatLogic {
 		Core.log(Chat.name, Codes.STARTUP.toString(), "Distance values succesfully assigned");
 	}
 	
+	/**
+	 * Check to see if the player is talking in Ooc chat
+	 * 
+	 * @param player
+	 * @return Returns whether 
+	 */
 	public static boolean isOOC(Player player) {
 		try {
 			return ChatBase.checkOoc(player);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return true;
+		}
+	}
+	
+	/**
+	 * Check to see if the player is talking in Ooc chat
+	 * 
+	 * @param player
+	 * @return Returns whether 
+	 */
+	public static boolean isOOCToggled(Player player) {
+		try {
+			return ChatBase.checkOocToggle(player);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

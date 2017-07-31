@@ -28,7 +28,7 @@ public class ChatBase {
 	/**
 	 * Rp_Chat's distance default
 	 */
-	public static String distanceDefault = "\"distance\":\"talk\",\"ooc\":\"true\"";
+	public static String distanceDefault = "\"distance\":\"talk\",\"ooc\":true,\"ooc_toggle\":true";
 	
 	/**
 	 * Creates ChatBase
@@ -179,7 +179,7 @@ public class ChatBase {
 	}
 	
 	/**
-	 * Checks for the players Ooc state
+	 * Checks to see if the player is talking in Ooc
 	 * 
 	 * @param p The player
 	 * @return a boolean
@@ -205,7 +205,7 @@ public class ChatBase {
 	}
 	
 	/**
-	 * Sets the players Ooc state
+	 * Sets if the player is talking Ooc or not
 	 * 
 	 * @param p the player
 	 * @param state Whether the player is or isnt in Ooc
@@ -222,6 +222,60 @@ public class ChatBase {
 			fr.close();
 			JSONObject pData = new JSONObject(json);
 			pData.put("ooc", state);
+			pfile.delete();
+			PrintWriter pr = new PrintWriter(pfile);
+			pr.println(pData.toString());
+			pr.close();
+		}catch(IOException e){
+			e.printStackTrace();
+			Core.log(Chat.name, Codes.ERROR.toString(), "Something went wrong when setting the state for ooc for " + p.getDisplayName() + ". Check the Stacktrace above or report it.");
+		}
+	}
+	
+	/**
+	 * Checks to see if the player is seeing Ooc chat
+	 * 
+	 * @param p The player
+	 * @return a boolean
+	 * @throws IOException if the file is no found
+	 * @since 0.0.3
+	 */
+	public static boolean checkOocToggle(Player p) throws IOException{
+		File pfile = new File(Chat.chatBase + "/" + p.getUniqueId().toString() + ".json");
+		try{
+			FileReader fr = new FileReader(pfile);
+			BufferedReader br = new BufferedReader(fr);
+			String json = br.readLine();
+			br.close();
+			fr.close();
+			JSONObject pData = new JSONObject(json);
+			return pData.getBoolean("ooc_toggle");
+		}catch(IOException e){
+			e.printStackTrace();
+			Core.log(Chat.name, Codes.ERROR.toString(), "Tried to retrieve " + p.getDisplayName() + " talk distance, but Failed. Read StackTrace above or report it.");
+			Core.log(Chat.name, Codes.ERROR.toString(), "Sending talk to keep plugin from crashing, fix immediately.");
+		}
+		return true;
+	}
+	
+	/**
+	 * Sets if the player is seeing the Ooc Chat
+	 * 
+	 * @param p the player
+	 * @param state Whether the player is or isnt in Ooc
+	 * @throws IOException Cant write the .json file
+	 * @since 0.0.3
+	 */
+	public static void setOocToggle(Player p, boolean state) throws IOException{
+		File pfile = new File(Chat.chatBase + "/" + p.getUniqueId().toString() + ".json");
+		try{
+			FileReader fr = new FileReader(pfile);
+			BufferedReader br = new BufferedReader(fr);
+			String json = br.readLine();
+			br.close();
+			fr.close();
+			JSONObject pData = new JSONObject(json);
+			pData.put("ooc_toggle", state);
 			pfile.delete();
 			PrintWriter pr = new PrintWriter(pfile);
 			pr.println(pData.toString());
