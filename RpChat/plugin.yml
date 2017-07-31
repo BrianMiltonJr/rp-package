@@ -1,5 +1,5 @@
 name: Rp_Chat
-version: 0.0.2
+version: 0.0.3
 author: John_Willikers
 main: com.johnwillikers.rp.Chat
 depend: [Rp_Core]

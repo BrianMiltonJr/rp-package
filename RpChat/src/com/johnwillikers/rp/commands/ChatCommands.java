@@ -118,6 +118,8 @@ public class ChatCommands implements CommandExecutor {
 			if(ChatLogic.isOOC(player)) {
 				try {
 					ChatBase.setOoc(player, false);
+					player.sendMessage("You are now talking In game. Keep this in mind.");
+					return true;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -125,6 +127,8 @@ public class ChatCommands implements CommandExecutor {
 			}else {
 				try {
 					ChatBase.setOoc(player, true);
+					player.sendMessage("You are now talking out of character, keep in mind you can still be muted.");
+					return true;
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
