@@ -60,6 +60,7 @@ public class ChatLogic {
 	 * @param whisper the whisper distance
 	 * @param talk the talk distance
 	 * @param yell the yell distance
+	 * @since 0.0.3
 	 */
 	public static void assignDistances(int whisper, int talk, int yell){
 		Core.log(Chat.name, Codes.STARTUP.toString(), "Attempting to assign Distance values for chat.");

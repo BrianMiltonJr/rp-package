@@ -184,6 +184,7 @@ public class ChatBase {
 	 * @param p The player
 	 * @return a boolean
 	 * @throws IOException if the file is no found
+	 * @since 0.0.3
 	 */
 	public static boolean checkOoc(Player p) throws IOException{
 		File pfile = new File(Chat.chatBase + "/" + p.getUniqueId().toString() + ".json");
@@ -209,6 +210,7 @@ public class ChatBase {
 	 * @param p the player
 	 * @param state Whether the player is or isnt in Ooc
 	 * @throws IOException Cant write the .json file
+	 * @since 0.0.3
 	 */
 	public static void setOoc(Player p, boolean state) throws IOException{
 		File pfile = new File(Chat.chatBase + "/" + p.getUniqueId().toString() + ".json");
