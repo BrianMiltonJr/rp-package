@@ -10,13 +10,13 @@ Current Features:
   * Full JSON support
 
 What I'm Working on:
-  * Karma System - Inspired by TTT to allow game-masters to penalize failRp and rules
-  * Commenting code for contributors
+  * Karma System - Inspired by TTT to allow game-masters to penalize failRp and rules (Currently implemented, but barebones)
+  * Commenting code for contributors (Currently up to date with V0.0.2)
   * more debug calls
 
 Planned Features:
   * Government or tribal implementation of a grouping system
-  * MySQL or JSON support
+  * MySQL or JSON support (JSON fully supported)
   * And much more
 
 Permissions:
@@ -32,6 +32,7 @@ Rp Chat:
 
 Rp Karma (Still Under heavy development, Will be released with V0.0.2):
   *rp.negate - allows an admin to negate karma from a player that is performing badly on the server.
+  *rp.karma - allows an admin to check a player's karma file
 
 Commands(first & last refer to names):
 
@@ -46,6 +47,7 @@ Rp Chat:
 
 Rp Karma((Still Under heavy development, Will be released with V0.0.2)):
   * /negate - Usage: /negate first last offense description | Registers an offense on the offender's karma negating its total.
+  * /karma - Usage: /karma first last | Prints player's karma file
 
 
 Other Need to know information:
