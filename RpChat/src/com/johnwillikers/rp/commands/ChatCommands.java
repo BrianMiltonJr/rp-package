@@ -111,6 +111,9 @@ public class ChatCommands implements CommandExecutor {
 					return true;
 				}
 			}
+		}else if(cmd.getName().equalsIgnoreCase("ooc")){
+			String msg = String.join(" ", args);
+			Bukkit.broadcastMessage("[OOC] " + msg);
 		}
 		return false;
 	}

@@ -2,6 +2,7 @@ package com.johnwillikers.rp;
 
 import java.io.IOException;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -20,31 +21,42 @@ public class KarmaLogic {
 	 * @since 0.0.2
 	 */
 	public static void karmaCheck(Player player, int karma){
-		switch(karma){
-		case(-500):
+		if(karma <= -500) {
 			//Recommend for ban
-			break;
-		case(-250):
+			Bukkit.broadcast(player.getDisplayName() + " has " + String.valueOf(karma) + " Karma. They are being recommended for a ban", "rp.gamemaster");
+		}
+		if(karma <= -250 && karma != -500) {
 			//Recommend for kick
-			break;
-		case(0):
+			Bukkit.broadcast(player.getDisplayName() + " has " + String.valueOf(karma) + " Karma. They are being recommended for a kick", "rp.gamemaster");
+		}
+		if(karma <=0 && karma > -250) {
 			//Recommend for admin review
-			break;
-		case(250):
+			Bukkit.broadcast(player.getDisplayName() + " has " + String.valueOf(karma) + " Karma. They are being recommended for an admin review", "rp.gamemaster");
+		}
+		if(karma >= 250 && karma < 500) {
 			//miniscule reward
-			break;
-		case(500):
+		}
+		if(karma >= 500 && karma < 750) {
 			//give permission to color name
-			break;
-		case(600):
+		}
+		if(karma >= 750 && karma < 1000) {
 			//medium reward
-			break;
-		case(700):
+		}
+		if(karma >= 1000 && karma < 1250) {
 			//medium reward
-			break;
-		case(800):
+		}
+		if(karma >= 1250 && karma < 50000) {
 			//large reward
-			break;
+		}
+		/*To developers who read this online on github. I'd like this to be a thing no one knows. So people who play aren't aiming to be a game master at the end. I'd rather
+		 * Game Masters not even know about this option. Just let it ping one day randomly in gm chat and them talk about it. By this karma amount they will have played enough through the 
+		 * rp that they are well experienced
+		 */
+		if(karma >= 50000) {
+			//Recommended to become a Game master
+			if(!player.hasPermission("rp.gamemaster")) {
+				Bukkit.broadcast("You feel a numbing sensation in your toes, and your vision turns dark.\n It then flashes an image of " + player.getDisplayName() + " and you hear a deep voice roar, \"HE IS TO BE THE NEXT GAMEMASTER.\" Your vision returns and your breath is shaking heavily", "rp.gamemaster");
+			}
 		}
 	}
 	

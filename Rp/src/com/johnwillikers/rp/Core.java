@@ -34,12 +34,16 @@ public class Core extends JavaPlugin{
 	 * The name of the town
 	 */
 	public static String townName = "The Encampment";
+	
 	public static Core plugin;
 	/**
 	 * When another dependable plugin is loaded they switch their respective indice to 1 to allow smooth creation process and logging
 	 */
 	public static int[] dependables = {0,0};
+	
 	public ConversationFactory factory = new ConversationFactory(this);
+	
+	public static String[] gameMasters;
 	
 	/**
 	 * This method is in charge of logging messages to console with that feature 

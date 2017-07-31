@@ -14,6 +14,8 @@ public class EntryListener implements Listener{
 	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e){
+		
+		// Checks to see if the player exists in the playerbase. If they do they are updated and if they aren't they are registered
 		if(!PlayerBase.exists(e.getPlayer())){
 			Core.log(Core.name, Codes.ENTRYLISTENER.toString(), "This is the first time " + e.getPlayer().getDisplayName() + " has joined the server, starting new character process.");
 			e.getPlayer().chat("/ae356784901ldnvld0-083lwe");
