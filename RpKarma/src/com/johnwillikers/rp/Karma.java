@@ -14,16 +14,38 @@ import com.johnwillikers.rp.timertasks.KarmaTask;
 public class Karma extends JavaPlugin{
 	
 	public static Karma plugin;
+	/**
+	 * Rp_Karma's name
+	 */
 	public static String name = Codes.KARMA.toString();
+	/**
+	 * Rp_Karma's dir
+	 */
 	public static String dir = Core.dir + "Rp_Karma";
 	public ConversationFactory factory = new ConversationFactory(this);
-	//How many seconds should the timer start after the server starting
+	/**
+	 * The Time before starting update karma task
+	 */
 	public long startTime = 5;
+	/**
+	 * Modifies the time into seconds
+	 */
 	public long startModifier = startTime * 1000;
-	//How long between karma checks on the server
+	/**
+	 * The time before starting another update karma task
+	 */
 	public long delayTime = 1;
+	/**
+	 * Modifies the time into hours
+	 */
 	public long delayModifier = delayTime * 1000 * 60 * 60;
+	/**
+	 * Creates a timer with the label karma-update and sets it as a daemon
+	 */
 	public Timer karmaUpdate = new Timer("karma-update", true);
+	/**
+	 * How much karma to give during a karma update
+	 */
 	public static int karmaUpAmount = 50;
 	
 	@Override

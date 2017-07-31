@@ -2,7 +2,15 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/BRIAN/server/plugins/Rp_Core.jar"/>
-	<classpathentry kind="lib" path="C:/BRIAN/server/spigot.jar"/>
+	<classpathentry kind="lib" path="C:/Brian/Server/plugins/Rp_Core.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Brian/Rp%20Source/rp-package/Rp/doc/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="C:/Brian/Server/spigot.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/C:/Brian/Server/doc/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

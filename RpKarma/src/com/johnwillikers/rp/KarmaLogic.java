@@ -12,6 +12,13 @@ import net.md_5.bungee.api.ChatColor;
 
 public class KarmaLogic {
 	
+	/**
+	 * Checks to see what the recommended action be for a player
+	 * 
+	 * @param player the player
+	 * @param karma their karma
+	 * @since 0.0.2
+	 */
 	public static void karmaCheck(Player player, int karma){
 		switch(karma){
 		case(-500):
@@ -41,6 +48,12 @@ public class KarmaLogic {
 		}
 	}
 	
+	/**
+	 * Adds karma to a player
+	 * 
+	 * @param player the player
+	 * @param amount the amount
+	 */
 	public static void aid(Player player, int amount){
 		JSONObject derp = null;
 		try {
@@ -50,6 +63,14 @@ public class KarmaLogic {
 		}
 	}
 	
+	/**
+	 * Takes away karma and logs the incident
+	 * 
+	 * @param uuid the player
+	 * @param amount the amount
+	 * @param incident the latest incident
+	 * @throws IOException Error in writing new karma file
+	 */
 	public static void negate(String uuid, int amount, JSONObject incident) throws IOException{
 		KarmaBase.updateKarma(uuid, amount, incident);
 	}
@@ -58,6 +79,12 @@ public class KarmaLogic {
 		player.sendMessage(msg);
 	}
 	
+	/**
+	 * Looks up the player in the KarmaBase and formats it into a message
+	 * 
+	 * @param uuid the player
+	 * @return String
+	 */
 	public static String lookUp(String uuid){
 		Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "lookUp() was triggered.");
 		JSONObject info = KarmaBase.getKarmaInfo(uuid);

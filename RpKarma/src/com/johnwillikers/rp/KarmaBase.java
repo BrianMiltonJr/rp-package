@@ -14,9 +14,20 @@ import com.johnwillikers.rp.enums.Codes;
 
 public class KarmaBase {
 
+	/**
+	 * The KarmaBase dir
+	 */
 	public static String dir = Karma.dir + "/KarmaBase/";
+	/**
+	 * Rp_Karma's settings file
+	 */
 	public static File settings = new File(Utilities.settingsDir + "/karma_settings.json");
 		
+	/**
+	 * Creates KarmaBase
+	 * 
+	 * @since 0.0.2
+	 */
 		public static void createKarmaBaseDir(){
 			File pb = new File(dir);
 			Core.log(Karma.name, Codes.STARTUP.toString(), "Checking Whether Karma Base Location Exists.");
@@ -42,6 +53,12 @@ public class KarmaBase {
 			}
 		}
 		
+		/**
+		 * Gets the settings
+		 * 
+		 * @return JSONObject
+		 * @since 0.0.2
+		 */
 		public static JSONObject getSettings(){
 			try{
 				FileReader fr = new FileReader(settings);
@@ -59,6 +76,14 @@ public class KarmaBase {
 			}
 		}
 		
+		/**
+		 * Writes a karma file
+		 * 
+		 * @param UUID the players UUID
+		 * @param karma the amount of karma
+		 * @param incidents the player's incidents
+		 * @since 0.0.2
+		 */
 		public static void writeKarma(String UUID, int karma, JSONArray incidents){
 			if(exists(UUID)){
 			new File(dir + UUID + ".json").delete();
@@ -88,6 +113,15 @@ public class KarmaBase {
 			}
 		}
 		
+		/**
+		 * Updates a players karma
+		 * 
+		 * @param UUID the players UUID
+		 * @param karma their karma
+		 * @param incident the players incidents
+		 * @throws IOException Error in writting new karma file
+		 * @since 0.0.2
+		 */
 		public static void updateKarma(String UUID, int karma, JSONObject incident) throws IOException{
 			File user = new File(dir + UUID + ".json");
 			FileReader fr = new FileReader(user);
@@ -129,6 +163,13 @@ public class KarmaBase {
 			}
 		}
 		
+		/**
+		 * Checks to see if the player exists in the karmabase
+		 * 
+		 * @param UUID the players UUID
+		 * @return boolean
+		 * @since 0.0.2
+		 */
 		public static boolean exists(String UUID){
 			File user = new File(dir + UUID + ".json");
 			Core.debug(Karma.name, Codes.DEBUG + "Karmabase.exists()", "user File = " + user.toString());
@@ -139,6 +180,13 @@ public class KarmaBase {
 			}
 		}
 		
+		/**
+		 * Gets the player's karma info
+		 * 
+		 * @param uuid the player's UUID
+		 * @return JSONObject
+		 * @since 0.0.2
+		 */
 		public static JSONObject getKarmaInfo(String uuid){
 			File user = new File(dir + uuid + ".json");
 			try{

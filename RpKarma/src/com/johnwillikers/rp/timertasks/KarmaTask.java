@@ -13,6 +13,9 @@ import com.johnwillikers.rp.KarmaLogic;
 
 public class KarmaTask extends TimerTask{
 
+	/**
+	 * Gives every online player karma
+	 */
 	@Override
 	public void run() {
 		Core.log(Karma.name, "KarmaUpdate", "Updating Online players karma");
