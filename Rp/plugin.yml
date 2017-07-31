@@ -14,3 +14,8 @@ commands:
     usage: /player <first name> <last name>
     permissions: rp.player
     permission-message: Oh silly mortal, that's not for you
+  toggle_debug:
+    description: Toggles Debug State
+    usage: /toggle_debug
+    permissions: rp.toggle.debug
+    permission-message: A Server Operator command.

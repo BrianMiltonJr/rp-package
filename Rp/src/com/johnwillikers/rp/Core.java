@@ -1,7 +1,5 @@
 package com.johnwillikers.rp;
 
-import java.io.File;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
@@ -16,37 +14,60 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Core extends JavaPlugin{
 	
+	/**
+	 * The name of this plugin
+	 */
 	public static String name = Codes.CORE.toString();
+	/**
+	 * The Directory of Rp_Core
+	 */
 	public static String dir = "./plugins/RP_Core/";
-	public static String playerBase = dir + "PlayerBase/";
+	/**
+	 * This holds the settings of this plugin into a {@code String[]}
+	 */
 	public static String[] settings;
+	/**
+	 * This String determines wheter debug logs are printed or not
+	 */
 	public static String debugState = "true";
+	/**
+	 * The name of the town
+	 */
 	public static String townName = "The Encampment";
 	public static Core plugin;
+	/**
+	 * When another dependable plugin is loaded they switch their respective indice to 1 to allow smooth creation process and logging
+	 */
 	public static int[] dependables = {0,0};
 	public ConversationFactory factory = new ConversationFactory(this);
 	
-	public static void debug(String name, String location, String msg){
-		if(debugState.equalsIgnoreCase("true")){
-			log(name, location, msg);
-		}
-	}
-	
-	public static void log(String name, String level, String msg){
+	/**
+	 * This method is in charge of logging messages to console with that feature 
+	 * color coding by using a Codes enum. This enum can be found in the enum package.
+	 * 
+	 * @param name The Plugin name
+	 * @param type The type of message e.g Commands, Listeners, etc.
+	 * @param msg The message to pass to the console.
+	 * @since 0.0.1
+	 */
+	public static void log(String name, String type, String msg){
 		//System.out.println("[" + name + "]|" + "[" + level + "] " + msg); deprecated code, old method of sending messages to console, but doesn't support coloring. Left for the lulz
 		Server server = Bukkit.getServer();
 		ConsoleCommandSender console = server.getConsoleSender();
-		console.sendMessage(ChatColor.WHITE + "[" + name + ChatColor.WHITE + "]|" + "[" + level + ChatColor.WHITE + "] " + msg);
+		console.sendMessage(ChatColor.WHITE + "[" + name + ChatColor.WHITE + "]|" + "[" + type + ChatColor.WHITE + "] " + msg);
 	}
 	
-	public static void firstLaunch(){
-		File pb = new File(playerBase);
-		log(name, Codes.STARTUP.toString(), "Does PlayerBase Exist?");
-		if(!pb.exists()){
-			log(name, Codes.STARTUP.toString(), "Creating PlayerBase.");
-			pb.mkdirs();
-		}else{
-			log(name, Codes.STARTUP.toString(), "Playerbase Exists.");
+	/**
+	 * This method is in charge of logging debug messages to console
+	 * 
+	 * @param name The Plugin name
+	 * @param location What Class and function the debug call is called from. e.g Core.debug, Core.log, Core.first_launch
+	 * @param msg The debug message to pass to console
+	 * @since 0.0.1
+	 */
+	public static void debug(String name, String location, String msg){
+		if(debugState.equalsIgnoreCase("true")){
+			log(name, location, msg);
 		}
 	}
 	
@@ -64,6 +85,7 @@ public class Core extends JavaPlugin{
 		log(name, Codes.COMMANDS.toString(), "Registering Commands");
 		this.getCommand("ae356784901ldnvld0-083lwe").setExecutor(new Commands(this));
 		this.getCommand("player").setExecutor(new Commands(this));
+		this.getCommand("toggle_debug").setExecutor(new Commands(this));
 		log(name, Codes.LISTENERS.toString(), "Registering Listeners");
 		getServer().getPluginManager().registerEvents(new EntryListener(), this);
 		log(name, Codes.STARTUP.toString(), "Initializtion Completed.");

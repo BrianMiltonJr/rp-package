@@ -14,9 +14,21 @@ import com.johnwillikers.rp.enums.Codes;
 
 public class PlayerBase {
 
+/**
+ * The directory where the playerbase files are located
+ */
 public static String dir = Core.dir;
+/**
+ * The masterfile location which holds the rp playername to UUID for system tasks
+ */
 public static File master_file = new File(dir + "master_file.json");
 	
+/**
+ * Creates the masterfile
+ * 
+ * @throws IOException
+ * @since 0.0.1
+ */
 	public static void createMasterFile() throws IOException{
 		Core.log(Core.name, Codes.FIRST_LAUNCH.toString(), "Attempting to create Master File");
 		JSONObject obj = new JSONObject();
@@ -29,12 +41,26 @@ public static File master_file = new File(dir + "master_file.json");
 		}
 	}
 	
+	/**
+	 * Saves the masterfile
+	 * 
+	 * @param json The json string to save the masterfile
+	 * @throws IOException
+	 * @since 0.0.1
+	 */
 	public static void saveMasterFile(String json) throws IOException{
 		PrintWriter mf = new PrintWriter(master_file);
 		mf.println(json);
 		mf.close();
 	}
 	
+	/**
+	 * Loads the masterfile
+	 * 
+	 * @return Returns a JSONObject
+	 * @throws IOException
+	 * @since 0.0.1
+	 */
 	public static JSONObject loadMasterFile() throws IOException{
 		FileReader fr = new FileReader(master_file);
 		BufferedReader br = new BufferedReader(fr);
@@ -45,6 +71,14 @@ public static File master_file = new File(dir + "master_file.json");
 		return data;
 	}
 	
+	/**
+	 * Appends an entry to the masterfile
+	 * 
+	 * @param UUID The Player's UUID
+	 * @param name The Players new rp name
+	 * @throws IOException
+	 * @since 0.0.1
+	 */
 	public static void appendMasterFile(String UUID, String name) throws IOException{
 		try{
 			JSONObject data = loadMasterFile();
@@ -56,7 +90,11 @@ public static File master_file = new File(dir + "master_file.json");
 	}
 	
 	/**
-	 * Returns a String[] payload. Index 0 is the Success code and if successful, UUID is assigned into Index 1.
+	 * Checks the masterfile for the UUID of a player
+	 * 
+	 * @param name The players Rp name styled with a _ instead of spaces
+	 * @return Returns a {@code String[]} with the UUID of the player
+	 * @since 0.0.1
 	 */
 	public static String[] checkMasteFile(String name){
 		JSONObject data;
@@ -77,6 +115,12 @@ public static File master_file = new File(dir + "master_file.json");
 			return bad;
 		}
 	}
+	
+	/**
+	 * Creates the Playerbase and calls execution of the creation of the masterfile
+	 * 
+	 * @since 0.0.1
+	 */
 	public static void createPlayerBaseDir(){
 		File pb = new File(dir);
 		Core.debug(Core.name, Codes.STARTUP.toString(), "Checking Whether Player Base Location Exists.");
@@ -99,6 +143,19 @@ public static File master_file = new File(dir + "master_file.json");
 		}
 	}
 	
+	/**
+	 * Writes a new player to the PlayerBase
+	 * 
+	 * @param UUID The Players UUID
+	 * @param first The Players rp first name
+	 * @param last The Players rp last name
+	 * @param playerName The Players actual minecraft account name
+	 * @param gender The Players gender
+	 * @param originalIp The Players Original Ip
+	 * @param lastIp The Players Last Ip
+	 * @throws IOException
+	 * @since 0.0.1
+	 */
 	public static void writePlayer(String UUID, String first, String last, String playerName, String gender, String originalIp, String lastIp) throws IOException{
 		JSONObject pfile = new JSONObject().put("first", first).put("last", last).put("playerName", playerName).put("gender", gender).put("originalIp", originalIp).put("lastIp", lastIp);
 		PrintWriter write = new PrintWriter(new File(dir + UUID + ".json"));
@@ -107,6 +164,15 @@ public static File master_file = new File(dir + "master_file.json");
 		appendMasterFile(UUID, first + "_" + last);
 	}
 	
+	/**
+	 * Updates a player in the PlayerBase mostly called when logging in
+	 * 
+	 * @param UUID The Players UUID
+	 * @param newIp The Players new latest ip
+	 * @param playerName The Players current Minecraft account name
+	 * @throws IOException
+	 * @since 0.0.1
+	 */
 	public static void updatePlayer(String UUID, String newIp, String playerName) throws IOException{
 		File pfile = new File(dir + UUID + ".json");
 		FileReader fr = new FileReader(pfile);
@@ -133,6 +199,13 @@ public static File master_file = new File(dir + "master_file.json");
 		}
 	}
 	
+	/**
+	 * Checks to see if the player is registered in the playerbase
+	 * 
+	 * @param player The player to be checked
+	 * @return a boolean regarding whether it exists or not
+	 * @since 0.0.1
+	 */
 	public static boolean exists(Player player){
 		File user = new File(dir + player.getUniqueId().toString() + ".json");
 		if(user.exists()){
@@ -142,6 +215,13 @@ public static File master_file = new File(dir + "master_file.json");
 		}
 	}
 	
+	/**
+	 * Gets the players info from the playerbase
+	 * 
+	 * @param player the player to get their information retrieved
+	 * @return Returns a {@code String[]} containing the players info
+	 * @since 0.0.1
+	 */
 	public static String[] getPlayerInfo(Player player){
 		Core.debug(Core.name, Codes.DEBUG + "PlayerBase.getPlayerInfo", dir + player.getUniqueId().toString() + ".json");
 		File user = new File(dir + player.getUniqueId().toString() + ".json");

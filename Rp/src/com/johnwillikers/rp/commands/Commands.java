@@ -12,6 +12,7 @@ import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.PlayerBase;
 import com.johnwillikers.rp.Utilities;
 import com.johnwillikers.rp.conversations.EntryPrompt;
+import com.johnwillikers.rp.enums.Codes;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -68,6 +69,22 @@ public class Commands implements CommandExecutor {
 						player.sendMessage(args[0] + " " + args[1] + " does not exist");
 						return true;
 					}
+				}
+			}else if(cmd.getName().equalsIgnoreCase("toggle_debug")) {
+				if(sender.isOp()) {
+					if(Core.debugState == "true") {
+						Core.debugState = "false";
+						sender.sendMessage("Debug State has been disabled");
+						Core.log(Core.name, Codes.DEBUG.toString(), "Debug State has been disabled");
+					}else {
+						Core.debugState = "true";
+						sender.sendMessage("Debug State has been enabled");
+						Core.log(Core.name, Codes.DEBUG.toString(), "Debug State has been enabled.");
+					}
+					return true;
+				}else {
+					sender.sendMessage("You must be a Server Operator to use this command.");
+					return true;
 				}
 			}
 		}

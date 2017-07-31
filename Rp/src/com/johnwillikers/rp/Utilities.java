@@ -16,14 +16,36 @@ import com.johnwillikers.rp.enums.Codes;
 
 public class Utilities {
 	
+	/**
+	 * The Settings dir
+	 */
 	public static File settingsDir = new File(Core.dir + "Settings");
+	/**
+	 * Rp_Core's setting file
+	 */
 	public static File settingsFile = new File(settingsDir + "/core_settings.json");
+	/**
+	 * The default JSONObject to be written on first launch
+	 */
 	public static JSONObject settingsDefault = new JSONObject("{\"debugState\":true,\"townName\":\"The Encampment\"}");
 	
+	/**
+	 * A helper method that converts a String version of a UUID into a full fledged UUID
+	 * 
+	 * @param uuid the {@code String} version of the UUID you want to convert
+	 * @return Returns a {@code UUID}
+	 * @since 0.0.1
+	 */
 	public static UUID returnUUID(String uuid){
 		return UUID.fromString(uuid);
 	}
 	
+	/**
+	 * Gets the current date
+	 * 
+	 * @return Returns a {@code String} of the current date
+	 * @since 0.0.1
+	 */
 	public static String getDate(){
 		DateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
 		Date dateRaw = new Date();
@@ -31,6 +53,12 @@ public class Utilities {
 		return date;
 	}
 	
+	/**
+	 * Grabs Rp_Core's settings and puts them into a String[]
+	 * 
+	 * @return Returns a {@code String[]}
+	 * @since 0.0.1
+	 */
 	public static String[] getSettings(){
 		try{
 			FileReader fr = new FileReader(settingsFile);
@@ -52,6 +80,11 @@ public class Utilities {
 		}
 	}
 	
+	/**
+	 * Creates the Rp_Cores settings
+	 * 
+	 * @since 0.0.1
+	 */
 	public static void createSettingsFile(){
 		Core.log(Core.name, Codes.STARTUP.toString(), "Checking to see if settings.json exists.");
 		if(!settingsFile.exists()){
@@ -71,6 +104,11 @@ public class Utilities {
 		Core.log(Core.name, Codes.STARTUP.toString(), "settings.json exists");
 	}
 	
+	/**
+	 * Creates the Settings filepath
+	 * 
+	 * @since 0.0.1
+	 */
 	public static void createSettingsPath(){
 		Core.log(Core.name, Codes.STARTUP.toString(), "Checking to see if settings Directory exists");
 		if(!settingsDir.exists()){
