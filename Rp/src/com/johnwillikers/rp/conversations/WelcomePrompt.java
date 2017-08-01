@@ -23,10 +23,10 @@ public class WelcomePrompt extends MessagePrompt{
 		}
 		if(Integer.valueOf(con.getSessionData("gender").toString()) == 0){
 			Bukkit.broadcastMessage("Welcome " + con.getSessionData("first").toString() + " " + con.getSessionData("last").toString() + " to " + Core.townName);
-			return "\n\n\n\n\n\n\nWelcome to TODO:ENTERNAME Ms. " + player.getDisplayName() + ".";
+			return "\n\n\n\n\n\n\nWelcome to " + Core.townName + " Ms. " + player.getDisplayName() + ".";
 		}else{
 			Bukkit.broadcastMessage("Welcome " + con.getSessionData("first").toString() + " " + con.getSessionData("last").toString() + " to " + Core.townName);
-			return "\n\n\n\n\n\n\nWelcome to TODO:ENTERNAME Mr. " + player.getDisplayName() + ".";
+			return "\n\n\n\n\n\n\nWelcome to " + Core.townName + " Mr. " + player.getDisplayName() + ".";
 		}
 	}
 

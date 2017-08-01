@@ -9,11 +9,12 @@ Current Features:
   * A chat system that goes by distance with the ability to whisper, talk or yell
   * A Out of Character chat system that can be toggle to talk into by using /ooc or using /ooc on | /ooc off to display ooc chat
   * Full JSON support
-
-What I'm Working on:
   * Karma System - Inspired by TTT to allow game-masters to penalize failRp and rules (Currently implemented, but barebones)
   * Commenting code for contributors (Currently up to date with V0.0.2)
   * more debug calls
+
+What Im Working On:
+  * Merging project-elrond into this plugin as a stat system
 
 Planned Features:
   * Government or tribal implementation of a grouping system
