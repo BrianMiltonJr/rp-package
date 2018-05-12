@@ -1,22 +1,14 @@
 package com.johnwillikers.rp.conversations;
 
-import java.io.IOException;
-
-import org.bukkit.Bukkit;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
-import org.json.JSONObject;
-
 import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.Karma;
-import com.johnwillikers.rp.KarmaBase;
-import com.johnwillikers.rp.KarmaLogic;
-import com.johnwillikers.rp.PlayerBase;
+import com.johnwillikers.rp.KarmaBaseMySql;
+import com.johnwillikers.rp.PlayerBaseMySql;
 import com.johnwillikers.rp.Utilities;
-import com.johnwillikers.rp.enums.Codes;
-import com.johnwillikers.rp.enums.KarmaNegation;
 
 public class NegateConfirmPrompt extends StringPrompt{
 
@@ -24,20 +16,35 @@ public class NegateConfirmPrompt extends StringPrompt{
 	public String offense;
 	public String uuid;
 	public String desc;
-	public Player player;
+	public Player gm;
 	public String name;
 	
-	public NegateConfirmPrompt(String question, String offense, String uuid, String desc, Player player, String name){
+	public NegateConfirmPrompt(String question, String offense, String uuid, String desc, Player gm, String name){
 		this.question = question;
 		this.offense = offense;
 		this.uuid = uuid;
 		this.desc = desc;
-		this.player = player;
+		this.gm = gm;
 		this.name = name;
 	}
 	
 	@Override
 	public Prompt acceptInput(ConversationContext con, String ans) {
+		if(ans.equalsIgnoreCase("y") || ans.equalsIgnoreCase("yes")) {
+			if(Core.dataMethod.equalsIgnoreCase("mysql")) {
+				String[] data = {this.desc, this.offense, Utilities.getDate()};
+				KarmaBaseMySql.complain(this.gm, PlayerBaseMySql.getPlayerId(this.uuid), data);
+				Core.debug(Karma.name, "NegateConfirmPrompt.acceptInput", "Offense = " + Integer.valueOf(this.offense));
+				KarmaBaseMySql.updateKarma(PlayerBaseMySql.getPlayerId(uuid), Integer.valueOf(this.offense));
+			}else {
+				
+			}
+			return Prompt.END_OF_CONVERSATION;
+		}else {
+			this.gm.sendMessage("You have cancelled the report");
+			return Prompt.END_OF_CONVERSATION;
+		}
+		/* JSON methodology my dude
 		Core.debug(Karma.name, Codes.DEBUG.toString() + "NegateConfirmPrompt.acceptInput", "ans = " + ans);
 		@SuppressWarnings("unused")
 		Player offender = Bukkit.getPlayer(this.uuid);
@@ -78,7 +85,8 @@ public class NegateConfirmPrompt extends StringPrompt{
 			player.sendMessage("You did not confirm the report.");
 			return Prompt.END_OF_CONVERSATION;	
 		}
-		return Prompt.END_OF_CONVERSATION;
+		*/
+		
 	}
 
 	@Override

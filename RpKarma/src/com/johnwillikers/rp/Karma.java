@@ -1,11 +1,7 @@
 package com.johnwillikers.rp;
 
-import java.util.Timer;
-
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.JSONObject;
-
 import com.johnwillikers.rp.commands.KarmaCommands;
 import com.johnwillikers.rp.enums.Codes;
 
@@ -29,7 +25,7 @@ public class Karma extends JavaPlugin{
 		Core.log(Core.name, Codes.DEPENDENCY.toString(), "Rp Karma has been recognized. Allowing Rp Karma to use Rp Core.");
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization");
 		KarmaBase.createKarmaBaseDir();
-		JSONObject settings = KarmaBase.getSettings();
+		KarmaBaseMySql.createTables();
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
 		Core.log(name, Codes.STARTUP.toString(), "Initialization");
 		Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");

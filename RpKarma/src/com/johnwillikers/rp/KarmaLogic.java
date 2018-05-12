@@ -3,6 +3,7 @@ package com.johnwillikers.rp;
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -66,12 +67,16 @@ public class KarmaLogic {
 	 * @param player the player
 	 * @param amount the amount
 	 */
-	public static void aid(Player player, int amount){
-		JSONObject derp = null;
-		try {
-			KarmaBase.updateKarma(player.getUniqueId().toString(), amount, derp);
-		} catch (IOException e) {
-			e.printStackTrace();
+	public static void aid(String uuid, int amount){
+		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
+			KarmaBaseMySql.updateKarma(PlayerBaseMySql.getPlayerId(uuid), amount);
+		}else {
+			JSONObject derp = null;
+			try {
+				KarmaBase.updateKarma(uuid, amount, derp);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	
@@ -83,12 +88,15 @@ public class KarmaLogic {
 	 * @param incident the latest incident
 	 * @throws IOException Error in writing new karma file
 	 */
-	public static void negate(String uuid, int amount, JSONObject incident) throws IOException{
-		KarmaBase.updateKarma(uuid, amount, incident);
-	}
-	
-	public static void sendOffenderMsg(Player player, String msg){
-		player.sendMessage(msg);
+	public static void negate(CommandSender send, String uuid, int amount, String[] data) throws IOException{
+		Player gm = (Player) send;
+		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
+			KarmaBaseMySql.updateKarma(PlayerBaseMySql.getPlayerId(uuid), amount);
+			KarmaBaseMySql.complain(gm, PlayerBaseMySql.getPlayerId(uuid), data);
+		}else {
+			JSONObject incident = new JSONObject();
+			KarmaBase.updateKarma(uuid, amount, incident);
+		}
 	}
 	
 	/**
@@ -97,40 +105,68 @@ public class KarmaLogic {
 	 * @param uuid the player
 	 * @return String
 	 */
+	
 	public static String lookUp(String uuid){
-		Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "lookUp() was triggered.");
-		JSONObject info = KarmaBase.getKarmaInfo(uuid);
-		Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "JSONObject info loaded");
-		Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning Karma Coloring");
-		if(info.getInt("status") == 1){
-			ChatColor karmaColor = null;
-			if(info.getInt("karma") > 0){
-				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.GREEN + " Green");
-				karmaColor = ChatColor.GREEN;
-			}else if(info.getInt("karma") < 0){
-				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.RED + " Red");
-				karmaColor = ChatColor.RED;
-			}else{
-				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.YELLOW + " YELLOW");
-				karmaColor = ChatColor.YELLOW;
+		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
+			String[] reportIds = KarmaBaseMySql.getInfo(Bukkit.getPlayer(Utilities.returnUUID(uuid)));
+			if(!(reportIds.equals(null))) {
+				ChatColor karmaColor = null;
+				int karma = Integer.valueOf(reportIds[0]);
+				if(karma > 0){
+					Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.GREEN + " Green");
+					karmaColor = ChatColor.GREEN;
+				}else if(karma < 0){
+					Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.RED + " Red");
+					karmaColor = ChatColor.RED;
+				}else{
+					Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.YELLOW + " YELLOW");
+					karmaColor = ChatColor.YELLOW;
+				}
+				int length = reportIds.length - 1;
+				String success = ChatColor.GOLD + "Karma: " + karmaColor + karma + ChatColor.GOLD + "\nNumber of Incidents: " + length + "\n Report Id's:\n";
+				
+				
+				for(int i=1; i<=length; i++) {
+					success = success + "* " + reportIds[i] + "\n";
+				}
+				success = success + "Use /report {id} to view the report";
+				return success;
 			}
-			String success = ChatColor.GOLD + "Karma: " + karmaColor + info.getInt("karma") + ChatColor.GOLD + "\nIncidents: \n";
-			Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning incidents into JSONArray");
-			JSONArray incidents = info.getJSONArray("incidents");
-			int index = 0;
-			Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Looping over incidents JSONArray");
-			while(index < incidents.length()){
-				JSONObject contents = incidents.getJSONObject(index);
-				String date = contents.getString("date");
-				String desc = contents.getString("desc");
-				String actions = contents.getString("actions");
-				String gm = contents.getString("gm");
-				success = success + "--------------------------------------------------\n    Date: " + date + "\n    Description: " + desc + "\n    Actions: " + actions + "    GameMaster: " + gm + "\n";
-				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "End of Incident loop number " + index);
-				index++;
+		}else {
+			Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "lookUp() was triggered.");
+			JSONObject info = KarmaBase.getKarmaInfo(uuid);
+			Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "JSONObject info loaded");
+			Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning Karma Coloring");
+			if(info.getInt("status") == 1){
+				ChatColor karmaColor = null;
+				if(info.getInt("karma") > 0){
+					Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.GREEN + " Green");
+					karmaColor = ChatColor.GREEN;
+				}else if(info.getInt("karma") < 0){
+					Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.RED + " Red");
+					karmaColor = ChatColor.RED;
+				}else{
+					Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning" + ChatColor.YELLOW + " YELLOW");
+					karmaColor = ChatColor.YELLOW;
+				}
+				String success = ChatColor.GOLD + "Karma: " + karmaColor + info.getInt("karma") + ChatColor.GOLD + "\nIncidents: \n";
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Assigning incidents into JSONArray");
+				JSONArray incidents = info.getJSONArray("incidents");
+				int index = 0;
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "Looping over incidents JSONArray");
+				while(index < incidents.length()){
+					JSONObject contents = incidents.getJSONObject(index);
+					String date = contents.getString("date");
+					String desc = contents.getString("desc");
+					String actions = contents.getString("actions");
+					String gm = contents.getString("gm");
+					success = success + "--------------------------------------------------\n    Date: " + date + "\n    Description: " + desc + "\n    Actions: " + actions + "    GameMaster: " + gm + "\n";
+					Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookUp", "End of Incident loop number " + index);
+					index++;
+				}
+				Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookup", "Success = " + success);
+				return success;
 			}
-			Core.debug(Karma.name, Codes.DEBUG.toString() + "KarmaLogic.lookup", "Success = " + success);
-			return success;
 		}
 		String fail = "User does not exist, or bypassed being logged by the Karma System.";
 		return fail;
