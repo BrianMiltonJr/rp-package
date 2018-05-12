@@ -23,7 +23,7 @@ public class EntryListener implements Listener{
 				
 			}else{
 				//MySql way of updating the player
-				String[] player = PlayerBaseMySql.getPlayerInfo(e.getPlayer());
+				String[] player = PlayerBaseMySql.getPlayerInfo(PlayerBaseMySql.getPlayerId(e.getPlayer().getUniqueId().toString()));
 				Core.debug(Core.name, "EntryListener.onPlayerJoin", "Attempting to update " + e.getPlayer().getDisplayName() + "'s PlayerBase Entry [MySql]");
 				Core.log(Core.name, Codes.ENTRYLISTENER.toString(), player[1] + " " + player[2] + " just joined, attempting to update them in the PlayerBase [MySQL]");
 				String[] pData = {"last_ip", e.getPlayer().getAddress().toString(), "player_name", e.getPlayer().getDisplayName()};

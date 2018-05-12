@@ -51,12 +51,12 @@ public class PlayerBaseMySql {
 	 * @return Returns a {@code String[]} containing the players info
 	 * @since 0.0.1
 	 */
-	public static String[] getPlayerInfo(Player player){
-		String query = "SELECT * FROM players WHERE uuid='" + player.getUniqueId().toString() + "';";
+	public static String[] getPlayerInfo(int id){
+		String query = "SELECT * FROM players WHERE id='" + id + "';";
 		ResultSet rs = executeQuery(query);
 		try {
 			rs.next();
-			String[] details = {"1", rs.getString(2), rs.getString(3), rs.getString(4), String.valueOf(rs.getBoolean(5)), rs.getString(6), rs.getString(7)};
+			String[] details = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)};
 			rs.close();
 			return details;
 		} catch (SQLException e) {
