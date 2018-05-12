@@ -1,23 +1,19 @@
 package com.johnwillikers.rp;
 
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-
 import org.bukkit.entity.Player;
-import java.sql.Connection;
 
 public class PlayerBaseMySql {
 	
 	public static void createTables() {
 		String playersTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`players` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` VARCHAR(200) NOT NULL , `first` VARCHAR(200) NOT NULL , `last` VARCHAR(200) NOT NULL , `player_name` VARCHAR(200) NOT NULL , `gender` INT NOT NULL , `creation_ip` VARCHAR(200) NOT NULL , `last_ip` VARCHAR(200) NOT NULL , `created_at` VARCHAR(200) NOT NULL , `updated_at` VARCHAR(200) NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM";
-		executeUpdate(playersTableQuery);
+		Utilities.executeUpdate(playersTableQuery, Core.name);
 	}
 	
 	public static int getPlayerId(String uuid) {
 		String query = "SELECT id FROM players WHERE uuid='" + uuid + "';";
-		ResultSet rs = executeQuery(query);
+		ResultSet rs = Utilities.executeQuery(query, Core.name);
 		try {
 			if(rs.next()) {
 				int id = rs.getInt(1);
@@ -32,7 +28,7 @@ public class PlayerBaseMySql {
 	
 	public static String getUuid(String first, String last){
 		String query = "SELECT uuid FROM players WHERE first LIKE '" + first + "' AND last LIKE '" + last + "';";
-		ResultSet rs = executeQuery(query);
+		ResultSet rs = Utilities.executeQuery(query, Core.name);
 		try {
 			if(rs.next()) {
 				return rs.getString(1);
@@ -53,7 +49,7 @@ public class PlayerBaseMySql {
 	 */
 	public static String[] getPlayerInfo(int id){
 		String query = "SELECT * FROM players WHERE id='" + id + "';";
-		ResultSet rs = executeQuery(query);
+		ResultSet rs = Utilities.executeQuery(query, Core.name);
 		try {
 			rs.next();
 			String[] details = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)};
@@ -75,7 +71,7 @@ public class PlayerBaseMySql {
 	 */
 	public static boolean exists(Player player){
 		String query = "SELECT * FROM players WHERE uuid='" + player.getUniqueId().toString() + "';";
-		ResultSet rs = executeQuery(query);
+		ResultSet rs = Utilities.executeQuery(query, Core.name);
 		try {
 			if(rs.next()) {
 				return true;
@@ -112,52 +108,14 @@ public class PlayerBaseMySql {
 			}
 		}
 		query = query + "WHERE uuid='" + player.getUniqueId().toString() + "';";
-		executeUpdate(query);
+		Utilities.executeUpdate(query, Core.name);
 	}
 	
 	public static void createPlayer(String[] data) {
 		String query = "INSERT INTO players ( uuid, first, last, player_name, gender, creation_ip, last_ip, created_at, updated_at ) "
 				+ "VALUES ('" + data[0] + "', '" + data[1] + "', '" + data[2] + "', '" + data[3] + "', "+ data[4] + ", '" + data[5] +
 				"', '" + data[6] + "', '" + data[7] + "', '" + data[8] + "');";
-		executeUpdate(query);
+		Utilities.executeUpdate(query, Core.name);
 		
-	}
-	
-	public static ResultSet executeQuery(String query) {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection(Core.driver);
-			Statement stmt = conn.createStatement();
-			Core.debug(Core.name, "PlayerBaseMysql.executeQuery", "Query String = " + query);
-			ResultSet rs = stmt.executeQuery(query);
-			return rs;
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			
-		}
-		return null;
-	}
-	
-	public static void executeUpdate(String query) {
-		try {
-			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection(Core.driver);
-			Statement stmt = conn.createStatement();
-			Core.debug(Core.name, "PlayerBaseMysql.executeUpdate", "Query String = " + query);
-			stmt.executeUpdate(query);
-			stmt.close();
-			conn.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			
-		}
 	}
 }

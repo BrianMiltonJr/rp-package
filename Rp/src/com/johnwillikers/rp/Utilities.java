@@ -5,6 +5,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -123,6 +128,44 @@ public class Utilities {
 			createSettingsFile();
 		}else{
 			Core.log(Core.name, Codes.STARTUP.toString(), "settings Directory exists.");
+		}
+	}
+	
+	public static ResultSet executeQuery(String query, String pluginName) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(Core.driver);
+			Statement stmt = conn.createStatement();
+			Core.debug(pluginName, "Utilities.executeUpdate", "Query String = " + query);
+			ResultSet rs = stmt.executeQuery(query);
+			return rs;
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+		}
+		return null;
+	}
+	
+	public static void executeUpdate(String query, String pluginName) {
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection conn = DriverManager.getConnection(Core.driver);
+			Statement stmt = conn.createStatement();
+			Core.debug(pluginName, "Utilities.executeUpdate", "Query String = " + query);
+			stmt.executeUpdate(query);
+			stmt.close();
+			conn.close();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
 		}
 	}
 }
