@@ -18,6 +18,7 @@ public enum Codes {
 	CORE(ChatColor.DARK_GREEN + "Rp_Core"),
 	CHAT(ChatColor.AQUA + "Rp_Chat"),
 	KARMA(ChatColor.RED + "Rp_Karma"),
+	MMO(ChatColor.LIGHT_PURPLE + "Rp_MMO"),
 	RELOAD(ChatColor.DARK_GREEN + "Reload");
 	
 	private final String text;
