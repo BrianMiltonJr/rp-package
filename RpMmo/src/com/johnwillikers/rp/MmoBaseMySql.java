@@ -2,7 +2,6 @@ package com.johnwillikers.rp;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.Utilities;
 
 public class MmoBaseMySql {
@@ -12,8 +11,20 @@ public class MmoBaseMySql {
 	static int[] startingPoints = {5, 3};
 	
 	public static void createTables() {
-		String toonsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db +"`.`gamemasters` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` VARCHAR(200) NOT NULL , `name` VARCHAR(200) NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
+		String toonsTableQuery = "CREATE TABLE IF NOT EXISTS`" + Core.db + "`.`toons` ( `id` INT NOT NULL AUTO_INCREMENT , `player_id` INT NOT NULL , `xp` INT NOT NULL , `level` INT NOT NULL , `stat_points` INT NOT NULL , `skill_points` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
+		String statsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`stats` ( `id` INT NOT NULL AUTO_INCREMENT , `toon_id` INT NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , `constitution` INT NOT NULL , `spirit` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
+		String skillsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`skills` ( `id` INT NOT NULL AUTO_INCREMENT , `toon_id` INT NOT NULL , `sword` INT NOT NULL , `shield` INT NOT NULL , `axe` INT NOT NULL , `bow` INT NOT NULL , `light_armor` INT NOT NULL , `heavy_armor` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
+		String swordsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`swords` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
+		String shieldsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`shields` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
+		String axesTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`axes` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;"; 
+		String bowsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`bows` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;"; 
 		Utilities.executeUpdate(toonsTableQuery, Mmo.name);
+		Utilities.executeUpdate(statsTableQuery, Mmo.name);
+		Utilities.executeUpdate(skillsTableQuery, Mmo.name);
+		Utilities.executeUpdate(swordsTableQuery, Mmo.name);
+		Utilities.executeUpdate(shieldsTableQuery, Mmo.name);
+		Utilities.executeUpdate(axesTableQuery, Mmo.name);
+		Utilities.executeUpdate(bowsTableQuery, Mmo.name);
 	}
 	
 	public static boolean exists(int player_id){

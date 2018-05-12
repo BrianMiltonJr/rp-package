@@ -64,7 +64,7 @@ public class Core extends JavaPlugin{
 	/**
 	 * When another dependable plugin is loaded they switch their respective indice to 1 to allow smooth creation process and logging
 	 */
-	public static int[] dependables = {0,0};
+	public static int[] dependables = {0,0,0};
 	
 	public ConversationFactory factory = new ConversationFactory(this);
 	

@@ -25,19 +25,22 @@ public class Mmo extends JavaPlugin{
 	
 	@Override
 	public void onEnable(){
-		Core.dependables[1] = 1;
-		Core.log(Core.name, Codes.DEPENDENCY.toString(), "Rp Karma has been recognized. Allowing Rp Karma to use Rp Core.");
-		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization");
-		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
-		Core.log(name, Codes.STARTUP.toString(), "Initialization");
-		Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");
-		this.getCommand("mmo").setExecutor(new MmoCommands(this));
-		this.getCommand("item").setExecutor(new MmoCommands(this));
-		this.getCommand("character").setExecutor(new MmoCommands(this));
-		this.getCommand("level").setExecutor(new MmoCommands(this));
-		getServer().getPluginManager().registerEvents(new MmoListener(), this);
-		getServer().getPluginManager().registerEvents(new DamageListener(), this);
-		Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
+		Core.dependables[2] = 1;
+		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
+			Core.log(Core.name, Codes.DEPENDENCY.toString(), "Rp Karma has been recognized. Allowing Rp Karma to use Rp Core.");
+			Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization");
+			MmoBaseMySql.createTables();
+			Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
+			Core.log(name, Codes.STARTUP.toString(), "Initialization");
+			Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");
+			this.getCommand("mmo").setExecutor(new MmoCommands(this));
+			this.getCommand("item").setExecutor(new MmoCommands(this));
+			this.getCommand("character").setExecutor(new MmoCommands(this));
+			this.getCommand("level").setExecutor(new MmoCommands(this));
+			getServer().getPluginManager().registerEvents(new MmoListener(), this);
+			getServer().getPluginManager().registerEvents(new DamageListener(), this);
+			Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
+		}
 	}
 	
 	@Override
