@@ -34,6 +34,7 @@ public class Mmo extends JavaPlugin{
 		this.getCommand("mmo").setExecutor(new MmoCommands(this));
 		this.getCommand("item").setExecutor(new MmoCommands(this));
 		this.getCommand("character").setExecutor(new MmoCommands(this));
+		this.getCommand("level").setExecutor(new MmoCommands(this));
 		getServer().getPluginManager().registerEvents(new MmoListener(), this);
 		getServer().getPluginManager().registerEvents(new DamageListener(), this);
 		Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");

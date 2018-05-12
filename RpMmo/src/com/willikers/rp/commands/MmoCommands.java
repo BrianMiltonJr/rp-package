@@ -33,6 +33,14 @@ public class MmoCommands implements CommandExecutor {
 				player.sendMessage(msg);
 				return true;
 			}
+			if(args[0].equalsIgnoreCase("xp")) {
+				String targetUuid = PlayerBaseMySql.getUuid(args[1], args[2]);
+				int targetId = PlayerBaseMySql.getPlayerId(targetUuid);
+				Toon toon = new Toon(targetId);
+				toon.experience(Integer.valueOf(args[3]));
+				player.sendMessage("Awarded " + args[3] + " XP to " + args[1] + " " + args[1]);
+				return true;
+			}
 		}else if(cmd.getName().equalsIgnoreCase("item")) {
 			if(args.length==2) {
 				if(args[0].equalsIgnoreCase("sword")) {
@@ -58,6 +66,49 @@ public class MmoCommands implements CommandExecutor {
 			String msg = toon.generateToonMsg();
 			player.sendMessage(msg);
 			return true;
+		}else if(cmd.getName().equalsIgnoreCase("level")) {
+			int playerId = PlayerBaseMySql.getPlayerId(player.getUniqueId().toString());
+			Toon toon = new Toon(playerId);
+			if(args.length==0) {
+				player.sendMessage(toon.unspentPoints());
+				return true;
+			}else {
+				int amount = Integer.valueOf(args[2]);
+				if(args[0].equalsIgnoreCase("stat")) {
+					if(args[1].equalsIgnoreCase("str") || args[1].equalsIgnoreCase("strength")) {
+						toon.levelStat(amount, "str");
+					}else if(args[1].equalsIgnoreCase("agi") || args[1].equalsIgnoreCase("agility")) {
+						toon.levelStat(amount, "agi");
+					}else if(args[1].equalsIgnoreCase("dex") || args[1].equalsIgnoreCase("dexterity")) {
+						toon.levelStat(amount, "dex");
+					}else if(args[1].equalsIgnoreCase("cons") || args[1].equalsIgnoreCase("constitution")) {
+						toon.levelStat(amount, "cons");
+					}else if(args[1].equalsIgnoreCase("spr") || args[1].equalsIgnoreCase("spirit")) {
+						toon.levelStat(amount, "spirit");
+					}
+					toon.update();
+					return true;
+				}else if(args[0].equalsIgnoreCase("skill")) {
+					if(args[1].equalsIgnoreCase("swords") || args[1].equalsIgnoreCase("swd")) {
+						toon.levelSkill(amount, "sword");
+					}else if(args[1].equalsIgnoreCase("shields") || args[1].equalsIgnoreCase("shd")) {
+						toon.levelSkill(amount, "shield");
+					}else if(args[1].equalsIgnoreCase("axes") || args[1].equalsIgnoreCase("axe")) {
+						toon.levelSkill(amount, "axe");
+					}else if(args[1].equalsIgnoreCase("bows") || args[1].equalsIgnoreCase("bow")) {
+						toon.levelSkill(amount, "bow");
+					}else if(args[1].equalsIgnoreCase("lightarmor") || args[1].equalsIgnoreCase("larm")) {
+						toon.levelSkill(amount, "larm");
+					}else if(args[1].equalsIgnoreCase("heavyarmor") || args[1].equalsIgnoreCase("harm")) {
+						toon.levelSkill(amount, "harm");
+					}
+					toon.update();
+					return true;
+				}else {
+					player.sendMessage("try /level [stat/skill]");
+					return true;
+				}
+			}
 		}
 		return false;
 		

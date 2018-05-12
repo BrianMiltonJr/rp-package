@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.Mmo;
@@ -31,36 +32,62 @@ public class DamageListener implements Listener{
 			ItemStack weapon = p.getInventory().getItemInMainHand();
 			ItemMeta weaponMeta = weapon.getItemMeta();
 			List<String> lore = weaponMeta.getLore();
-			int str = Integer.valueOf(lore.get(0)); 
-			int agi = Integer.valueOf(lore.get(1));
-			int dex = Integer.valueOf(lore.get(2));
+			int str = Integer.valueOf(lore.get(1)); 
+			int agi = Integer.valueOf(lore.get(3));
+			int dex = Integer.valueOf(lore.get(5));
 			Material weaponType = weapon.getType();
 			
 			//Formula in charge of adding up damage
 			int attack = 0;
 			int attackBonus = 0;
-			if(dex>=stats[2]) {
+			int meleeFormula = (stats[0] * 2) + (stats[1]/2);
+			int rangedFormula = (stats[1]*2) + (stats[0]/4);
+			int swordBonusFormula = (str*2) + (agi*skills[0]);
+			int axeBonusFormula = (str*2) + (agi*skills[1]);
+			int bowBonusFormula = (agi*2) + (str*skills[2]);
+			if(stats[2]>=dex) {
+				Core.debug(Mmo.name, "DamageListener.onDamage", "Meets dex requirments");
 				switch(weaponType){
 				case IRON_SWORD: 
-					attack = str;
-					attackBonus = (attackBonus + str) + skills[0];
+					attack = meleeFormula;
+					attackBonus = (attackBonus + swordBonusFormula);
 					break;
 				case IRON_AXE: 
-					attack = str;
-					attackBonus = (attackBonus + str) + skills[0];
-					break;
-				case BOW:
-					attack = agi;
-					attackBonus = (attackBonus + agi) + skills[1];
+					attack = meleeFormula;
+					attackBonus = (attackBonus + axeBonusFormula);
 					break;
 				default:
 					attackBonus = 0;
 				}
 			
+			}else {
+				Core.debug(Mmo.name, "DamageListener.onDamage", "Does not Meet dex requirments");
+				switch(weaponType){
+				case IRON_SWORD: 
+					attack = meleeFormula;
+					attackBonus = (attackBonus - str);
+					break;
+				case IRON_AXE: 
+					attack = meleeFormula;
+					attackBonus = (attackBonus - str);
+					break;
+				default:
+					attackBonus = 0;
+				}
 			}
-			Core.debug(Mmo.name, "DamageListener.onDamage", "attack =" + attack);
-			Core.debug(Mmo.name, "DamageListener.onDamage", "attackBonus" + attackBonus);
-			e.setDamage(Double.valueOf(attack+attackBonus));
+			Core.debug(Mmo.name, "DamageListener.onDamage", "attack = " + attack);
+			Core.debug(Mmo.name, "DamageListener.onDamage", "attackBonus = " + attackBonus);
+			int dmg = attack + attackBonus;
+			Core.debug(Mmo.name, "DamageListener.onDamage", "dmg = " + dmg);
+			if(dmg<=0) {
+				dmg = 0;
+			}
+			if(e.getCause().equals(DamageCause.PROJECTILE)) {
+				attack = rangedFormula;
+				attackBonus = (attackBonus + bowBonusFormula);
+				dmg = (attack + attackBonus);
+			}
+			e.setDamage(Double.valueOf(dmg));
 		}
 	}
 }

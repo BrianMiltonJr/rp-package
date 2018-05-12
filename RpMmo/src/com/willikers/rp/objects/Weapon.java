@@ -20,8 +20,11 @@ public class Weapon{
 		ItemMeta weaponMeta = weapon.getItemMeta();
 		weaponMeta.setDisplayName(this.name);
 		ArrayList<String> lore = new ArrayList<String>();
+		lore.add("Strength:");
 		lore.add(String.valueOf(this.str));
+		lore.add("Agility:");
 		lore.add(String.valueOf(this.agi));
+		lore.add("Dexterity:");
 		lore.add(String.valueOf(this.dex));
 		weaponMeta.setLore(lore);
 		weapon.setItemMeta(weaponMeta);

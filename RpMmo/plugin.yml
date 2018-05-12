@@ -16,7 +16,12 @@ commands:
     permissions: rp.mmo.item
     permission-message: You feel a strong force denying you.
   character:
-    description: lets you view your Character Sheer
+    description: lets you view your Character Sheet
     usage: /character
     permissions: rp.mmo.character
+    permission-message: Contact a Server Operator.
+  level:
+    description: Lets you level either a skill or stat
+    usage: /level [skill/stat] [name] [amount]
+    permissions: rp.mmo.level
     permission-message: Contact a Server Operator.

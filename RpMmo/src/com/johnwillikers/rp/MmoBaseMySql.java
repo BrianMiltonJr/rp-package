@@ -116,7 +116,7 @@ public class MmoBaseMySql {
 	public static void updateMmoTable(int toonId, String table, String[] data) {
 		String query = "UPDATE " + table + " SET ";
 		for(int i = 0; i<(data.length-1); i++){
-			query = query + data[i] + "=";
+			query = query + data[i] + " = ";
 			i++;
 			if(i<data.length-1) {
 				query = query  + data[i] + ", ";
@@ -130,6 +130,8 @@ public class MmoBaseMySql {
 		}else {
 			query = query + "WHERE toon_id=" + toonId + ";";
 		}
+		
+		Utilities.executeUpdate(query, Mmo.name);
 	}
 	
 	public static void createNewToon(int playerId) {

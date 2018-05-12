@@ -3,10 +3,9 @@ package com.willikers.rp.objects;
 import com.johnwillikers.rp.MmoBaseMySql;
 
 public class Toon {
-
-	private final int skillLevel = 3;
-	private final int statLevel = 5;
 	
+	private final int skillLevel = 2;
+	private final int statLevel = 4;
 	private int id;
 	private int playerId;
 	
@@ -65,7 +64,12 @@ public class Toon {
 		return skills;
 	}
 	
-	
+	public String unspentPoints() {
+		String msg = "Your Unspent Points:"
+				+"\n*  Stat Points: " + this.statPoints
+				+"\n*  Skill Points: " + this.skillPoints;
+		return msg;
+	}
 	public String generateToonMsg() {
 		String msg = "Your Resources:"
 				+ "\n*  HP: " + this.cons *2
@@ -87,28 +91,33 @@ public class Toon {
 	
 	public void update() {
 		String[] toonData = {"xp", String.valueOf(this.xp), "level", String.valueOf(this.level), "stat_points", String.valueOf(this.statPoints), "skill_points", String.valueOf(this.skillPoints)};
-		String[] skillData = {"strength", String.valueOf(this.str), "dexterity", String.valueOf(this.dex), "agility", String.valueOf(this.agi), "constitution", String.valueOf(this.cons), "spirit", String.valueOf(this.spirit)};
-		String[] statData = {"sword", String.valueOf(this.sword), "shield", String.valueOf(this.shield), "axe", String.valueOf(this.axe), "bow", String.valueOf(this.bow), "light_armor", String.valueOf(this.larm), "heavy_armor", String.valueOf(this.harm)};
+		String[] statData = {"strength", String.valueOf(this.str), "agility", String.valueOf(this.agi), "dexterity", String.valueOf(this.dex), "constitution", String.valueOf(this.cons), "spirit", String.valueOf(this.spirit)};
+		String[] skillData = {"sword", String.valueOf(this.sword), "shield", String.valueOf(this.shield), "axe", String.valueOf(this.axe), "bow", String.valueOf(this.bow), "light_armor", String.valueOf(this.larm), "heavy_armor", String.valueOf(this.harm)};
 		MmoBaseMySql.updateMmoTable(this.id, "toons", toonData);
 		MmoBaseMySql.updateMmoTable(this.id, "skills", skillData);
 		MmoBaseMySql.updateMmoTable(this.id, "stats", statData);
 	}
 	
 	public boolean levelStat(int statPoints, String stat) {
-		if(skillPoints>this.skillPoints || skillPoints==0) {
+		if(statPoints>this.statPoints || this.statPoints==0) {
 			return false;
 		}else {
-			this.skillPoints = this.skillPoints - skillPoints;
+			this.statPoints = this.statPoints - statPoints;
 			switch (stat) {
-				case "str": this.str = this.str + skillPoints;
+				case "str": 
+						this.str = this.str + statPoints;
 						break;
-				case "agi": this.agi = this.agi + skillPoints;
+				case "agi": 
+						this.agi = this.agi + statPoints;
 						break;
-				case "dex": this.dex = this.dex + skillPoints;
+				case "dex": 
+						this.dex = this.dex + statPoints;
 						break;
-				case "cons": this.cons = this.cons + skillPoints;
+				case "cons": 
+						this.cons = this.cons + statPoints;
 						break;
-				case "spirit": this.spirit = this.spirit + skillPoints;
+				case "spirit": 
+						this.spirit = this.spirit + statPoints;
 						break;
 			}
 			return true;
@@ -140,17 +149,30 @@ public class Toon {
 	
 	public void experience(int xp) {
 		this.xp = this.xp + xp;
-		if(this.level<=5) {
-			if(xp>=500) {
+		if(this.level<5) {
+			if(this.xp>=500) {
 				this.xp = this.xp - 500;
+				this.level++;
+			}
+			if(this.level % 2 == 0) {
+				this.statPoints = this.statPoints + this.statLevel;
+			}
+			if(this.level==5) {
+				this.skillPoints = this.skillPoints + this.skillLevel;
 			}
 		}else {
-			if(xp>=1000) {
+			if(this.xp>=1000) {
 				this.xp = this.xp - 1000;
+				this.level++;
+				if(this.level % 4 == 0) {
+					this.statPoints = this.statPoints + this.statLevel;
+				}
+				if(this.level % 5 == 0) {
+					this.skillPoints = this.skillPoints + this.skillLevel;
+				}
 			}
 		}
-		this.level++;
-		this.statPoints = this.statPoints + this.statLevel;
-		this.skillPoints = this.skillPoints + this.skillLevel;
+		String[] toonData = {"xp", String.valueOf(this.xp), "level", String.valueOf(this.level), "stat_points", String.valueOf(this.statPoints), "skill_points", String.valueOf(this.skillPoints)};
+		MmoBaseMySql.updateMmoTable(this.id, "toons", toonData);
 	}
 }
