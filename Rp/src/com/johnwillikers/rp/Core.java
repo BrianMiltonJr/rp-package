@@ -33,7 +33,7 @@ public class Core extends JavaPlugin{
 	/**
 	 * This String determines how to store and retrieve data
 	 */
-	public static String dataMethod = "mysql";
+	public static String dataMethod = "json";
 	/**
 	 * MySql host
 	 */
