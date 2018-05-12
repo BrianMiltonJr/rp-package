@@ -2,10 +2,11 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
-	<classpathentry kind="lib" path="C:/Brian/Server/spigot.jar" sourcepath="C:/Brian/BuildTools/Spigot/Spigot-Server/src/main">
+	<classpathentry kind="lib" path="G:/Servers/Minecraft/Latest/spigot-1.12.2.jar" sourcepath="C:/Brian/BuildTools/Spigot/Spigot-Server/src/main">
 		<attributes>
 			<attribute name="javadoc_location" value="file:/C:/Brian/Server/doc/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="G:/dependencies/java/mysql-connector-java-5.1.46.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

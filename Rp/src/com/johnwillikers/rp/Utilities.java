@@ -27,7 +27,7 @@ public class Utilities {
 	/**
 	 * The default JSONObject to be written on first launch
 	 */
-	public static JSONObject settingsDefault = new JSONObject("{\"debugState\":true,\"townName\":\"The Encampment\"}");
+	public static JSONObject settingsDefault = new JSONObject("{\"debugState\":true,\"townName\":\"The Encampment\", \"dataMethod\":\"mysql\"}");
 	
 	/**
 	 * A helper method that converts a String version of a UUID into a full fledged UUID
@@ -69,7 +69,8 @@ public class Utilities {
 			JSONObject data = new JSONObject(json);
 			boolean debugState = data.getBoolean("debugState");
 			String townName = data.getString("townName");
-			String[] goodReply = {"1", String.valueOf(debugState), townName};
+			String dataMethod = data.getString("dataMethod");
+			String[] goodReply = {"1", String.valueOf(debugState), townName, dataMethod};
 			Core.debug(Core.name, Codes.DEBUG + "Utilities.getSettings", "Returning goodReply contains: failCode: " + goodReply[0] + " debugState: " + goodReply[1]);
 			return goodReply;
 		} catch (IOException e) {

@@ -86,6 +86,16 @@ public class Commands implements CommandExecutor {
 					sender.sendMessage("You must be a Server Operator to use this command.");
 					return true;
 				}
+			}else if(cmd.getName().equalsIgnoreCase("rp")) {
+				if(args[0].equalsIgnoreCase("reload")) {
+					Core.log(Core.name, Codes.RELOAD.toString(), "Reloading " + Core.name + " Settings");
+					Core.settings = Utilities.getSettings();
+					Core.debugState = Core.settings[1];
+					Core.townName = Core.settings[2];
+					Core.dataMethod = Core.settings[3];
+					sender.sendMessage("You have updated " + Core.name + " settings");
+					return true;
+				}
 			}
 		}
 		return false;

@@ -19,3 +19,8 @@ commands:
     usage: /toggle_debug
     permissions: rp.toggle.debug
     permission-message: A Server Operator command.
+  rp:
+    description: admin command
+    usage: /rp <args>
+    permissions: rp.admin
+    permission-message: A Server Operator command.

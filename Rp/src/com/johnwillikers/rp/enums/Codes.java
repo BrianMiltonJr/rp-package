@@ -17,7 +17,8 @@ public enum Codes {
 	DEPENDENCY(ChatColor.DARK_GREEN + "Dependency"),
 	CORE(ChatColor.DARK_GREEN + "Rp_Core"),
 	CHAT(ChatColor.AQUA + "Rp_Chat"),
-	KARMA(ChatColor.RED + "Rp_Karma");
+	KARMA(ChatColor.RED + "Rp_Karma"),
+	RELOAD(ChatColor.DARK_GREEN + "Reload");
 	
 	private final String text;
 	

@@ -31,6 +31,10 @@ public class Core extends JavaPlugin{
 	 */
 	public static String debugState = "true";
 	/**
+	 * This String determines how to store and retrieve data
+	 */
+	public static String dataMethod = "mysql";
+	/**
 	 * The name of the town
 	 */
 	public static String townName = "The Encampment";
@@ -83,13 +87,16 @@ public class Core extends JavaPlugin{
 		settings = Utilities.getSettings();
 		debugState = settings[1];
 		townName = settings[2];
+		dataMethod = settings[3];
 		debug(name, Codes.DEBUG + "Core.onEnable", "debugState = " + settings[1]);
+		debug(name, Codes.DEBUG + "Core.onEnable", "dataMethod = " + settings[3]);
 		log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
 		log(name, Codes.STARTUP.toString(), "Initialization");
 		log(name, Codes.COMMANDS.toString(), "Registering Commands");
 		this.getCommand("ae356784901ldnvld0-083lwe").setExecutor(new Commands(this));
 		this.getCommand("player").setExecutor(new Commands(this));
 		this.getCommand("toggle_debug").setExecutor(new Commands(this));
+		this.getCommand("rp").setExecutor(new Commands(this));
 		log(name, Codes.LISTENERS.toString(), "Registering Listeners");
 		getServer().getPluginManager().registerEvents(new EntryListener(), this);
 		log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
