@@ -25,7 +25,9 @@ public class Karma extends JavaPlugin{
 		Core.log(Core.name, Codes.DEPENDENCY.toString(), "Rp Karma has been recognized. Allowing Rp Karma to use Rp Core.");
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization");
 		KarmaBase.createKarmaBaseDir();
-		KarmaBaseMySql.createTables();
+		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
+			KarmaBaseMySql.createTables();
+		}
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
 		Core.log(name, Codes.STARTUP.toString(), "Initialization");
 		Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");
