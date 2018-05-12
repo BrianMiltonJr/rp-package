@@ -116,6 +116,7 @@ public class Core extends JavaPlugin{
 		driver = "jdbc:mysql://" + host + "/" + table + "?user=" + user + "&password=" + password + "&useSSL=false";
 		debug(name, Codes.DEBUG + "Core.onEnable", "debugState = " + settings[1]);
 		debug(name, Codes.DEBUG + "Core.onEnable", "dataMethod = " + settings[3]);
+		debug(name, Codes.DEBUG + "Core.onEnable", "Driver = " + driver);
 		log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
 		log(name, Codes.STARTUP.toString(), "Initialization");
 		log(name, Codes.COMMANDS.toString(), "Registering Commands");

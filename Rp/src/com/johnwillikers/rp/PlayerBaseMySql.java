@@ -6,18 +6,27 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.bukkit.entity.Player;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.johnwillikers.rp.enums.Codes;
-
-import java.io.IOException;
 import java.sql.Connection;
 
 public class PlayerBaseMySql {
 
-	public static String[] queries = {"INSERT INTO players (uuid, first, last, player_name, gender, creation_ip, last_ip, created_at, updated_at) VALUES()",
+	public static String[] queries = {"INSERT INTO players ( uuid, first, last, player_name, gender, creation_ip, last_ip, created_at, updated_at ) VALUES()",
 									  "UPDATE players SET"};
+	
+	public static int getPlayerId(String uuid) {
+		String query = "SELECT id FROM players WHERE uuid='" + uuid + "';";
+		ResultSet rs = executeQuery(query);
+		try {
+			if(rs.next()) {
+				int id = rs.getInt(1);
+				return id;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return -4000;
+	}
 	
 	public static String getUuid(String first, String last){
 		String query = "SELECT uuid FROM players WHERE first LIKE '" + first + "' AND last LIKE '" + last + "';";
@@ -105,7 +114,9 @@ public class PlayerBaseMySql {
 	}
 	
 	public static void createPlayer(String[] data) {
-		String query = "INSERT INTO players VALUES ('" + data[0] + "', '" + data[1] + "', '" + data[2] + "', '" + data[3] + "', "+ data[4] + ", '" + data[5] + "', '" + data[6] + "', '" + data[7] + "', '" + data[8] + "');";
+		String query = "INSERT INTO players ( uuid, first, last, player_name, gender, creation_ip, last_ip, created_at, updated_at ) "
+				+ "VALUES ('" + data[0] + "', '" + data[1] + "', '" + data[2] + "', '" + data[3] + "', "+ data[4] + ", '" + data[5] +
+				"', '" + data[6] + "', '" + data[7] + "', '" + data[8] + "');";
 		executeUpdate(query);
 		
 	}
