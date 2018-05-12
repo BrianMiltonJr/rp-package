@@ -9,9 +9,11 @@ import org.bukkit.entity.Player;
 import java.sql.Connection;
 
 public class PlayerBaseMySql {
-
-	public static String[] queries = {"INSERT INTO players ( uuid, first, last, player_name, gender, creation_ip, last_ip, created_at, updated_at ) VALUES()",
-									  "UPDATE players SET"};
+	
+	public static void createTables() {
+		String playersTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`players` ( `id` INT NOT NULL AUTO_INCREMENT , `uuid` VARCHAR(200) NOT NULL , `first` VARCHAR(200) NOT NULL , `last` VARCHAR(200) NOT NULL , `player_name` VARCHAR(200) NOT NULL , `gender` INT NOT NULL , `creation_ip` VARCHAR(200) NOT NULL , `last_ip` VARCHAR(200) NOT NULL , `created_at` VARCHAR(200) NOT NULL , `updated_at` VARCHAR(200) NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM";
+		executeUpdate(playersTableQuery);
+	}
 	
 	public static int getPlayerId(String uuid) {
 		String query = "SELECT id FROM players WHERE uuid='" + uuid + "';";

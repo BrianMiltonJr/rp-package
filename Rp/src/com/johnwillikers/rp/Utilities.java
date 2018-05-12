@@ -27,7 +27,7 @@ public class Utilities {
 	/**
 	 * The default JSONObject to be written on first launch
 	 */
-	public static JSONObject settingsDefault = new JSONObject("{\"debugState\":true,\"townName\":\"The Encampment\",\"dataMethod\":\"mysql\",\"host\":\"localhost\",\"table\":\"mctest\",\"user\":\"root\",\"password\":\"\"}");
+	public static JSONObject settingsDefault = new JSONObject("{\"debugState\":true,\"townName\":\"The Encampment\",\"dataMethod\":\"mysql\",\"host\":\"localhost\",\"db\":\"mctest\",\"user\":\"root\",\"password\":\"\"}");
 	
 	/**
 	 * A helper method that converts a String version of a UUID into a full fledged UUID

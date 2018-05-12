@@ -41,7 +41,7 @@ public class Core extends JavaPlugin{
 	/**
 	 * MySql table
 	 */
-	public static String table = "mctest";
+	public static String db = "mctest";
 	/**
 	 * MySql Root credential
 	 * 
@@ -54,7 +54,7 @@ public class Core extends JavaPlugin{
 	/**
 	 *  Driver Path for Minecraft Mysql Server
 	 */
-	public static String driver = "jdbc:mysql://" + host + "/" + table + "?user=" + user + "&password=" + password + "&useSSL=false";
+	public static String driver = "jdbc:mysql://" + host + "/" + db + "?user=" + user + "&password=" + password + "&useSSL=false";
 	/**
 	 * The name of the town
 	 */
@@ -110,10 +110,13 @@ public class Core extends JavaPlugin{
 		townName = settings[2];
 		dataMethod = settings[3];
 		host = settings[4];
-		table = settings[5];
+		db = settings[5];
 		user = settings[6];
 		password = settings[7];
-		driver = "jdbc:mysql://" + host + "/" + table + "?user=" + user + "&password=" + password + "&useSSL=false";
+		driver = "jdbc:mysql://" + host + "/" + db + "?user=" + user + "&password=" + password + "&useSSL=false";
+		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
+			PlayerBaseMySql.createTables();
+		}
 		debug(name, Codes.DEBUG + "Core.onEnable", "debugState = " + settings[1]);
 		debug(name, Codes.DEBUG + "Core.onEnable", "dataMethod = " + settings[3]);
 		debug(name, Codes.DEBUG + "Core.onEnable", "Driver = " + driver);
