@@ -6,12 +6,32 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import org.bukkit.entity.Player;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.johnwillikers.rp.enums.Codes;
+
+import java.io.IOException;
 import java.sql.Connection;
 
 public class PlayerBaseMySql {
 
 	public static String[] queries = {"INSERT INTO players (uuid, first, last, player_name, gender, creation_ip, last_ip, created_at, updated_at) VALUES()",
 									  "UPDATE players SET"};
+	
+	public static String getUuid(String[] name){
+		String query = "SELECT uuid FROM players WHERE first LIKE '" + name[0] + "' AND last LIKE '" + name[1] + "';";
+		ResultSet rs = executeQuery(query);
+		try {
+			if(rs.next()) {
+				return rs.getString(1);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
 	
 	/**
 	 * Gets the players info from the playerbase
@@ -95,7 +115,7 @@ public class PlayerBaseMySql {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mctest?user=root&useSSL=false");
 			Statement stmt = conn.createStatement();
-			Core.debug(Core.name, "PlayerBaseMysql.runMysqlQuery", "Query String = " + query);
+			Core.debug(Core.name, "PlayerBaseMysql.executeQuery", "Query String = " + query);
 			ResultSet rs = stmt.executeQuery(query);
 			return rs;
 		} catch (ClassNotFoundException e) {
@@ -114,7 +134,7 @@ public class PlayerBaseMySql {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mctest?user=root&useSSL=false");
 			Statement stmt = conn.createStatement();
-			Core.debug(Core.name, "PlayerBaseMysql.runMysqlQuery", "Query String = " + query);
+			Core.debug(Core.name, "PlayerBaseMysql.executeUpdate", "Query String = " + query);
 			stmt.executeUpdate(query);
 			stmt.close();
 			conn.close();
