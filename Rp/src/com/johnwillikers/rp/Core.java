@@ -35,6 +35,27 @@ public class Core extends JavaPlugin{
 	 */
 	public static String dataMethod = "mysql";
 	/**
+	 * MySql host
+	 */
+	public static String host = "localhost";
+	/**
+	 * MySql table
+	 */
+	public static String table = "mctest";
+	/**
+	 * MySql Root credential
+	 * 
+	 */
+	public static String user = "root";
+	/**
+	 * MySql Passwoord credential
+	 */
+	public static String password = "";
+	/**
+	 *  Driver Path for Minecraft Mysql Server
+	 */
+	public static String driver = "jdbc:mysql://" + host + "/" + table + "?user=" + user + "&password=" + password + "&useSSL=false";
+	/**
 	 * The name of the town
 	 */
 	public static String townName = "The Encampment";
@@ -88,6 +109,11 @@ public class Core extends JavaPlugin{
 		debugState = settings[1];
 		townName = settings[2];
 		dataMethod = settings[3];
+		host = settings[4];
+		table = settings[5];
+		user = settings[6];
+		password = settings[7];
+		driver = "jdbc:mysql://" + host + "/" + table + "?user=" + user + "&password=" + password + "&useSSL=false";
 		debug(name, Codes.DEBUG + "Core.onEnable", "debugState = " + settings[1]);
 		debug(name, Codes.DEBUG + "Core.onEnable", "dataMethod = " + settings[3]);
 		log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");

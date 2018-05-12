@@ -27,7 +27,7 @@ public class Utilities {
 	/**
 	 * The default JSONObject to be written on first launch
 	 */
-	public static JSONObject settingsDefault = new JSONObject("{\"debugState\":true,\"townName\":\"The Encampment\", \"dataMethod\":\"mysql\"}");
+	public static JSONObject settingsDefault = new JSONObject("{\"debugState\":true,\"townName\":\"The Encampment\", \"dataMethod\":\"mysql\", \"host\":\"localhost\", \"table\":\"mctest\", \"user\":\\\"root\", \"password\":\"\"}");
 	
 	/**
 	 * A helper method that converts a String version of a UUID into a full fledged UUID
@@ -70,7 +70,11 @@ public class Utilities {
 			boolean debugState = data.getBoolean("debugState");
 			String townName = data.getString("townName");
 			String dataMethod = data.getString("dataMethod");
-			String[] goodReply = {"1", String.valueOf(debugState), townName, dataMethod};
+			String host = data.getString("host");
+			String table = data.getString("table");
+			String user = data.getString("user");
+			String password = data.getString("password");
+			String[] goodReply = {"1", String.valueOf(debugState), townName, dataMethod, host, table ,dataMethod, user, password};
 			Core.debug(Core.name, Codes.DEBUG + "Utilities.getSettings", "Returning goodReply contains: failCode: " + goodReply[0] + " debugState: " + goodReply[1]);
 			return goodReply;
 		} catch (IOException e) {

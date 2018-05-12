@@ -19,8 +19,8 @@ public class PlayerBaseMySql {
 	public static String[] queries = {"INSERT INTO players (uuid, first, last, player_name, gender, creation_ip, last_ip, created_at, updated_at) VALUES()",
 									  "UPDATE players SET"};
 	
-	public static String getUuid(String[] name){
-		String query = "SELECT uuid FROM players WHERE first LIKE '" + name[0] + "' AND last LIKE '" + name[1] + "';";
+	public static String getUuid(String first, String last){
+		String query = "SELECT uuid FROM players WHERE first LIKE '" + first + "' AND last LIKE '" + last + "';";
 		ResultSet rs = executeQuery(query);
 		try {
 			if(rs.next()) {
@@ -113,7 +113,7 @@ public class PlayerBaseMySql {
 	public static ResultSet executeQuery(String query) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mctest?user=root&useSSL=false");
+			Connection conn = DriverManager.getConnection(Core.driver);
 			Statement stmt = conn.createStatement();
 			Core.debug(Core.name, "PlayerBaseMysql.executeQuery", "Query String = " + query);
 			ResultSet rs = stmt.executeQuery(query);
@@ -132,7 +132,7 @@ public class PlayerBaseMySql {
 	public static void executeUpdate(String query) {
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
-			Connection conn = DriverManager.getConnection("jdbc:mysql://localhost/mctest?user=root&useSSL=false");
+			Connection conn = DriverManager.getConnection(Core.driver);
 			Statement stmt = conn.createStatement();
 			Core.debug(Core.name, "PlayerBaseMysql.executeUpdate", "Query String = " + query);
 			stmt.executeUpdate(query);
