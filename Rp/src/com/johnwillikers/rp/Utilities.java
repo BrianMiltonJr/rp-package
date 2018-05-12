@@ -71,10 +71,10 @@ public class Utilities {
 			String townName = data.getString("townName");
 			String dataMethod = data.getString("dataMethod");
 			String host = data.getString("host");
-			String table = data.getString("table");
+			String db = data.getString("db");
 			String user = data.getString("user");
 			String password = data.getString("password");
-			String[] goodReply = {"1", String.valueOf(debugState), townName, dataMethod, host, table, user, password};
+			String[] goodReply = {"1", String.valueOf(debugState), townName, dataMethod, host, db, user, password};
 			Core.debug(Core.name, Codes.DEBUG + "Utilities.getSettings", "Returning goodReply contains: failCode: " + goodReply[0] + " debugState: " + goodReply[1]);
 			return goodReply;
 		} catch (IOException e) {
