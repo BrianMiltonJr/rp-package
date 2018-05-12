@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import com.johnwillikers.rp.commands.KarmaCommands;
 import com.johnwillikers.rp.enums.Codes;
-import com.johnwillikers.rp.timertasks.KarmaTask;
 
 
 public class Karma extends JavaPlugin{
@@ -23,30 +22,6 @@ public class Karma extends JavaPlugin{
 	 */
 	public static String dir = Core.dir + "Rp_Karma";
 	public ConversationFactory factory = new ConversationFactory(this);
-	/**
-	 * The Time before starting update karma task
-	 */
-	public long startTime = 5;
-	/**
-	 * Modifies the time into seconds
-	 */
-	public long startModifier = startTime * 1000;
-	/**
-	 * The time before starting another update karma task
-	 */
-	public long delayTime = 1;
-	/**
-	 * Modifies the time into hours
-	 */
-	public long delayModifier = delayTime * 1000 * 60 * 60;
-	/**
-	 * Creates a timer with the label karma-update and sets it as a daemon
-	 */
-	public Timer karmaUpdate = new Timer("karma-update", true);
-	/**
-	 * How much karma to give during a karma update
-	 */
-	public static int karmaUpAmount = 50;
 	
 	@Override
 	public void onEnable(){
@@ -55,10 +30,6 @@ public class Karma extends JavaPlugin{
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization");
 		KarmaBase.createKarmaBaseDir();
 		JSONObject settings = KarmaBase.getSettings();
-		this.startTime = settings.getInt("startTime");
-		this.delayTime = settings.getInt("delayTime");
-		karmaUpAmount = settings.getInt("karmaUpAmount");
-		Core.debug(name, Codes.DEBUG.toString() + "Karma.onEnable", "startTime: " + startTime + " | delayTime: " + delayTime + " | karmaUpAmount: " + karmaUpAmount);
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
 		Core.log(name, Codes.STARTUP.toString(), "Initialization");
 		Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");
@@ -66,14 +37,11 @@ public class Karma extends JavaPlugin{
 		this.getCommand("negate").setExecutor(new KarmaCommands(this));
 		this.getCommand("karma").setExecutor(new KarmaCommands(this));
 		Core.log(name, Codes.STARTUP.toString(), "Starting up Timers");
-		karmaUpdate.schedule(new KarmaTask(), this.startModifier , this.delayModifier);
 		Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
 	}
 	
 	@Override
 	public void onDisable(){
 		Core.log(name, Codes.SHUTDOWN.toString(), "Disabling Timers");
-		karmaUpdate.cancel();
-		karmaUpdate.purge();
 	}
 }
