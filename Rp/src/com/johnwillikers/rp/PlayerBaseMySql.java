@@ -46,14 +46,14 @@ public class PlayerBaseMySql {
 		String query = "SELECT * FROM players WHERE uuid='" + player.getUniqueId().toString() + "';";
 		ResultSet rs = executeQuery(query);
 		try {
-			if(rs.wasNull()) {
-				return false;
+			if(rs.next()) {
+				return true;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return true;
+		return false;
 	}
 	
 	

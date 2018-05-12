@@ -80,7 +80,7 @@ public class Utilities {
 			return badReply;
 		}
 	}
-	
+
 	/**
 	 * Creates the Rp_Cores settings
 	 * 
