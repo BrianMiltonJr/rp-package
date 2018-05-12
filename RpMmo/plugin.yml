@@ -1,22 +1,22 @@
-name: Rp_Karma
+name: Rp_Mmo
 version: 0.0.3
 author: John_Willikers
-main: com.johnwillikers.rp.Karma
-description: This is the punishment/reward system for John Williker's Custom Rp Server.
+main: com.johnwillikers.rp.Mmo
+description: This is the RPG system to the Rp_Package
 depend: [Rp_Core]
 commands:
-  0e812e08h02v8he0182vhe1:
-    description: Admits the player into the Karma database
-    usage: /0e812e08h02v8he0182vhe1
-    permissions: rp.karma.entry
+  mmo:
+    description: let's a gamemaster pull up a users toon sheet
+    usage: /mmo (first) (last)
+    permissions: rp.mmo.check
     permission-message: You feel a strong force denying you.
-  negate:
-    description: GameMaster commands that allows a player to be negated for failRp
-    usage: /negate first last offense desc
-    permissions: rp.negate
+  item:
+    description: lets you spawn an item needing a type and the weapon id
+    usage: /item (type) (id)
+    permissions: rp.mmo.item
     permission-message: You feel a strong force denying you.
-  karma:
-    description: GameMaster commands that allows a player to be negated for failRp
-    usage: /karma first last
-    permissions: rp.karma
-    permission-message: You feel a strong force denying you.
+  character:
+    description: lets you view your Character Sheer
+    usage: /character
+    permissions: rp.mmo.character
+    permission-message: Contact a Server Operator.

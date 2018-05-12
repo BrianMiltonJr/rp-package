@@ -1,10 +1,13 @@
-package com.willikers.rp;
+package com.johnwillikers.rp;
 
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.enums.Codes;
+import com.willikers.rp.commands.MmoCommands;
+import com.willikers.rp.listeners.DamageListener;
+import com.willikers.rp.listeners.MmoListener;
 
 
 public class Mmo extends JavaPlugin{
@@ -28,8 +31,11 @@ public class Mmo extends JavaPlugin{
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
 		Core.log(name, Codes.STARTUP.toString(), "Initialization");
 		Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");
-		//this.getCommand("negate").setExecutor(new KarmaCommands(this));
-		Core.log(name, Codes.STARTUP.toString(), "Starting up Timers");
+		this.getCommand("mmo").setExecutor(new MmoCommands(this));
+		this.getCommand("item").setExecutor(new MmoCommands(this));
+		this.getCommand("character").setExecutor(new MmoCommands(this));
+		getServer().getPluginManager().registerEvents(new MmoListener(), this);
+		getServer().getPluginManager().registerEvents(new DamageListener(), this);
 		Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
 	}
 	
