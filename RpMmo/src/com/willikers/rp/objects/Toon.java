@@ -96,6 +96,7 @@ public class Toon {
 		MmoBaseMySql.updateMmoTable(this.id, "toons", toonData);
 		MmoBaseMySql.updateMmoTable(this.id, "skills", skillData);
 		MmoBaseMySql.updateMmoTable(this.id, "stats", statData);
+		this.destroy();
 	}
 	
 	public boolean levelStat(int statPoints, String stat) {
@@ -174,5 +175,9 @@ public class Toon {
 		}
 		String[] toonData = {"xp", String.valueOf(this.xp), "level", String.valueOf(this.level), "stat_points", String.valueOf(this.statPoints), "skill_points", String.valueOf(this.skillPoints)};
 		MmoBaseMySql.updateMmoTable(this.id, "toons", toonData);
+	}
+	
+	public void destroy() {
+		this.destroy();
 	}
 }
