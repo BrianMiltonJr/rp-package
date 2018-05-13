@@ -106,6 +106,7 @@ public class Core extends JavaPlugin{
 	
 	@Override
 	public void onEnable(){
+		plugin = this;
 		log(name, Codes.STARTUP.toString(), "Pre-Initialization");
 		PlayerBase.createPlayerBaseDir();
 		Utilities.createSettingsPath();

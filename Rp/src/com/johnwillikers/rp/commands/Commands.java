@@ -39,31 +39,35 @@ public class Commands implements CommandExecutor {
 		}else if(cmd.getName().equalsIgnoreCase("player")){
 			if(args.length > 1 || args.length == 2){
 				if(Core.dataMethod.equalsIgnoreCase("mysql")) {
-					String query = "SELECT * FROM players WHERE first LIKE " + args[0] + " AND last LIKE " + args[1] + ";";
+					String query = "SELECT * FROM players WHERE first LIKE '" + args[0] + "' AND last LIKE '" + args[1] + "';";
 					//Asyncronously Calls for the data and when it arrives sends it to the player
 					DbHandler.executeQuery(Core.plugin, query, Core.name, new MySqlCallback() {
 						@Override
 						public void onQueryDone(ResultSet rs) {
 							try {
-								String[] details = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)};
-								rs.close();
-								String first = details[2];
-								String last = details[3];
-								String playerName = details[4];
-								String gender;
-								if(Integer.valueOf(details[5]) == 0){
-									gender = "Female";
-								}else{
-									gender = "Male";
+								if(rs.next()) {
+									String[] details = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)};
+									rs.close();
+									String first = details[2];
+									String last = details[3];
+									String playerName = details[4];
+									String gender;
+									if(Integer.valueOf(details[5]) == 0){
+										gender = "Female";
+									}else{
+										gender = "Male";
+									}
+									String originalIp = details[6];
+									String lastIp = details[7];
+									String createdAt = details[8];
+									String updatedAt = details[9];
+									String reply = ChatColor.GOLD + "--------------------\n" + ChatColor.GREEN + "Name: " + ChatColor.AQUA + first + " " + last + "\n" + ChatColor.GREEN + "Real Name: "
+											+ ChatColor.AQUA + playerName + "\n" + ChatColor.GREEN +"Gender: " + ChatColor.AQUA + gender + "\n" + ChatColor.GREEN + "Original Ip: " + ChatColor.AQUA + originalIp +
+											"\n" + ChatColor.GREEN + "Last Ip: " + ChatColor.AQUA + lastIp + ChatColor.GOLD + "\n" + ChatColor.GREEN + "Created At: " + ChatColor.AQUA + createdAt + "\n" + ChatColor.GREEN + "Updated At: " + ChatColor.AQUA + updatedAt + ChatColor.GOLD + "\n --------------------";
+									player.sendMessage(reply);
+								}else {
+									player.sendMessage(args[0] + " " + args[1] + " does not exist.");
 								}
-								String originalIp = details[6];
-								String lastIp = details[7];
-								String createdAt = details[8];
-								String updatedAt = details[9];
-								String reply = ChatColor.GOLD + "--------------------\n" + ChatColor.GREEN + "Name: " + ChatColor.AQUA + first + " " + last + "\n" + ChatColor.GREEN + "Real Name: "
-										+ ChatColor.AQUA + playerName + "\n" + ChatColor.GREEN +"Gender: " + ChatColor.AQUA + gender + "\n" + ChatColor.GREEN + "Original Ip: " + ChatColor.AQUA + originalIp +
-										"\n" + ChatColor.GREEN + "Last Ip: " + ChatColor.AQUA + lastIp + ChatColor.GOLD + "\n" + ChatColor.GREEN + "Created At: " + ChatColor.AQUA + createdAt + "\n" + ChatColor.GREEN + "Updated At: " + ChatColor.AQUA + updatedAt + ChatColor.GOLD + "\n --------------------";
-								player.sendMessage(reply);
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
