@@ -52,9 +52,13 @@ public class Core extends JavaPlugin{
 	 */
 	public static String password = "";
 	/**
+	 *  SSL status
+	 */
+	public static String ssl = "false";
+	/**
 	 *  Driver Path for Minecraft Mysql Server
 	 */
-	public static String driver = "jdbc:mysql://" + host + "/" + db + "?user=" + user + "&password=" + password + "&useSSL=false";
+	public static String driver = "jdbc:mysql://" + host + "/" + db + "?user=" + user + "&password=" + password + "&useSSL=" + ssl;
 	/**
 	 * The name of the town
 	 */
@@ -113,6 +117,7 @@ public class Core extends JavaPlugin{
 		db = settings[5];
 		user = settings[6];
 		password = settings[7];
+		ssl = settings[8];
 		driver = "jdbc:mysql://" + host + "/" + db + "?user=" + user + "&password=" + password + "&useSSL=false";
 		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
 			PlayerBaseMySql.createTables();
