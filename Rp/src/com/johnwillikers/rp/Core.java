@@ -120,7 +120,7 @@ public class Core extends JavaPlugin{
 		ssl = settings[8];
 		driver = "jdbc:mysql://" + host + "/" + db + "?user=" + user + "&password=" + password + "&useSSL=false";
 		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
-			PlayerBaseMySql.createTables();
+			DbHandler.createTables();
 		}
 		debug(name, Codes.DEBUG + "Core.onEnable", "debugState = " + settings[1]);
 		debug(name, Codes.DEBUG + "Core.onEnable", "dataMethod = " + settings[3]);
