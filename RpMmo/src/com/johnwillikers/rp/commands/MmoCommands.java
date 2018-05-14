@@ -33,10 +33,9 @@ public class MmoCommands implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		final Player player = (Player) sender;
-		final String[] finalArgs = args;
-		
+		final String[] finalArgs = args;	
 		if(cmd.getName().equalsIgnoreCase("mmo")){
-			if(args.length==2) {
+			if(args.length==2 && !(args[0].equalsIgnoreCase("xp"))) {
 				String query = "SELECT id FROM players WHERE first LIKE '" + args[0] + "' AND last LIKE '" + args[1] + "';";
 				DbHandler.executeQuery(Mmo.plugin, query, Mmo.name, "MmoCommands.onCommand (/mmo)", new MySqlCallback() {
 					@Override
@@ -68,15 +67,20 @@ public class MmoCommands implements CommandExecutor {
 								if(rs.next()) {
 									final String uuid = rs.getString(1);
 									rs.close();
-									JSONObject toonData = ToonBaseLocal.readToon(uuid);
-									int oldLevel = toonData.getInt("level");
-									int oldXp = toonData.getInt("xp");
-									int[] newLevelXp = MmoFormulas.formulateLevelUp(oldXp, oldLevel, Integer.valueOf(finalArgs[3]));
-									player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " used to be level " + oldLevel + " with their xp at " + oldXp + ".");
-									player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " is now level " + newLevelXp[0] + " with their new xp at " + newLevelXp[1] + ".");
-									toonData.put("xp", newLevelXp[1]);
-									toonData.put("level", newLevelXp[0]);
-									ToonBaseLocal.updateToon(toonData, uuid);
+									//TODO Fix this to actually check if the user is online before we try accessing them in the live DB
+									if(Bukkit.getServer().getPlayer(uuid).isOnline()) {
+										JSONObject toonData = ToonBaseLocal.readToon(uuid);
+										int oldLevel = toonData.getInt("level");
+										int oldXp = toonData.getInt("xp");
+										int[] newLevelXp = MmoFormulas.formulateLevelUp(oldXp, oldLevel, Integer.valueOf(finalArgs[3]));
+										player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " used to be level " + oldLevel + " with their xp at " + oldXp + ".");
+										player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " is now level " + newLevelXp[0] + " with their new xp at " + newLevelXp[1] + ".");
+										toonData.put("xp", newLevelXp[1]);
+										toonData.put("level", newLevelXp[0]);
+										ToonBaseLocal.updateToon(toonData, uuid);
+									}else {
+										player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " is not online currently, pleae try again when they are online.");
+									}
 								}else {
 									player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " does not exist.");
 								}	
@@ -92,9 +96,9 @@ public class MmoCommands implements CommandExecutor {
 					JSONObject toonData = ToonBaseLocal.readToon(player.getUniqueId().toString());
 					int oldLevel = toonData.getInt("level");
 					int oldXp = toonData.getInt("xp");
-					int[] newLevelXp = MmoFormulas.formulateLevelUp(oldXp, oldLevel, Integer.valueOf(finalArgs[3]));
-					player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " used to be level " + oldLevel + " with their xp at " + oldXp + ".");
-					player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " is now level " + newLevelXp[0] + " with their new xp at " + newLevelXp[1] + ".");
+					int[] newLevelXp = MmoFormulas.formulateLevelUp(oldXp, oldLevel, Integer.valueOf(args[1]));
+					player.sendMessage(player.getDisplayName() + " used to be level " + oldLevel + " with their xp at " + oldXp + ".");
+					player.sendMessage(player.getDisplayName() + " is now level " + newLevelXp[0] + " with their new xp at " + newLevelXp[1] + ".");
 					toonData.put("xp", newLevelXp[1]);
 					toonData.put("level", newLevelXp[0]);
 					ToonBaseLocal.updateToon(toonData, player.getUniqueId().toString());
@@ -119,7 +123,7 @@ public class MmoCommands implements CommandExecutor {
 		}else if(cmd.getName().equalsIgnoreCase("character")) {
 			int[] toonData = ToonBaseLocal.getToonDataIntArray(ToonBaseLocal.readToon(player.getUniqueId().toString()));
 			//TODO add a way to figure how to play ' in plural cases
-			Inventory characterInv = Bukkit.getServer().createInventory(player, 18, player.getDisplayName() + "'s Character Sheet");
+			Inventory characterInv = Bukkit.getServer().createInventory(player, 18, Utilities.ownership(player.getDisplayName()) + " Character Sheet");
 			characterInv.addItem(Utilities.createGuiItem("Strength", new ArrayList<String>(Arrays.asList("Level " + String.valueOf(toonData[4]), "Affects Melee Damage")), Material.ANVIL));
 			characterInv.addItem(Utilities.createGuiItem("Agility", new ArrayList<String>(Arrays.asList("Level " + String.valueOf(toonData[5]), "Affects Ranged Damage")), Material.BOW));
 			characterInv.addItem(Utilities.createGuiItem("Dexterity", new ArrayList<String>(Arrays.asList("Level " + String.valueOf(toonData[5]), "Your Weapon Equip stat")), Material.SLIME_BALL));
@@ -178,7 +182,6 @@ public class MmoCommands implements CommandExecutor {
 
 								@Override
 								public void onQueryDone(ResultSet rs) {
-									
 									try {
 										if(!rs.next()) {
 											String toonsQuery = "INSERT INTO toons ( player_id, xp, level, stat_points, skill_points ) VALUES ( " + id + ", 0, 1, 3, 5 );";
@@ -201,27 +204,22 @@ public class MmoCommands implements CommandExecutor {
 													} catch (SQLException e) {
 														e.printStackTrace();
 													}
-													
 												}
-												
 											});
 										}
 									} catch (SQLException e) {
 										e.printStackTrace();
 									}
 								}
-								
 							});
 						}
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-					
 				}
 			});
 			return true;
 		}
 		return false;
-		
 	}
 }
