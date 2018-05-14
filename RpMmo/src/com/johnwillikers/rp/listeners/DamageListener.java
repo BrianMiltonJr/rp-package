@@ -1,4 +1,4 @@
-package com.willikers.rp.listeners;
+package com.johnwillikers.rp.listeners;
 
 import java.util.List;
 
@@ -11,24 +11,22 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.Mmo;
-import com.johnwillikers.rp.PlayerBaseMySql;
-import com.willikers.rp.objects.Toon;
+import com.johnwillikers.rp.ToonBaseLocal;
 
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.json.JSONObject;
 
 public class DamageListener implements Listener{
 
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if(e.getDamager() instanceof Player){
-			Player p = (Player) e.getDamager();
-			int playerId = PlayerBaseMySql.getPlayerId(p.getUniqueId().toString());
-			//Creates a New Toon Instance and puts the skills and stats in handy arrays for later
-			Toon toon = new Toon(playerId);
-			int[] stats = toon.getStats();
-			int[] skills = toon.getSkills();
-			//GrAab the item in hand and get it's Material and Weapon ID
+			final Player p = (Player) e.getDamager();
+			JSONObject toonData = ToonBaseLocal.readToon(p.getUniqueId().toString());
+			int[] stats = {toonData.getInt("strength"), toonData.getInt("agility"), toonData.getInt("dexterity"), toonData.getInt("constitution"), toonData.getInt("spirit")};
+			int[] skills = {toonData.getInt("sword"), toonData.getInt("shield"), toonData.getInt("axe"), toonData.getInt("bow"), toonData.getInt("light_armor"), toonData.getInt("heavy_armor")};
+			//Grab the item in hand and get it's Material and Weapon ID
 			ItemStack weapon = p.getInventory().getItemInMainHand();
 			ItemMeta weaponMeta = weapon.getItemMeta();
 			List<String> lore = weaponMeta.getLore();

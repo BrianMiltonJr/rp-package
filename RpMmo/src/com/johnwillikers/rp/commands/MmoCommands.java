@@ -1,17 +1,19 @@
-package com.willikers.rp.commands;
+package com.johnwillikers.rp.commands;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.json.JSONObject;
 
+import com.johnwillikers.rp.DbHandler;
 import com.johnwillikers.rp.Mmo;
-import com.johnwillikers.rp.PlayerBaseMySql;
-import com.willikers.rp.objects.Axe;
-import com.willikers.rp.objects.Bow;
-import com.willikers.rp.objects.Shield;
-import com.willikers.rp.objects.Sword;
-import com.willikers.rp.objects.Toon;
+import com.johnwillikers.rp.MySqlCallback;
+import com.johnwillikers.rp.ToonBaseLocal;
+import com.johnwillikers.rp.Weapon;
 
 public class MmoCommands implements CommandExecutor {
 	
@@ -23,92 +25,196 @@ public class MmoCommands implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
-		Player player = (Player) sender;
+		final Player player = (Player) sender;
+		final String[] finalArgs = args;
+		
 		if(cmd.getName().equalsIgnoreCase("mmo")){
 			if(args.length==2) {
-				String targetUuid = PlayerBaseMySql.getUuid(args[0], args[1]);
-				int targetId = PlayerBaseMySql.getPlayerId(targetUuid);
-				Toon toon = new Toon(targetId);
-				String msg = toon.generateToonMsg();
-				player.sendMessage(msg);
+				String query = "SELECT id FROM players WHERE first LIKE '" + args[0] + "' AND last LIKE '" + args[1] + "';";
+				DbHandler.executeQuery(Mmo.plugin, query, Mmo.name, "MmoCommands.onCommand (/mmo)", new MySqlCallback() {
+					@Override
+					public void onQueryDone(ResultSet rs) {
+						try {
+							if(rs.next()) {
+								@SuppressWarnings("unused")
+								final int id = rs.getInt(1);
+								rs.close();
+								//TODO Add Gui that shows player stats
+							}else {
+								player.sendMessage(finalArgs[0] + " " + finalArgs[1] + " does not exist.");
+							}
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+				});
 				return true;
 			}
 			if(args[0].equalsIgnoreCase("xp")) {
-				String targetUuid = PlayerBaseMySql.getUuid(args[1], args[2]);
-				int targetId = PlayerBaseMySql.getPlayerId(targetUuid);
-				Toon toon = new Toon(targetId);
-				toon.experience(Integer.valueOf(args[3]));
-				player.sendMessage("Awarded " + args[3] + " XP to " + args[1] + " " + args[1]);
+				String query = "SELECT uuid FROM players WHERE first LIKE '" + args[1] + "' AND last LIKE '" + args[2] + "';";
+				DbHandler.executeQuery(Mmo.plugin, query, Mmo.name, "MmoCommands.onCommand (/mmo xp)", new MySqlCallback() {
+
+					@Override
+					public void onQueryDone(ResultSet rs) {
+						try {
+							if(rs.next()) {
+								final String uuid = rs.getString(1);
+								rs.close();
+								JSONObject toonData = ToonBaseLocal.readToon(uuid);
+								int oldLevel = toonData.getInt("level");
+								int level = oldLevel;
+								int oldXp = toonData.getInt("xp");
+								int xp = oldXp;
+								xp = xp + Integer.valueOf(finalArgs[3]);
+								if(level<=5) {
+									if(xp % 500 == 0) {
+										level = level + (xp/500);
+										xp = 0;
+									}else {
+										int surplus = xp % 500;
+										int levelXp = xp - surplus;
+										level = level + (levelXp/500);
+										xp = surplus;
+									}
+								}
+								if(level>5 && level <=60) {
+									if(xp % 1000 == 0) {
+										level = level + (xp/1000);
+										xp = 0;
+									}else {
+										int surplus = xp % 1000;
+										int levelXp = xp - surplus;
+										level = level + (levelXp/1000);
+										xp = surplus;
+									}
+								}
+								player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " used to be level " + oldLevel + " with their xp at " + oldXp + ".");
+								player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " is now level " + level + " with their new xp at " + xp + ".");
+								toonData.put("xp", xp);
+								toonData.put("level", level);
+								ToonBaseLocal.updateToon(toonData, uuid);
+							}else {
+								player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " does not exist.");
+							}	
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					
+				});
 				return true;
 			}
 		}else if(cmd.getName().equalsIgnoreCase("item")) {
 			if(args.length==2) {
 				if(args[0].equalsIgnoreCase("sword")) {
-					Sword sword = new Sword(Integer.valueOf(args[1]));
-					player.getInventory().addItem(sword.getItem());
+					new Weapon("swords", Integer.valueOf(args[1]), player);
 				}else if(args[0].equalsIgnoreCase("axe")) {
-					Axe axe = new Axe(Integer.valueOf(args[1]));
-					player.getInventory().addItem(axe.getItem());
+					new Weapon("axes", Integer.valueOf(args[1]), player);
 				}else if(args[0].equalsIgnoreCase("bow")) {
-					Bow bow = new Bow(Integer.valueOf(args[1]));
-					player.getInventory().addItem(bow.getItem());
+					new Weapon("bows", Integer.valueOf(args[1]), player);
 				}else if(args[0].equalsIgnoreCase("shield")) {
-					Shield shield = new Shield(Integer.valueOf(args[1]));
-					player.getInventory().addItem(shield.getItem());
+					new Weapon("shields", Integer.valueOf(args[1]), player);
 				}else {
 					player.sendMessage("Item type does not exist");
 				}
 				return true;
 			}
 		}else if(cmd.getName().equalsIgnoreCase("character")) {
-			int playerId = PlayerBaseMySql.getPlayerId(player.getUniqueId().toString());
-			Toon toon = new Toon(playerId);
-			String msg = toon.generateToonMsg();
-			player.sendMessage(msg);
+			String query = "SELECT id FROM players WHERE uuid='" + player.getUniqueId().toString() + "';";
+			DbHandler.executeQuery(Mmo.plugin, query, Mmo.name, "MmoCommands.onCommand (/character)", new MySqlCallback() {
+				@Override
+				public void onQueryDone(ResultSet rs) {
+					try {
+						if(rs.next()) {
+							@SuppressWarnings("unused")
+							final int id = rs.getInt(1);
+							rs.close();
+							//TODO Insert Gui Method to render your character Sheet
+						}else {
+							player.sendMessage(finalArgs[0] + " " + finalArgs[1] + " does not exist.");
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+				
+			});
 			return true;
 		}else if(cmd.getName().equalsIgnoreCase("level")) {
-			int playerId = PlayerBaseMySql.getPlayerId(player.getUniqueId().toString());
-			Toon toon = new Toon(playerId);
-			if(args.length==0) {
-				player.sendMessage(toon.unspentPoints());
-				return true;
-			}else {
-				int amount = Integer.valueOf(args[2]);
-				if(args[0].equalsIgnoreCase("stat")) {
-					if(args[1].equalsIgnoreCase("str") || args[1].equalsIgnoreCase("strength")) {
-						toon.levelStat(amount, "str");
-					}else if(args[1].equalsIgnoreCase("agi") || args[1].equalsIgnoreCase("agility")) {
-						toon.levelStat(amount, "agi");
-					}else if(args[1].equalsIgnoreCase("dex") || args[1].equalsIgnoreCase("dexterity")) {
-						toon.levelStat(amount, "dex");
-					}else if(args[1].equalsIgnoreCase("cons") || args[1].equalsIgnoreCase("constitution")) {
-						toon.levelStat(amount, "cons");
-					}else if(args[1].equalsIgnoreCase("spr") || args[1].equalsIgnoreCase("spirit")) {
-						toon.levelStat(amount, "spirit");
+			String query = "SELECT id FROM players WHERE uuid='" + player.getUniqueId().toString() + "';";
+			DbHandler.executeQuery(Mmo.plugin, query, Mmo.name, "MmoCommands.onCommand (/level)", new MySqlCallback() {
+
+				@Override
+				public void onQueryDone(ResultSet rs) {
+					try {
+						if(rs.next()) {
+							@SuppressWarnings("unused")
+							final int id = rs.getInt(1);
+							rs.close();
+							//TODO Add Gui method for leveling up skills and stats
+						}
+					} catch (NumberFormatException | SQLException e) {
+						e.printStackTrace();
 					}
-					toon.update();
-					return true;
-				}else if(args[0].equalsIgnoreCase("skill")) {
-					if(args[1].equalsIgnoreCase("swords") || args[1].equalsIgnoreCase("swd")) {
-						toon.levelSkill(amount, "sword");
-					}else if(args[1].equalsIgnoreCase("shields") || args[1].equalsIgnoreCase("shd")) {
-						toon.levelSkill(amount, "shield");
-					}else if(args[1].equalsIgnoreCase("axes") || args[1].equalsIgnoreCase("axe")) {
-						toon.levelSkill(amount, "axe");
-					}else if(args[1].equalsIgnoreCase("bows") || args[1].equalsIgnoreCase("bow")) {
-						toon.levelSkill(amount, "bow");
-					}else if(args[1].equalsIgnoreCase("lightarmor") || args[1].equalsIgnoreCase("larm")) {
-						toon.levelSkill(amount, "larm");
-					}else if(args[1].equalsIgnoreCase("heavyarmor") || args[1].equalsIgnoreCase("harm")) {
-						toon.levelSkill(amount, "harm");
-					}
-					toon.update();
-					return true;
-				}else {
-					player.sendMessage("try /level [stat/skill]");
-					return true;
 				}
-			}
+				
+			});
+		}else if(cmd.getName().equalsIgnoreCase("03f9147b09743nf09n71")) {
+			String query = "SELECT id FROM players WHERE uuid='" + player.getUniqueId().toString() + "';";
+			DbHandler.executeQuery(Mmo.plugin, query, Mmo.name, "MmoCommands.onCommand (/03f9147b09743nf09n71)", new MySqlCallback() {
+
+				@Override
+				public void onQueryDone(ResultSet rs) {
+					
+					try {
+						if(rs.next()) {
+							final int id = rs.getInt(1);
+							String query = "SELECT * FROM toons WHERE player_id=" + id + ";";
+							DbHandler.executeQuery(Mmo.plugin, query, Mmo.name, "MmoCommands.onCommand (/03f9147b09743nf09n71)", new MySqlCallback() {
+
+								@Override
+								public void onQueryDone(ResultSet rs) {
+									
+									try {
+										if(!rs.next()) {
+											String toonsQuery = "INSERT INTO toons ( player_id, xp, level, stat_points, skill_points ) VALUES ( " + id + ", 0, 1, 3, 5 );";
+											DbHandler.executeUpdate(toonsQuery, Mmo.name);
+											String getNewToonIdQuery = "SELECT id FROM toons WHERE player_id=" + id + ";";
+											DbHandler.executeQuery(Mmo.plugin, getNewToonIdQuery, Mmo.name, "MmoCommands.onCommand (/03f9147b09743nf09n71)", new MySqlCallback() {
+
+												@Override
+												public void onQueryDone(ResultSet rs) {
+													try {
+														if(rs.next()) {
+															final int toonId = rs.getInt(1);
+															rs.close();
+															String statsQuery = "INSERT INTO stats ( toon_id, strength, agility, dexterity, constitution, spirit ) VALUES ( " + toonId + ", 1, 1, 1, 5, 1 );";
+															String skillsQuery = "INSERT INTO skills ( toon_id, sword, shield, axe, bow, light_armor, heavy_armor ) VALUES ( " + toonId + ", 0, 0, 0, 0, 0, 0 );";
+															DbHandler.executeUpdate(statsQuery, Mmo.name);
+															DbHandler.executeUpdate(skillsQuery, Mmo.name);
+														}
+													} catch (SQLException e) {
+														e.printStackTrace();
+													}
+													
+												}
+												
+											});
+										}
+									} catch (SQLException e) {
+										e.printStackTrace();
+									}
+								}
+								
+							});
+						}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+					
+				}
+			});
+			return true;
 		}
 		return false;
 		
