@@ -61,14 +61,31 @@ public class NegateConfirmPrompt extends StringPrompt{
 										try {
 											if(rs.next()) {
 												//Storing the karma then updating it with the offense
-												int karma = rs.getInt(1);
-												karma = karma + Integer.valueOf(complaintData[1]);
-												
-												//MySql Queries that update the players karma and insert the complaint
-												String negateKarma = "UPDATE karma SET karma = " + karma + " WHERE player_id=" + id + ";";
-												String complain = "INSERT INTO reports ( player_id, body, actions, date ) VALUES ( " + id + ", '" + complaintData[0] +"', '" + complaintData[1] + "', '" + complaintData[2] + "' );";
-												DbHandler.executeUpdate(negateKarma, Karma.name);
-												DbHandler.executeUpdate(complain, Karma.name);
+												final int karma = rs.getInt(1) + Integer.valueOf(complaintData[1]);
+												rs.close();
+												String query = "SELECT id FROM gamemasters WHERE uuid='" + guy.getUniqueId().toString() + "';";
+												DbHandler.executeQuery(Karma.plugin, query, Karma.name, "NegateConfirmPrompt.acceptInput", new MySqlCallback() {
+
+													@Override
+													public void onQueryDone(ResultSet rs) {
+														try {
+															if(rs.next()) {
+																final int gmId = rs.getInt(1);
+																rs.close();
+																//MySql Queries that update the players karma and insert the complaint
+																String negateKarma = "UPDATE karma SET karma = " + karma + " WHERE player_id=" + id + ";";
+																String complain = "INSERT INTO reports ( gm_id, player_id, body, actions, date ) VALUES ( " + gmId + ", " + id + ", '" + complaintData[0] +"', '" + complaintData[1] + "', '" + complaintData[2] + "' );";
+																DbHandler.executeUpdate(negateKarma, Karma.name);
+																DbHandler.executeUpdate(complain, Karma.name);
+															}
+														} catch (SQLException e) {
+															// TODO Auto-generated catch block
+															e.printStackTrace();
+														}
+														
+													}
+													
+												});
 											}
 										} catch (NumberFormatException e) {
 											// TODO Auto-generated catch block
