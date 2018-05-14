@@ -37,14 +37,16 @@ public class EntryListener implements Listener{
 								@Override
 								public void onQueryDone(ResultSet rs) {
 									try {
-									String[] player = {rs.getString(1), rs.getString(2)};
-									Core.debug(Core.name, "EntryListener.onPlayerJoin", "Attempting to update " + e.getPlayer().getDisplayName() + "'s PlayerBase Entry [MySql]");
-									Core.log(Core.name, Codes.ENTRYLISTENER.toString(), player[1] + " " + player[2] + " just joined, attempting to update them in the PlayerBase [MySQL]");
-									String query = "UPDATE players SET last_ip = '" + e.getPlayer().getAddress().toString() + "', player_name = '" + e.getPlayer().getDisplayName() + "' WHERE uuid='" + e.getPlayer().getUniqueId().toString() + "';";
-									DbHandler.executeUpdate(query, Core.name);
-									Core.log(Core.name, Codes.ENTRYLISTENER.toString(), player[1] + " " + player[2] + " has been updated in the PlayerBase [MySql]");
-									Core.debug(Core.name, "EntryListener.onPlayerJoin", "PlayerBase Entry successfully updated. [MySql]");
-									e.getPlayer().setDisplayName(player[1] + " " + player[2]);
+									if(rs.next()) {
+										String[] player = {rs.getString(1), rs.getString(2)};
+										Core.debug(Core.name, "EntryListener.onPlayerJoin", "Attempting to update " + e.getPlayer().getDisplayName() + "'s PlayerBase Entry [MySql]");
+										Core.log(Core.name, Codes.ENTRYLISTENER.toString(), player[0] + " " + player[1] + " just joined, attempting to update them in the PlayerBase [MySQL]");
+										String query = "UPDATE players SET last_ip = '" + e.getPlayer().getAddress().toString() + "', player_name = '" + e.getPlayer().getDisplayName() + "' WHERE uuid='" + e.getPlayer().getUniqueId().toString() + "';";
+										DbHandler.executeUpdate(query, Core.name);
+										Core.log(Core.name, Codes.ENTRYLISTENER.toString(), player[0] + " " + player[1] + " has been updated in the PlayerBase [MySql]");
+										Core.debug(Core.name, "EntryListener.onPlayerJoin", "PlayerBase Entry successfully updated. [MySql]");
+										e.getPlayer().setDisplayName(player[0] + " " + player[1]);
+									}
 									}catch(SQLException e) {
 										e.printStackTrace();
 									}
