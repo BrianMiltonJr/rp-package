@@ -62,8 +62,6 @@ public class DbHandler {
 					Statement stmt = conn.createStatement();
 					Core.debug(pluginName, Codes.DEBUG + "DbHandler.executeQuery | " + location, "Query String = " + query);
 					ResultSet rs = stmt.executeQuery(query);
-					stmt.close();
-					conn.close();
 					Bukkit.getScheduler().runTask(plugin, new Runnable() {
 						@Override
 						public void run() {
