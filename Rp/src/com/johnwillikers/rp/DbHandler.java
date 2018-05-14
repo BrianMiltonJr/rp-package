@@ -30,7 +30,8 @@ public class DbHandler {
 		String shieldsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`shields` ( `id` INT NOT NULL AUTO_INCREMENT , `type` VARCHAR(200) NOT NULL , `material` VARCHAR(200) NOT NULL , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
 		String axesTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`axes` ( `id` INT NOT NULL AUTO_INCREMENT , `type` VARCHAR(200) NOT NULL , `material` VARCHAR(200) NOT NULL , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;"; 
 		String bowsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`bows` ( `id` INT NOT NULL AUTO_INCREMENT , `type` VARCHAR(200) NOT NULL , `material` VARCHAR(200) NOT NULL , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;"; 
-		if(!Core.isInit[0]) {executeUpdate(playersTablesQuery, Core.name);}
+		if(!Core.isInit[0])
+			executeUpdate(playersTablesQuery, Core.name);
 		if(Core.dependables[1] == 1) {
 			if(!Core.isInit[2]) {
 				executeUpdate(gamemastersTableQuery, ChatColor.RED + "Rp_Karma");
