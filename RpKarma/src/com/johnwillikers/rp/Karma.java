@@ -18,7 +18,7 @@ public class Karma extends JavaPlugin{
 	/**
 	 * Rp_Karma's dir
 	 */
-	public static String dir = Core.dir + "Rp_Karma";
+	public static String dir = Core.dir + "Karma";
 	public ConversationFactory factory = new ConversationFactory(this);
 	
 	@Override
@@ -35,6 +35,7 @@ public class Karma extends JavaPlugin{
 			this.getCommand("0e812e08h02v8he0182vhe1").setExecutor(new KarmaCommands(this));
 			this.getCommand("negate").setExecutor(new KarmaCommands(this));
 			this.getCommand("karma").setExecutor(new KarmaCommands(this));
+			this.getCommand("gamemaster").setExecutor(new KarmaCommands(this));
 			Core.log(name, Codes.STARTUP.toString(), "Starting up Timers");
 			Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
 			Core.isInit[2] = true;

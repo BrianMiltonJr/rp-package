@@ -16,7 +16,7 @@ public class Chat extends JavaPlugin{
 	/**
 	 * Rp_Chat's dir
 	 */
-	public static String dir = Core.dir + "Rp_Chat";
+	public static String dir = Core.dir + "Chat";
 	/**
 	 * Rp_Chat's Chatbase
 	 */

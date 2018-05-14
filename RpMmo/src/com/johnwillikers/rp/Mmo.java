@@ -26,7 +26,7 @@ public class Mmo extends JavaPlugin{
 	/**
 	 * Rp_Mmo's dir
 	 */
-	public static String dir = Core.dir + "Rp_Mmo/";
+	public static String dir = Core.dir + "Mmo";
 	public ConversationFactory factory = new ConversationFactory(this);
 	
 	@Override

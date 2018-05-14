@@ -24,7 +24,7 @@ public class Core extends JavaPlugin{
 	/**
 	 * The Directory of Rp_Core
 	 */
-	public static String dir = "./plugins/RP_Core/";
+	public static String dir = "./plugins/Rp/";
 	/**
 	 * This holds the settings of this plugin into a {@code String[]}
 	 */
