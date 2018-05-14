@@ -22,6 +22,7 @@ public class WelcomePrompt extends MessagePrompt{
 			player.chat("/0e812e08h02v8he0182vhe1");
 		}
 		if(Core.dependables[2] == 1) {
+			player.chat("/03f9147b09743nf09n71");
 		}
 		if(Integer.valueOf(con.getSessionData("gender").toString()) == 0){
 			Bukkit.broadcastMessage("Welcome " + con.getSessionData("first").toString() + " " + con.getSessionData("last").toString() + " to " + Core.townName);
