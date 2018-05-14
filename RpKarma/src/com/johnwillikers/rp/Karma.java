@@ -21,13 +21,11 @@ public class Karma extends JavaPlugin{
 	
 	@Override
 	public void onEnable(){
+		plugin = this;
 		Core.dependables[1] = 1;
 		Core.log(Core.name, Codes.DEPENDENCY.toString(), "Rp Karma has been recognized. Allowing Rp Karma to use Rp Core.");
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization");
 		KarmaBase.createKarmaBaseDir();
-		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
-			KarmaBaseMySql.createTables();
-		}
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
 		Core.log(name, Codes.STARTUP.toString(), "Initialization");
 		Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");

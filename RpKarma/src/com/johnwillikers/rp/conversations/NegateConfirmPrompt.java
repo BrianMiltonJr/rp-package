@@ -1,13 +1,16 @@
 package com.johnwillikers.rp.conversations;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 import com.johnwillikers.rp.Core;
+import com.johnwillikers.rp.DbHandler;
 import com.johnwillikers.rp.Karma;
-import com.johnwillikers.rp.KarmaBaseMySql;
-import com.johnwillikers.rp.PlayerBaseMySql;
+import com.johnwillikers.rp.MySqlCallback;
 import com.johnwillikers.rp.Utilities;
 
 public class NegateConfirmPrompt extends StringPrompt{
@@ -32,10 +35,62 @@ public class NegateConfirmPrompt extends StringPrompt{
 	public Prompt acceptInput(ConversationContext con, String ans) {
 		if(ans.equalsIgnoreCase("y") || ans.equalsIgnoreCase("yes")) {
 			if(Core.dataMethod.equalsIgnoreCase("mysql")) {
-				String[] data = {this.desc, this.offense, Utilities.getDate()};
-				KarmaBaseMySql.complain(this.gm, PlayerBaseMySql.getPlayerId(this.uuid), data);
-				Core.debug(Karma.name, "NegateConfirmPrompt.acceptInput", "Offense = " + Integer.valueOf(this.offense));
-				KarmaBaseMySql.updateKarma(PlayerBaseMySql.getPlayerId(uuid), Integer.valueOf(this.offense));
+				
+				//Data we want to be accessible inside our Callback
+				final String [] complaintData = {this.desc, this.offense, Utilities.getDate()};
+				final Player guy = this.gm;
+				final String offenderName = this.name;
+				
+				//Asynchronously calling for the player's id in the players table
+				String query = "SELECT id FROM players WHERE uuid='" + this.uuid + "';";
+				DbHandler.executeQuery(Karma.plugin, query, Karma.name, new MySqlCallback() {
+					@Override
+					public void onQueryDone(ResultSet rs) {
+						try {
+							if(rs.next()) {
+								//Makes a Final reference of the id so we can pull it farther in
+								final String id = rs.getString(1);
+								rs.close();
+								
+								//Grabbing the players current karma
+								String getKarma = "SELECT karma FROM karma WHERE player_id=" + id + ";";
+								DbHandler.executeQuery(Karma.plugin, getKarma, Karma.name, new MySqlCallback() {
+
+									@Override
+									public void onQueryDone(ResultSet rs) {
+										try {
+											if(rs.next()) {
+												//Storing the karma then updating it with the offense
+												int karma = rs.getInt(1);
+												karma = karma + Integer.valueOf(complaintData[1]);
+												
+												//MySql Queries that update the players karma and insert the complaint
+												String negateKarma = "UPDATE karma SET karma = " + karma + " WHERE player_id=" + id + ";";
+												String complain = "INSERT INTO reports ( player_id, body, actions, date ) VALUES ( " + id + ", '" + complaintData[0] +"', '" + complaintData[1] + "', '" + complaintData[2] + "' );";
+												DbHandler.executeUpdate(negateKarma, Karma.name);
+												DbHandler.executeUpdate(complain, Karma.name);
+											}
+										} catch (NumberFormatException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										} catch (SQLException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+									}
+									
+								});
+							}else {
+								guy.sendMessage(offenderName + " does not exist.");
+							}
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+
+				});
 			}else {
 				
 			}
