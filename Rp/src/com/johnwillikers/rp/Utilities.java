@@ -7,9 +7,13 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.UUID;
 
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.json.JSONObject;
 
 import com.johnwillikers.rp.enums.Codes;
@@ -126,4 +130,13 @@ public class Utilities {
 			Core.log(Core.name, Codes.STARTUP.toString(), "settings Directory exists.");
 		}
 	}
+	
+	public static ItemStack createGuiItem(String name, ArrayList<String> desc, Material mat) {
+        ItemStack i = new ItemStack(mat, 1);
+        ItemMeta iMeta = i.getItemMeta();
+        iMeta.setDisplayName(name);
+        iMeta.setLore(desc);
+        i.setItemMeta(iMeta);
+        return i;
+    }
 }
