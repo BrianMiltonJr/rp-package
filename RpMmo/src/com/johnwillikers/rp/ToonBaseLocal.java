@@ -92,6 +92,27 @@ public class ToonBaseLocal {
 		return toonData;
 	}
 	
+	public static JSONObject getToonDataJSONObject(int[] toonDataArray) {
+		JSONObject toonData = new JSONObject();
+		toonData.put("xp", toonDataArray[0]);
+		toonData.put("level", toonDataArray[1]);
+		toonData.put("stat_points", toonDataArray[2]);
+		toonData.put("skill_points", toonDataArray[3]);
+		toonData.put("strength", toonDataArray[4]);
+		toonData.put("agility", toonDataArray[5]);
+		toonData.put("dexterity", toonDataArray[6]);
+		toonData.put("constitution", toonDataArray[7]);
+		toonData.put("spirit", toonDataArray[8]);
+		toonData.put("sword", toonDataArray[9]);
+		toonData.put("shield", toonDataArray[10]);
+		toonData.put("axe", toonDataArray[11]);
+		toonData.put("bow", toonDataArray[12]);
+		toonData.put("light_armor", toonDataArray[13]);
+		toonData.put("heavy_armor", toonDataArray[14]);
+		toonData.put("toon_id", toonDataArray[15]);
+		return toonData;
+	}
+	
 	public static JSONObject readToon(String playerUuid) {
 		File toonFile = new File(dir + playerUuid + ".json");
 		if(!toonFile.exists())
