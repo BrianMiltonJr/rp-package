@@ -11,6 +11,8 @@ import org.bukkit.plugin.Plugin;
 
 import com.johnwillikers.rp.enums.Codes;
 
+import net.md_5.bungee.api.ChatColor;
+
 public class DbHandler {
 	
 	public static void createTables() {
@@ -24,24 +26,28 @@ public class DbHandler {
 		String toonsTableQuery = "CREATE TABLE IF NOT EXISTS`" + Core.db + "`.`toons` ( `id` INT NOT NULL AUTO_INCREMENT , `player_id` INT NOT NULL , `xp` INT NOT NULL , `level` INT NOT NULL , `stat_points` INT NOT NULL , `skill_points` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
 		String statsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`stats` ( `id` INT NOT NULL AUTO_INCREMENT , `toon_id` INT NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , `constitution` INT NOT NULL , `spirit` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
 		String skillsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`skills` ( `id` INT NOT NULL AUTO_INCREMENT , `toon_id` INT NOT NULL , `sword` INT NOT NULL , `shield` INT NOT NULL , `axe` INT NOT NULL , `bow` INT NOT NULL , `light_armor` INT NOT NULL , `heavy_armor` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
-		String swordsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`swords` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
-		String shieldsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`shields` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
-		String axesTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`axes` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;"; 
-		String bowsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`bows` ( `id` INT NOT NULL AUTO_INCREMENT , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;"; 
-		executeUpdate(playersTablesQuery, Core.name);
+		String swordsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`swords` ( `id` INT NOT NULL AUTO_INCREMENT , `type` VARCHAR(200) NOT NULL , `material` VARCHAR(200) NOT NULL , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
+		String shieldsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`shields` ( `id` INT NOT NULL AUTO_INCREMENT , `type` VARCHAR(200) NOT NULL , `material` VARCHAR(200) NOT NULL , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;";
+		String axesTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`axes` ( `id` INT NOT NULL AUTO_INCREMENT , `type` VARCHAR(200) NOT NULL , `material` VARCHAR(200) NOT NULL , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;"; 
+		String bowsTableQuery = "CREATE TABLE IF NOT EXISTS `" + Core.db + "`.`bows` ( `id` INT NOT NULL AUTO_INCREMENT , `type` VARCHAR(200) NOT NULL , `material` VARCHAR(200) NOT NULL , `name` VARCHAR(200) NOT NULL , `strength` INT NOT NULL , `agility` INT NOT NULL , `dexterity` INT NOT NULL , PRIMARY KEY (`id`)) ENGINE = MyISAM;"; 
+		if(!Core.isInit[0]) {executeUpdate(playersTablesQuery, Core.name);}
 		if(Core.dependables[1] == 1) {
-			executeUpdate(gamemastersTableQuery, Core.name);
-			executeUpdate(karmaTableQuery, Core.name);
-			executeUpdate(reportsTableQuery, Core.name);
+			if(!Core.isInit[2]) {
+				executeUpdate(gamemastersTableQuery, ChatColor.RED + "Rp_Karma");
+				executeUpdate(karmaTableQuery, ChatColor.RED + "Rp_Karma");
+				executeUpdate(reportsTableQuery, ChatColor.RED + "Rp_Karma");
+			}
 		}
-		if(Core.dependables[2] == 2) {
-			executeUpdate(toonsTableQuery, Core.name);
-			executeUpdate(statsTableQuery, Core.name);
-			executeUpdate(skillsTableQuery, Core.name);
-			executeUpdate(swordsTableQuery, Core.name);
-			executeUpdate(shieldsTableQuery, Core.name);
-			executeUpdate(axesTableQuery, Core.name);
-			executeUpdate(bowsTableQuery, Core.name);
+		if(Core.dependables[2] == 1) {
+			if(!Core.isInit[3]) {
+				executeUpdate(toonsTableQuery, ChatColor.LIGHT_PURPLE + "Rp_Mmo");
+				executeUpdate(statsTableQuery, ChatColor.LIGHT_PURPLE + "Rp_Mmo");
+				executeUpdate(skillsTableQuery, ChatColor.LIGHT_PURPLE + "Rp_Mmo");
+				executeUpdate(swordsTableQuery, ChatColor.LIGHT_PURPLE + "Rp_Mmo");
+				executeUpdate(shieldsTableQuery, ChatColor.LIGHT_PURPLE + "Rp_Mmo");
+				executeUpdate(axesTableQuery, ChatColor.LIGHT_PURPLE + "Rp_Mmo");
+				executeUpdate(bowsTableQuery, ChatColor.LIGHT_PURPLE + "Rp_Mmo");
+			}
 		}
 	}
 	
@@ -55,6 +61,8 @@ public class DbHandler {
 					Statement stmt = conn.createStatement();
 					Core.debug(pluginName, Codes.DEBUG + "DbHandler.executeQuery | " + location, "Query String = " + query);
 					ResultSet rs = stmt.executeQuery(query);
+					stmt.close();
+					conn.close();
 					Bukkit.getScheduler().runTask(plugin, new Runnable() {
 						@Override
 						public void run() {
