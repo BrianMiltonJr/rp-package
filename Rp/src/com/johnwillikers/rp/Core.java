@@ -6,6 +6,8 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.johnwillikers.rp.actionbar.Actionbar;
+import com.johnwillikers.rp.actionbar.Actionbar_1_12_R1;
 import com.johnwillikers.rp.commands.Commands;
 import com.johnwillikers.rp.enums.Codes;
 import com.johnwillikers.rp.listeners.EntryListener;
@@ -14,6 +16,7 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Core extends JavaPlugin{
 	
+	public static boolean[] isInit = {false, false, false, false};
 	/**
 	 * The name of this plugin
 	 */
@@ -63,7 +66,9 @@ public class Core extends JavaPlugin{
 	 * The name of the town
 	 */
 	public static String townName = "The Encampment";
-	
+	/**
+	 * Reference to this instance
+	 */
 	public static Core plugin;
 	/**
 	 * When another dependable plugin is loaded they switch their respective indice to 1 to allow smooth creation process and logging
@@ -72,7 +77,8 @@ public class Core extends JavaPlugin{
 	
 	public ConversationFactory factory = new ConversationFactory(this);
 	
-	public static String[] gameMasters;
+	public static Actionbar actionBar;
+	
 	
 	/**
 	 * This method is in charge of logging messages to console with that feature 
@@ -107,6 +113,7 @@ public class Core extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		log(name, Codes.STARTUP.toString(), "Pre-Initialization");
+		plugin=this;
 		PlayerBase.createPlayerBaseDir();
 		Utilities.createSettingsPath();
 		settings = Utilities.getSettings();
@@ -120,8 +127,9 @@ public class Core extends JavaPlugin{
 		ssl = settings[8];
 		driver = "jdbc:mysql://" + host + "/" + db + "?user=" + user + "&password=" + password + "&useSSL=false";
 		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
-			PlayerBaseMySql.createTables();
+			DbHandler.createTables();
 		}
+		setupActionbar();
 		debug(name, Codes.DEBUG + "Core.onEnable", "debugState = " + settings[1]);
 		debug(name, Codes.DEBUG + "Core.onEnable", "dataMethod = " + settings[3]);
 		debug(name, Codes.DEBUG + "Core.onEnable", "Driver = " + driver);
@@ -135,10 +143,27 @@ public class Core extends JavaPlugin{
 		log(name, Codes.LISTENERS.toString(), "Registering Listeners");
 		getServer().getPluginManager().registerEvents(new EntryListener(), this);
 		log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
+		isInit[0]=true;
 	}
 	
 	@Override
 	public void onDisable(){
 		
+	}
+	
+	public void setupActionbar() {
+
+	        String version = "0";
+
+	        try {
+	            version = Bukkit.getServer().getClass().getPackage().getName().replace(".",  ",").split(",")[3];
+	        } catch (ArrayIndexOutOfBoundsException e) {
+	           e.printStackTrace();
+	        }
+	        Core.debug(name, Codes.DEBUG + "Core.setupActionbar", "Server is running version: " + version);
+	        if (version.equals("v1_12_R1")) {
+	            //server is running 1.8-1.8.1 so we need to use the 1.8 R1 NMS class
+	            actionBar = new Actionbar_1_12_R1();
+	        }
 	}
 }

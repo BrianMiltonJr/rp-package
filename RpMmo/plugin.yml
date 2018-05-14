@@ -5,6 +5,11 @@ main: com.johnwillikers.rp.Mmo
 description: This is the RPG system to the Rp_Package
 depend: [Rp_Core]
 commands:
+  03f9147b09743nf09n71:
+    description: Rp_Mmo Entry Command
+    usage: /03f9147b09743nf09n71
+    permissions: rp.mmo.entry
+    permissions-message: You feel a strong force denying you.
   mmo:
     description: let's a gamemaster pull up a users toon sheet
     usage: /mmo (first) (last)

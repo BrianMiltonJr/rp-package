@@ -1,5 +1,8 @@
 package com.johnwillikers.rp.commands;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,8 +12,9 @@ import org.bukkit.conversations.Conversation;
 import org.bukkit.entity.Player;
 
 import com.johnwillikers.rp.Core;
+import com.johnwillikers.rp.DbHandler;
+import com.johnwillikers.rp.MySqlCallback;
 import com.johnwillikers.rp.PlayerBase;
-import com.johnwillikers.rp.PlayerBaseMySql;
 import com.johnwillikers.rp.Utilities;
 import com.johnwillikers.rp.conversations.EntryPrompt;
 import com.johnwillikers.rp.enums.Codes;
@@ -35,24 +39,42 @@ public class Commands implements CommandExecutor {
 		}else if(cmd.getName().equalsIgnoreCase("player")){
 			if(args.length > 1 || args.length == 2){
 				if(Core.dataMethod.equalsIgnoreCase("mysql")) {
-					String[] details = PlayerBaseMySql.getPlayerInfo(PlayerBaseMySql.getPlayerId(PlayerBaseMySql.getUuid(args[0], args[1])));
-					String first = details[2];
-					String last = details[3];
-					String playerName = details[4];
-					String gender;
-					if(Integer.valueOf(details[5]) == 0){
-						gender = "Female";
-					}else{
-						gender = "Male";
-					}
-					String originalIp = details[6];
-					String lastIp = details[7];
-					String createdAt = details[8];
-					String updatedAt = details[9];
-					String reply = ChatColor.GOLD + "--------------------\n" + ChatColor.GREEN + "Name: " + ChatColor.AQUA + first + " " + last + "\n" + ChatColor.GREEN + "Real Name: "
-							+ ChatColor.AQUA + playerName + "\n" + ChatColor.GREEN +"Gender: " + ChatColor.AQUA + gender + "\n" + ChatColor.GREEN + "Original Ip: " + ChatColor.AQUA + originalIp +
-							"\n" + ChatColor.GREEN + "Last Ip: " + ChatColor.AQUA + lastIp + ChatColor.GOLD + "\n" + ChatColor.GREEN + "Created At: " + ChatColor.AQUA + createdAt + "\n" + ChatColor.GREEN + "Updated At: " + ChatColor.AQUA + updatedAt + ChatColor.GOLD + "\n --------------------";
-					player.sendMessage(reply);
+					String query = "SELECT * FROM players WHERE first LIKE '" + args[0] + "' AND last LIKE '" + args[1] + "';";
+					//Asyncronously Calls for the data and when it arrives sends it to the player
+					DbHandler.executeQuery(Core.plugin, query, Core.name, "Commands.onCommand (/player)", new MySqlCallback() {
+						@Override
+						public void onQueryDone(ResultSet rs) {
+							try {
+								if(rs.next()) {
+									String[] details = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6), rs.getString(7), rs.getString(8), rs.getString(9), rs.getString(10)};
+									rs.close();
+									String first = details[2];
+									String last = details[3];
+									String playerName = details[4];
+									String gender;
+									if(Integer.valueOf(details[5]) == 0){
+										gender = "Female";
+									}else{
+										gender = "Male";
+									}
+									String originalIp = details[6];
+									String lastIp = details[7];
+									String createdAt = details[8];
+									String updatedAt = details[9];
+									String reply = ChatColor.GOLD + "--------------------\n" + ChatColor.GREEN + "Name: " + ChatColor.AQUA + first + " " + last + "\n" + ChatColor.GREEN + "Real Name: "
+											+ ChatColor.AQUA + playerName + "\n" + ChatColor.GREEN +"Gender: " + ChatColor.AQUA + gender + "\n" + ChatColor.GREEN + "Original Ip: " + ChatColor.AQUA + originalIp +
+											"\n" + ChatColor.GREEN + "Last Ip: " + ChatColor.AQUA + lastIp + ChatColor.GOLD + "\n" + ChatColor.GREEN + "Created At: " + ChatColor.AQUA + createdAt + "\n" + ChatColor.GREEN + "Updated At: " + ChatColor.AQUA + updatedAt + ChatColor.GOLD + "\n --------------------";
+									player.sendMessage(reply);
+								}else {
+									player.sendMessage(args[0] + " " + args[1] + " does not exist.");
+								}
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						
+					});
 					return true;
 				}else {
 					Core.debug(Core.name, "Commands.onCommand player", "name provided " + args[0] + " " + args[1]);

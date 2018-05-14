@@ -10,8 +10,8 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
 import com.johnwillikers.rp.Core;
+import com.johnwillikers.rp.DbHandler;
 import com.johnwillikers.rp.PlayerBase;
-import com.johnwillikers.rp.PlayerBaseMySql;
 import com.johnwillikers.rp.Utilities;
 import com.johnwillikers.rp.enums.Codes;
 
@@ -24,15 +24,14 @@ public class Confirmation extends StringPrompt{
 		String ip = player.getAddress().toString();
 		ip.substring(1);
 		ip.substring(0, ip.length()-6);
-		//Putting the players data in a handy dandy array
-		String[] pData = {player.getUniqueId().toString(), con.getSessionData("first").toString(), con.getSessionData("last").toString(), 
-				player.getDisplayName(), con.getSessionData("gender").toString(), ip, ip, Utilities.getDate(), Utilities.getDate()};
-		
+
 		if(s.equalsIgnoreCase("yes")){
-			//TODO Check to use Json or Mysql Data Methods
 			if(Core.dataMethod.equalsIgnoreCase("mysql")) {
 				Core.log(Core.name, Codes.PLAYERBASE.toString(), "Attempting to Create new Player " + player.getDisplayName() + " as UUID " + player.getUniqueId().toString() + " within PlayerBase.");
-				PlayerBaseMySql.createPlayer(pData);
+				String query = "INSERT INTO players ( uuid, first, last, player_name, gender, creation_ip, last_ip, created_at, updated_at ) "
+						+ "VALUES ('" + player.getUniqueId().toString() + "', '" + con.getSessionData("first").toString() + "', '" + con.getSessionData("last").toString() + "', '" + player.getDisplayName() + "', "+ con.getSessionData("gender").toString() + ", '" + ip +
+						"', '" + ip + "', '" + Utilities.getDate() + "', '" + Utilities.getDate() + "');";
+				DbHandler.executeUpdate(query, Core.name);
 				Core.log(Core.name, Codes.PLAYERBASE.toString(), "Player " + player.getDisplayName() + " has been created in the database.");
 			}else {
 				try {
