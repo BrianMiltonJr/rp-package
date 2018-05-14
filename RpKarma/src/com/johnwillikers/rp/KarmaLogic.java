@@ -1,5 +1,8 @@
 package com.johnwillikers.rp;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import com.johnwillikers.rp.enums.Codes;
@@ -77,15 +80,58 @@ public class KarmaLogic {
 		int length = reportIds.length;
 		String msg = ChatColor.GOLD + "Name: " + ChatColor.BLUE + playerName + ChatColor.GOLD + "\nKarma: " + karmaColor + karma;
 			
-		if(!reportIds.equals(null)) {
+		if(!reportIds[0].equalsIgnoreCase("derp")) {
 			msg = msg + ChatColor.GOLD + "\nNumber of Incidents: " + length + "\n Report Id's:\n";
 			for(int i=0; i<=length-1; i++) {
-				msg = msg + "* " + reportIds[i] + "\n";
+				msg = msg + ChatColor.GOLD + "* " + ChatColor.BLUE + reportIds[i] + "\n";
 			}
-			msg = msg + "Use /report {id} to view the report";
+			msg = msg + ChatColor.GOLD + "Use /karma report {" + ChatColor.GOLD + "id" + ChatColor.GOLD +"} to view the report";
 		}else {
 			msg = msg + ChatColor.BLUE + "\n" + playerName + ChatColor.GOLD + " has a clean record";
 		}
 		return msg;
+	}
+
+	public static void sendReportMessage(final String[] reportData, Player player) {
+		String query = "SELECT name FROM gamemasters WHERE id=" + reportData[1] + ";";
+		DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaLogic.buildReportMessage", new MySqlCallback() {
+
+			@Override
+			public void onQueryDone(ResultSet rs) {
+				try {
+					if(rs.next()) {
+						final String gmName = rs.getString(1);
+						rs.close();
+						String query = "SELECT first, last FROM players WHERE id=" + reportData[2] + ";";
+						DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaLogic.buildReportMessage", new MySqlCallback() {
+
+							@Override
+							public void onQueryDone(ResultSet rs) {
+								try {
+									if(rs.next()) {
+										final String name = rs.getString(1) + " " + rs.getString(2);
+										rs.close();
+										final String msg = ChatColor.GOLD + "Report " + ChatColor.RED + reportData[0] + ChatColor.GOLD +
+										"\n  Offender: " + ChatColor.BLUE + name + ChatColor.GOLD +
+										"\n  Game Master: " + ChatColor.LIGHT_PURPLE + gmName + ChatColor.GOLD +
+										"\n  Date: " + ChatColor.BLUE + reportData[5] + ChatColor.GOLD +
+										"\n  Action: " + ChatColor.BLUE + reportData[4] + ChatColor.GOLD +
+										"\n  Desc: " +ChatColor.GREEN + reportData[3];
+										player.sendMessage(msg);
+									}
+								} catch (SQLException e) {
+									e.printStackTrace();
+								}
+								
+							}
+							
+						});
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
+			
+		});
 	}
 }
