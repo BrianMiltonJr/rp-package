@@ -41,7 +41,7 @@ public class Commands implements CommandExecutor {
 				if(Core.dataMethod.equalsIgnoreCase("mysql")) {
 					String query = "SELECT * FROM players WHERE first LIKE '" + args[0] + "' AND last LIKE '" + args[1] + "';";
 					//Asyncronously Calls for the data and when it arrives sends it to the player
-					DbHandler.executeQuery(Core.plugin, query, Core.name, new MySqlCallback() {
+					DbHandler.executeQuery(Core.plugin, query, Core.name, "Commands.onCommand (/player)", new MySqlCallback() {
 						@Override
 						public void onQueryDone(ResultSet rs) {
 							try {

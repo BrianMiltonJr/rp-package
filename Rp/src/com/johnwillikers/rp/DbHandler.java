@@ -9,6 +9,8 @@ import java.sql.Statement;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
+import com.johnwillikers.rp.enums.Codes;
+
 public class DbHandler {
 	
 	public static void createTables() {
@@ -43,7 +45,7 @@ public class DbHandler {
 		}
 	}
 	
-	public static void executeQuery(Plugin plugin, String query, String pluginName, MySqlCallback callback) {
+	public static void executeQuery(Plugin plugin, String query, String pluginName, String location, MySqlCallback callback) {
 		Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -51,7 +53,7 @@ public class DbHandler {
 					Class.forName("com.mysql.jdbc.Driver");
 					Connection conn = DriverManager.getConnection(Core.driver);
 					Statement stmt = conn.createStatement();
-					Core.debug(pluginName, "DbHandler.executeQuery", "Query String = " + query);
+					Core.debug(pluginName, Codes.DEBUG + "DbHandler.executeQuery | " + location, "Query String = " + query);
 					ResultSet rs = stmt.executeQuery(query);
 					Bukkit.getScheduler().runTask(plugin, new Runnable() {
 						@Override

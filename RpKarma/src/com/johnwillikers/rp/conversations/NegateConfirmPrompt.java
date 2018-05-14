@@ -43,7 +43,7 @@ public class NegateConfirmPrompt extends StringPrompt{
 				
 				//Asynchronously calling for the player's id in the players table
 				String query = "SELECT id FROM players WHERE uuid='" + this.uuid + "';";
-				DbHandler.executeQuery(Karma.plugin, query, Karma.name, new MySqlCallback() {
+				DbHandler.executeQuery(Karma.plugin, query, Karma.name, "NegateConfirmPrompt.acceptInput", new MySqlCallback() {
 					@Override
 					public void onQueryDone(ResultSet rs) {
 						try {
@@ -54,7 +54,7 @@ public class NegateConfirmPrompt extends StringPrompt{
 								
 								//Grabbing the players current karma
 								String getKarma = "SELECT karma FROM karma WHERE player_id=" + id + ";";
-								DbHandler.executeQuery(Karma.plugin, getKarma, Karma.name, new MySqlCallback() {
+								DbHandler.executeQuery(Karma.plugin, getKarma, Karma.name, "NegateConfirmPrompt.acceptInput", new MySqlCallback() {
 
 									@Override
 									public void onQueryDone(ResultSet rs) {

@@ -35,7 +35,7 @@ public class KarmaCommands implements CommandExecutor{
 		if(cmd.getName().equalsIgnoreCase("0e812e08h02v8he0182vhe1")){
 			if(Core.dataMethod.equalsIgnoreCase("mysql")) {
 				String query = "SELECT id FROM players WHERE uuid='" + player.getUniqueId().toString() + "';";
-				DbHandler.executeQuery(Karma.plugin, query, Karma.name, new MySqlCallback() {
+				DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/0e812e08h02v8he0182vhe1)", new MySqlCallback() {
 
 					@Override
 					public void onQueryDone(ResultSet rs) {
@@ -72,7 +72,7 @@ public class KarmaCommands implements CommandExecutor{
 					final String[] data = {args[0], args[1], args[2], desc};
 					
 					String query = "SELECT id, uuid FROM players WHERE first LIKE '" + args[0] +"' AND last LIKE '" + args[1]+ "';";
-					DbHandler.executeQuery(Karma.plugin, query, Karma.name, new MySqlCallback() {
+					DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/negate)", new MySqlCallback() {
 
 						@Override
 						public void onQueryDone(ResultSet rs) {
@@ -83,7 +83,7 @@ public class KarmaCommands implements CommandExecutor{
 									final String uuid = rs.getString(2);
 									rs.close();
 									String query = "SELECT * FROM karma WHERE player_id=" + id + ";";
-									DbHandler.executeQuery(Karma.plugin, query, Karma.name, new MySqlCallback() {
+									DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/negate)", new MySqlCallback() {
 
 										@Override
 										public void onQueryDone(ResultSet rs) {
@@ -151,7 +151,7 @@ public class KarmaCommands implements CommandExecutor{
 					String query = "SELECT id FROM players WHERE first LIKE '" + args[0] + "' AND last LIKE '" + args[1] + "';";
 					final String playerName = args[0] + " " + args[1];
 					
-					DbHandler.executeQuery(Karma.plugin, query, Karma.name, new MySqlCallback() {
+					DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/karma)", new MySqlCallback() {
 
 						@Override
 						public void onQueryDone(ResultSet rs) {
@@ -160,7 +160,7 @@ public class KarmaCommands implements CommandExecutor{
 									final int id =  rs.getInt(1);
 									rs.close();
 									String query = "SELECT karma FROM karma WHERE player_id=" + id + ";";
-									DbHandler.executeQuery(Karma.plugin, query, Karma.name, new MySqlCallback() {
+									DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/karma)", new MySqlCallback() {
 
 										@Override
 										public void onQueryDone(ResultSet rs) {
@@ -169,7 +169,7 @@ public class KarmaCommands implements CommandExecutor{
 													final int karma = rs.getInt(1);
 													rs.close();
 													String query = "SELECT id FROM reports WHERE player_id=" + id + ";";
-													DbHandler.executeQuery(Karma.plugin, query, Karma.name, new MySqlCallback() {
+													DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/karma)", new MySqlCallback() {
 
 														@Override
 														public void onQueryDone(ResultSet rs) {

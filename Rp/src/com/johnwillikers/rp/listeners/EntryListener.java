@@ -20,7 +20,7 @@ public class EntryListener implements Listener{
 	public void onPlayerJoin(PlayerJoinEvent e){
 		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
 			String query = "SELECT * FROM players WHERE uuid='" + e.getPlayer().getUniqueId().toString() + "';";
-			DbHandler.executeQuery(Core.plugin, query, Core.name, new MySqlCallback() {
+			DbHandler.executeQuery(Core.plugin, query, Core.name, "EntryListener.onPlayerJoinEvent", new MySqlCallback() {
 
 				@Override
 				public void onQueryDone(ResultSet rs) {
@@ -32,7 +32,7 @@ public class EntryListener implements Listener{
 						}else{
 							//MySql way of updating the player
 							String query = "SELECT first, last FROM players WHERE uuid='" + e.getPlayer().getUniqueId().toString() + "';";
-							DbHandler.executeQuery(Core.plugin, query, Core.name, new MySqlCallback() {
+							DbHandler.executeQuery(Core.plugin, query, Core.name, "EntryListener.onPlayerJoinEvent", new MySqlCallback() {
 
 								@Override
 								public void onQueryDone(ResultSet rs) {
