@@ -19,4 +19,9 @@ commands:
     description: GameMaster commands that allows a player to be negated for failRp
     usage: /karma first last
     permissions: rp.karma
+    permission-message: You feel a strong force denying you
+  gamemaster:
+    description: Allows management of Gamemasters
+    usage: /gamemaster add first last first last\n/gamemaster remove first last
+    permissions: rp.karma
     permission-message: You feel a strong force denying you.
