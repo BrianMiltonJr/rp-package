@@ -11,6 +11,7 @@ import com.johnwillikers.rp.commands.MmoCommands;
 import com.johnwillikers.rp.enums.Codes;
 import com.johnwillikers.rp.listeners.DamageListener;
 import com.johnwillikers.rp.listeners.MmoEntryListener;
+import com.johnwillikers.rp.listeners.MmoInventoryListener;
 
 import net.md_5.bungee.api.ChatColor;
 
@@ -49,6 +50,7 @@ public class Mmo extends JavaPlugin{
 			Core.log(name, Codes.LISTENERS.toString(), "Registering Listeners");
 			getServer().getPluginManager().registerEvents(new DamageListener(), this);
 			getServer().getPluginManager().registerEvents(new MmoEntryListener(), this);
+			getServer().getPluginManager().registerEvents(new MmoInventoryListener(), this);
 			Core.log(name, Codes.STARTUP.toString(), "Initialization Completed.");
 			Core.isInit[3] = true;
 		}
