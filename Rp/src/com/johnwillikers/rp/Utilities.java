@@ -131,6 +131,20 @@ public class Utilities {
 		}
 	}
 	
+	public static String ownership(String name) {
+		Core.debug(Core.name, "Utilities.ownership", "Name = " + name);
+		String lastChar = name.substring(name.length()-1);
+		Core.debug(Core.name, "Utilities.ownership", "Last Character = " + lastChar);
+		String result;
+		if(lastChar.equalsIgnoreCase("s")) {
+			result = name + "'";
+		}else {
+			result = name + "'s";
+		}
+		Core.debug(Core.name, "Utilities.ownership", "Result = " + result);
+		return result;
+	}
+	
 	public static ItemStack createGuiItem(String name, ArrayList<String> desc, Material mat) {
         ItemStack i = new ItemStack(mat, 1);
         ItemMeta iMeta = i.getItemMeta();
