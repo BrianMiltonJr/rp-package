@@ -1,7 +1,10 @@
 package com.johnwillikers.rp;
 
+import org.bukkit.Bukkit;
 import org.bukkit.conversations.ConversationFactory;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.JSONObject;
 
 import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.commands.MmoCommands;
@@ -53,6 +56,13 @@ public class Mmo extends JavaPlugin{
 	
 	@Override
 	public void onDisable(){
-		Core.log(name, Codes.SHUTDOWN.toString(), "Disabling Timers");
+		Core.log(name, Codes.SHUTDOWN.toString(), "Starting Proccess of uploading all online players to MySql DB");
+		for(Player player : Bukkit.getServer().getOnlinePlayers()) {
+			JSONObject toonData = ToonBaseLocal.readToon(player.getUniqueId().toString());
+			ToonBaseLocal.uploadToon(toonData);
+			ToonBaseLocal.deleteToon(player.getUniqueId().toString());
+			Core.log(name, Codes.SHUTDOWN.toString(), player.getDisplayName() + " has been successfully uploaded.");
+		}
+		Core.log(name, Codes.SHUTDOWN.toString(), "All Online players have been uploaded. Exiting plugin");
 	}
 }

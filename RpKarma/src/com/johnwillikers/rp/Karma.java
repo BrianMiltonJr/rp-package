@@ -24,24 +24,24 @@ public class Karma extends JavaPlugin{
 	@Override
 	public void onEnable(){
 		plugin = this;
-		Core.dependables[1] = 1;
-		Core.log(Core.name, Codes.DEPENDENCY.toString(), name + ChatColor.WHITE + " has been recognized. Allowing " + name + ChatColor.WHITE + " to use Rp Core.");
-		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization");
-		KarmaBase.createKarmaBaseDir();
-		DbHandler.createTables();
-		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
-		Core.log(name, Codes.STARTUP.toString(), "Initialization");
-		Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");
-		this.getCommand("0e812e08h02v8he0182vhe1").setExecutor(new KarmaCommands(this));
-		this.getCommand("negate").setExecutor(new KarmaCommands(this));
-		this.getCommand("karma").setExecutor(new KarmaCommands(this));
-		Core.log(name, Codes.STARTUP.toString(), "Starting up Timers");
-		Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
-		Core.isInit[2] = true;
+		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
+			Core.dependables[1] = 1;
+			Core.log(Core.name, Codes.DEPENDENCY.toString(), name + ChatColor.WHITE + " has been recognized. Allowing " + name + ChatColor.WHITE + " to use Rp Core.");
+			Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization");
+			DbHandler.createTables();
+			Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
+			Core.log(name, Codes.STARTUP.toString(), "Initialization");
+			Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");
+			this.getCommand("0e812e08h02v8he0182vhe1").setExecutor(new KarmaCommands(this));
+			this.getCommand("negate").setExecutor(new KarmaCommands(this));
+			this.getCommand("karma").setExecutor(new KarmaCommands(this));
+			Core.log(name, Codes.STARTUP.toString(), "Starting up Timers");
+			Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
+			Core.isInit[2] = true;
+		}
 	}
 	
 	@Override
 	public void onDisable(){
-		Core.log(name, Codes.SHUTDOWN.toString(), "Disabling Timers");
 	}
 }
