@@ -45,32 +45,23 @@ public class DamageListener implements Listener{
 			int bowBonusFormula = (agi*2) + (str*skills[2]);
 			if(stats[2]>=dex) {
 				Core.debug(Mmo.name, "DamageListener.onDamage", "Meets dex requirments");
-				switch(weaponType){
-				case IRON_SWORD: 
+				if(weaponType==Material.WOOD_SWORD || weaponType==Material.IRON_SWORD || weaponType==Material.GOLD_SWORD || weaponType==Material.DIAMOND_SWORD) {
 					attack = meleeFormula;
 					attackBonus = (attackBonus + swordBonusFormula);
-					break;
-				case IRON_AXE: 
+				}
+				if(weaponType==Material.WOOD_AXE || weaponType==Material.IRON_AXE || weaponType==Material.GOLD_AXE || weaponType==Material.DIAMOND_AXE) {
 					attack = meleeFormula;
 					attackBonus = (attackBonus + axeBonusFormula);
-					break;
-				default:
-					attackBonus = 0;
 				}
-			
 			}else {
 				Core.debug(Mmo.name, "DamageListener.onDamage", "Does not Meet dex requirments");
-				switch(weaponType){
-				case IRON_SWORD: 
+				if(weaponType==Material.WOOD_SWORD || weaponType==Material.IRON_SWORD || weaponType==Material.GOLD_SWORD || weaponType==Material.DIAMOND_SWORD) {
 					attack = meleeFormula;
 					attackBonus = (attackBonus - str);
-					break;
-				case IRON_AXE: 
+				}
+				if(weaponType==Material.WOOD_AXE || weaponType==Material.IRON_AXE || weaponType==Material.GOLD_AXE || weaponType==Material.DIAMOND_AXE) {
 					attack = meleeFormula;
 					attackBonus = (attackBonus - str);
-					break;
-				default:
-					attackBonus = 0;
 				}
 			}
 			Core.debug(Mmo.name, "DamageListener.onDamage", "attack = " + attack);
