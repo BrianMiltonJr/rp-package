@@ -13,12 +13,12 @@ commands:
   mmo:
     description: let's a gamemaster pull up a users toon sheet
     usage: /mmo (first) (last)
-    permissions: rp.mmo.check
+    permissions: rp.mmo.gm.check
     permission-message: You feel a strong force denying you.
   item:
     description: lets you spawn an item needing a type and the weapon id
     usage: /item (type) (id)
-    permissions: rp.mmo.item
+    permissions: rp.mmo.gm.item
     permission-message: You feel a strong force denying you.
   character:
     description: lets you view your Character Sheet

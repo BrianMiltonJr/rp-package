@@ -11,17 +11,17 @@ commands:
     permissions: rp.karma.entry
     permission-message: You feel a strong force denying you.
   negate:
-    description: GameMaster commands that allows a player to be negated for failRp
+    description: 
     usage: /negate first last offense desc
-    permissions: rp.negate
+    permissions: rp.karma.gm.negate
     permission-message: You feel a strong force denying you.
   karma:
     description: GameMaster commands that allows a player to be negated for failRp
     usage: /karma first last
-    permissions: rp.karma
+    permissions: rp.karma.gm.karma
     permission-message: You feel a strong force denying you
   gamemaster:
     description: Allows management of Gamemasters
     usage: /gamemaster add first last first last\n/gamemaster remove first last
-    permissions: rp.karma
+    permissions: rp.karma.admin
     permission-message: You feel a strong force denying you.

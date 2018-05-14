@@ -12,15 +12,15 @@ commands:
   player:
     description: Check for a Player's Information
     usage: /player <first name> <last name>
-    permissions: rp.player
+    permissions: rp.gm.player
     permission-message: Oh silly mortal, that's not for you
   toggle_debug:
     description: Toggles Debug State
     usage: /toggle_debug
-    permissions: rp.toggle.debug
+    permissions: rp.admin.debug
     permission-message: A Server Operator command.
   rp:
     description: admin command
     usage: /rp <args>
-    permissions: rp.admin
+    permissions: rp.admin.rp
     permission-message: A Server Operator command.
