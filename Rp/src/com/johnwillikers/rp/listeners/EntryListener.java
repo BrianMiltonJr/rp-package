@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
@@ -16,7 +17,7 @@ import com.johnwillikers.rp.enums.Codes;
 
 public class EntryListener implements Listener{
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onPlayerJoin(PlayerJoinEvent e){
 		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
 			String query = "SELECT * FROM players WHERE uuid='" + e.getPlayer().getUniqueId().toString() + "';";
@@ -39,6 +40,7 @@ public class EntryListener implements Listener{
 									try {
 									if(rs.next()) {
 										String[] player = {rs.getString(1), rs.getString(2)};
+										rs.close();
 										Core.debug(Core.name, "EntryListener.onPlayerJoin", "Attempting to update " + e.getPlayer().getDisplayName() + "'s PlayerBase Entry [MySql]");
 										Core.log(Core.name, Codes.ENTRYLISTENER.toString(), player[0] + " " + player[1] + " just joined, attempting to update them in the PlayerBase [MySQL]");
 										String query = "UPDATE players SET last_ip = '" + e.getPlayer().getAddress().toString() + "', player_name = '" + e.getPlayer().getDisplayName() + "' WHERE uuid='" + e.getPlayer().getUniqueId().toString() + "';";
