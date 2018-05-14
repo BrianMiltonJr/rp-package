@@ -26,7 +26,6 @@ public class Confirmation extends StringPrompt{
 		ip.substring(0, ip.length()-6);
 
 		if(s.equalsIgnoreCase("yes")){
-			//TODO Check to use Json or Mysql Data Methods
 			if(Core.dataMethod.equalsIgnoreCase("mysql")) {
 				Core.log(Core.name, Codes.PLAYERBASE.toString(), "Attempting to Create new Player " + player.getDisplayName() + " as UUID " + player.getUniqueId().toString() + " within PlayerBase.");
 				String query = "INSERT INTO players ( uuid, first, last, player_name, gender, creation_ip, last_ip, created_at, updated_at ) "
