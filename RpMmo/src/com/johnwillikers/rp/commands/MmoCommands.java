@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import com.johnwillikers.rp.DbHandler;
 import com.johnwillikers.rp.Mmo;
+import com.johnwillikers.rp.MmoFormulas;
 import com.johnwillikers.rp.MySqlCallback;
 import com.johnwillikers.rp.ToonBaseLocal;
 import com.johnwillikers.rp.Weapon;
@@ -62,36 +63,12 @@ public class MmoCommands implements CommandExecutor {
 								rs.close();
 								JSONObject toonData = ToonBaseLocal.readToon(uuid);
 								int oldLevel = toonData.getInt("level");
-								int level = oldLevel;
 								int oldXp = toonData.getInt("xp");
-								int xp = oldXp;
-								xp = xp + Integer.valueOf(finalArgs[3]);
-								if(level<=5) {
-									if(xp % 500 == 0) {
-										level = level + (xp/500);
-										xp = 0;
-									}else {
-										int surplus = xp % 500;
-										int levelXp = xp - surplus;
-										level = level + (levelXp/500);
-										xp = surplus;
-									}
-								}
-								if(level>5 && level <=60) {
-									if(xp % 1000 == 0) {
-										level = level + (xp/1000);
-										xp = 0;
-									}else {
-										int surplus = xp % 1000;
-										int levelXp = xp - surplus;
-										level = level + (levelXp/1000);
-										xp = surplus;
-									}
-								}
+								int[] newLevelXp = MmoFormulas.formulateLevelUp(oldXp, oldLevel, Integer.valueOf(finalArgs[3]));
 								player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " used to be level " + oldLevel + " with their xp at " + oldXp + ".");
-								player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " is now level " + level + " with their new xp at " + xp + ".");
-								toonData.put("xp", xp);
-								toonData.put("level", level);
+								player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " is now level " + newLevelXp[0] + " with their new xp at " + newLevelXp[1] + ".");
+								toonData.put("xp", newLevelXp[1]);
+								toonData.put("level", newLevelXp[0]);
 								ToonBaseLocal.updateToon(toonData, uuid);
 							}else {
 								player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " does not exist.");
@@ -192,6 +169,7 @@ public class MmoCommands implements CommandExecutor {
 															String skillsQuery = "INSERT INTO skills ( toon_id, sword, shield, axe, bow, light_armor, heavy_armor ) VALUES ( " + toonId + ", 0, 0, 0, 0, 0, 0 );";
 															DbHandler.executeUpdate(statsQuery, Mmo.name);
 															DbHandler.executeUpdate(skillsQuery, Mmo.name);
+															ToonBaseLocal.storeToon(id, player.getUniqueId().toString());
 														}
 													} catch (SQLException e) {
 														e.printStackTrace();
