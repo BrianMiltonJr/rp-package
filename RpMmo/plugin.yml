@@ -26,7 +26,7 @@ commands:
     permissions: rp.mmo.character
     permission-message: Contact a Server Operator.
   level:
-    description: Lets you level either a skill or stat
-    usage: /level [skill/stat] [name] [amount]
+    description: Open the Level Gui for either your Stats or Skills
+    usage: /level skill or /level stat
     permissions: rp.mmo.level
     permission-message: Contact a Server Operator.
