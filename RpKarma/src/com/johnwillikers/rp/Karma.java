@@ -5,6 +5,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import com.johnwillikers.rp.commands.KarmaCommands;
 import com.johnwillikers.rp.enums.Codes;
 
+import net.md_5.bungee.api.ChatColor;
+
 
 public class Karma extends JavaPlugin{
 	
@@ -23,9 +25,10 @@ public class Karma extends JavaPlugin{
 	public void onEnable(){
 		plugin = this;
 		Core.dependables[1] = 1;
-		Core.log(Core.name, Codes.DEPENDENCY.toString(), "Rp Karma has been recognized. Allowing Rp Karma to use Rp Core.");
+		Core.log(Core.name, Codes.DEPENDENCY.toString(), name + ChatColor.WHITE + " has been recognized. Allowing " + name + ChatColor.WHITE + " to use Rp Core.");
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization");
 		KarmaBase.createKarmaBaseDir();
+		DbHandler.createTables();
 		Core.log(name, Codes.STARTUP.toString(), "Pre-Initialization Completed.");
 		Core.log(name, Codes.STARTUP.toString(), "Initialization");
 		Core.log(name, Codes.COMMANDS.toString(), "Registering Commands");
@@ -34,6 +37,7 @@ public class Karma extends JavaPlugin{
 		this.getCommand("karma").setExecutor(new KarmaCommands(this));
 		Core.log(name, Codes.STARTUP.toString(), "Starting up Timers");
 		Core.log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
+		Core.isInit[2] = true;
 	}
 	
 	@Override
