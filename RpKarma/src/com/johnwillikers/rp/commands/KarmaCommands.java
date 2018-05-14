@@ -30,6 +30,7 @@ public class KarmaCommands implements CommandExecutor{
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
 		final Player player = (Player) sender;
+		final String[] finalArgs = args;
 		if(cmd.getName().equalsIgnoreCase("0e812e08h02v8he0182vhe1")){
 			String query = "SELECT id FROM players WHERE uuid='" + player.getUniqueId().toString() + "';";
 			DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/0e812e08h02v8he0182vhe1)", new MySqlCallback() {
@@ -40,7 +41,7 @@ public class KarmaCommands implements CommandExecutor{
 						if(rs.next()) {
 							final int id = rs.getInt(1);
 							rs.close();
-							String query = "INSERT INTO karma ( player_id, karma) VALUES ( " + id + ", 0 );";
+							String query = "INSERT INTO karma ( player_id, karma ) VALUES ( " + id + ", 0 );";
 							DbHandler.executeUpdate(query, Karma.name);
 						}
 					} catch (SQLException e) {
@@ -105,84 +106,153 @@ public class KarmaCommands implements CommandExecutor{
 				return true;
 			}
 		}else if(cmd.getName().equalsIgnoreCase("karma")){
-			if(!(args.length <= 1)){
-				if(Core.dataMethod.equalsIgnoreCase("mysql")) {
+			if((args.length == 2 && !args[0].equalsIgnoreCase("report"))){					
+				String query = "SELECT id FROM players WHERE first LIKE '" + args[0] + "' AND last LIKE '" + args[1] + "';";
+				final String playerName = args[0] + " " + args[1];
 					
-					String query = "SELECT id FROM players WHERE first LIKE '" + args[0] + "' AND last LIKE '" + args[1] + "';";
-					final String playerName = args[0] + " " + args[1];
-					
-					DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/karma)", new MySqlCallback() {
+				DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/karma)", new MySqlCallback() {
 
+					@Override
+					public void onQueryDone(ResultSet rs) {
+						try {
+							if(rs.next()) {
+								final int id =  rs.getInt(1);
+								rs.close();
+								String query = "SELECT karma FROM karma WHERE player_id=" + id + ";";
+								DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/karma)", new MySqlCallback() {
+
+									@Override
+									public void onQueryDone(ResultSet rs) {
+										try {
+											if(rs.next()) {
+												final int karma = rs.getInt(1);
+												rs.close();
+												String query = "SELECT id FROM reports WHERE player_id=" + id + ";";
+												DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/karma)", new MySqlCallback() {
+
+													@Override
+													public void onQueryDone(ResultSet rs) {
+															
+														String[] reportIds = {"derp"};
+														try {
+															for(int i=0;rs.next();i++) {
+																reportIds[i] = rs.getString(1);
+															}
+															rs.close();
+															player.sendMessage(KarmaLogic.buildLookUpMessage(karma, playerName, reportIds));
+														} catch (SQLException e) {
+																e.printStackTrace();
+														}
+													}				
+												});
+											}
+										} catch (SQLException e) {
+											e.printStackTrace();
+										}		
+									}		
+								});
+							}else {
+								player.sendMessage(args[0] + " " + args[1] + " does not exist.");;
+							}
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}	
+				});
+				return true;
+			}
+			if(args[0].equalsIgnoreCase("report")) {
+				String query = "SELECT * FROM reports WHERE id=" + args[1] + ";";
+				DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand (/karma report)", new MySqlCallback() {
+
+					@Override
+					public void onQueryDone(ResultSet rs) {
+						try {
+							if(rs.next()) {
+								final String[] reportData = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)};
+								rs.close();
+								KarmaLogic.sendReportMessage(reportData, player);
+							}else {
+								player.sendMessage("Report " + args[1] + " does not exist.");
+							}
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+					
+				});
+				return true;
+			}
+		}else if(cmd.getName().equalsIgnoreCase("gamemaster")) {
+			if(args[0].equalsIgnoreCase("add")) {
+				if(args.length==5) {
+					String query = "SELECT uuid FROM players WHERE first LIKE '" + args[1] + "' AND last LIKE '" + args[2] + "';";
+					DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand (/gamemaster add)", new MySqlCallback() {
+	
 						@Override
 						public void onQueryDone(ResultSet rs) {
 							try {
 								if(rs.next()) {
-									final int id =  rs.getInt(1);
+									final String uuid = rs.getString(1);
 									rs.close();
-									String query = "SELECT karma FROM karma WHERE player_id=" + id + ";";
-									DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/karma)", new MySqlCallback() {
+									String query = "SELECT * FROM gamemasters WHERE uuid='" + uuid +"';";
+									DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand (/gamemaster add)", new MySqlCallback() {
 
 										@Override
 										public void onQueryDone(ResultSet rs) {
 											try {
-												if(rs.next()) {
-													final int karma = rs.getInt(1);
+												if(!rs.next()) {
 													rs.close();
-													String query = "SELECT id FROM reports WHERE player_id=" + id + ";";
-													DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand(/karma)", new MySqlCallback() {
-
-														@SuppressWarnings("null")
-														@Override
-														public void onQueryDone(ResultSet rs) {
-															
-															String[] reportIds = null;
-															try {
-																for(int i=0;rs.next();i++) {
-																	reportIds[i] = rs.getString(1);
-																}
-																rs.close();
-															} catch (SQLException e) {
-																// TODO Auto-generated catch block
-																e.printStackTrace();
-															}
-															KarmaLogic.buildLookUpMessage(karma, playerName, reportIds);
-														}
-														
-													});
+													String query = "INSERT INTO gamemasters ( uuid, name ) VALUES ( '" + uuid + "', '" + finalArgs[3] + " " + finalArgs[4] + "' );";
+													DbHandler.executeUpdate(query, Karma.name);
+													player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " has been made a Gamemaster named " + finalArgs[3] + " " + finalArgs[4]);
+												}else {
+													player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " is already a GameMaster");
 												}
 											} catch (SQLException e) {
-												// TODO Auto-generated catch block
 												e.printStackTrace();
 											}
-											
 										}
-										
-									});
+									});	
 								}else {
-									player.sendMessage(args[0] + " " + args[1] + " does not exist.");;
+									player.sendMessage(finalArgs[1] + " " + finalArgs[1] + " doesn't exist.");
 								}
 							} catch (SQLException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
 						}
 						
 					});
-					
-				}else {
-					/* Deprecated Json Code
-					String[] payload = PlayerBase.checkMasteFile(args[0] + "_" + args[1]);
-					if(Integer.valueOf(payload[0]) == 1){
-						if(KarmaBase.exists(payload[1])){
-							//JSONObject kfile = KarmaBase.getKarmaInfo(payload[1]);
-							String msg = KarmaLogic.lookUp(payload[1]);
-							player.sendMessage(ChatColor.GOLD + "Name: " + args[0] + " " + args[1] + "\n" + msg);
-						}else{
-							player.sendMessage("Are you sure " + args[0] + " " + args[1] + " is spelled correctly?");
-						}
-					}*/
+					return true;
 				}
-				return true;
+			}
+			
+			if(args[0].equalsIgnoreCase("remove")) {
+				if(args.length==3) {
+					String query = "SELECT * FROM gamemasters WHERE name='" + args[1] + " " + args[2] +"';";
+					DbHandler.executeQuery(Karma.plugin, query, Karma.name, "KarmaCommands.onCommand (/gamemaster remove)", new MySqlCallback() {
+	
+						@Override
+						public void onQueryDone(ResultSet rs) {
+							try {
+								if(rs.next()) {
+									String query = "DELETE FROM gamemasters WHERE id=" + rs.getInt(1) + ";";
+									rs.close();
+									DbHandler.executeUpdate(query, Karma.name);
+									player.sendMessage(finalArgs[1] + " " + finalArgs[2] + " is no longer a Game Master.");
+								}else {
+									player.sendMessage("No Game Master named " + finalArgs[1] + " " + finalArgs[2] + " exists.");
+								}
+							} catch (SQLException e) {
+								e.printStackTrace();
+							}
+						}
+						
+					});
+					return true;
+				}
 			}
 		}
 		return false;
