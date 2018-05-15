@@ -11,6 +11,7 @@ import com.johnwillikers.rp.ToonBaseLocal;
 import net.minecraft.server.v1_12_R1.Material;
 
 public class MmoInventoryListener implements Listener {
+	@SuppressWarnings("unlikely-arg-type")
 	@EventHandler
     public void inventoryClick(InventoryClickEvent e){
 		Player player = (Player) e.getWhoClicked();
