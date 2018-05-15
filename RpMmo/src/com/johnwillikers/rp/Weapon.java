@@ -10,11 +10,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.johnwillikers.rp.callbacks.MySqlCallback;
+import com.johnwillikers.rp.enums.Codes;
 
 public class Weapon {
 
-	public Weapon(String type, int id, Player player) {
-		String query = "SELECT type, material, name, strength, agility, dexterity FROM " + type + " WHERE id=" + id + ";";
+	public Weapon(String table, int id, Player player) {
+		String query = "SELECT type, material, name, strength, agility, dexterity FROM " + table + " WHERE id=" + id + ";";
 		DbHandler.executeQuery(Mmo.plugin, query, Mmo.name, "Weapon.createWeapon", new MySqlCallback() {
 
 			@Override
@@ -24,6 +25,9 @@ public class Weapon {
 						String[] data = {rs.getString(3), rs.getString(4), rs.getString(5), rs.getString(6)};
 						String[] type = {rs.getString(1), rs.getString(2)};
 						rs.close();
+						Material material = resolveMaterial(type);
+						Core.debug(Mmo.name, Codes.DEBUG.toString() + "Weapon.Constructor", "Weapon Material = " + material.toString());
+						Core.debug(Mmo.name, Codes.DEBUG.toString() + "Weapon.Constructor", "Came to this conclusion cause type = " + type[0] + " " + type[1]);
 						ItemStack weapon = new ItemStack(resolveMaterial(type));
 						ItemMeta weaponMeta = weapon.getItemMeta();
 						weaponMeta.setDisplayName(data[0]);
@@ -64,13 +68,13 @@ public class Weapon {
 		if(type[0].equalsIgnoreCase("axe")) {
 			switch(type[1]){
 				case "wood":
-					return Material.WOOD_SWORD;
+					return Material.WOOD_AXE;
 				case "iron":
-					return Material.IRON_SWORD;
+					return Material.IRON_AXE;
 				case "gold":
-					return Material.GOLD_SWORD;
+					return Material.GOLD_AXE;
 				case "diamond":
-					return Material.DIAMOND_SWORD;
+					return Material.DIAMOND_AXE;
 				default:
 					return Material.STICK;
 			}
@@ -78,13 +82,13 @@ public class Weapon {
 		if(type[0].equalsIgnoreCase("bow")) {
 			switch(type[1]){
 				case "wood":
-					return Material.WOOD_SWORD;
+					return Material.WOOD_AXE;
 				case "iron":
-					return Material.IRON_SWORD;
+					return Material.IRON_AXE;
 				case "gold":
-					return Material.GOLD_SWORD;
+					return Material.GOLD_AXE;
 				case "diamond":
-					return Material.DIAMOND_SWORD;
+					return Material.DIAMOND_AXE;
 				default:
 					return Material.STICK;
 			}
