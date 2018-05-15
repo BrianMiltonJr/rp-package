@@ -120,6 +120,18 @@ public class MmoCommands implements CommandExecutor {
 				}
 				return true;
 			}
+			
+			if(args[0].equalsIgnoreCase("create")) {
+				String name = "";
+				for(int i=6; i<args.length; i++) {
+					name = name + " " + args[i];
+				}
+				name = name.substring(1);
+				String query = "INSERT INTO " + args[1] + "s ( type, material, strength, agility, dexterity, name ) VALUE ( '" + args[1] + "', '" + args[2] + "', " + args[3] + ", " + args[4] + ", " + args[5] + ", '" 
+						+ name + "' );";
+				DbHandler.executeUpdate(query, Mmo.name);
+				return true;
+			}
 		}else if(cmd.getName().equalsIgnoreCase("character")) {
 			int[] toonData = ToonBaseLocal.getToonDataIntArray(ToonBaseLocal.readToon(player.getUniqueId().toString()));
 			//TODO add a way to figure how to play ' in plural cases
