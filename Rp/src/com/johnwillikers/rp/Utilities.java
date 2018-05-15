@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.lang.reflect.Field;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -152,5 +153,31 @@ public class Utilities {
         iMeta.setLore(desc);
         i.setItemMeta(iMeta);
         return i;
+    }
+	
+	@SuppressWarnings("rawtypes")
+	public static Object getPrivateField(String fieldName, Class clazz, Object object)
+    {
+        Field field;
+        Object o = null;
+
+        try
+        {
+            field = clazz.getDeclaredField(fieldName);
+
+            field.setAccessible(true);
+
+            o = field.get(object);
+        }
+        catch(NoSuchFieldException e)
+        {
+            e.printStackTrace();
+        }
+        catch(IllegalAccessException e)
+        {
+            e.printStackTrace();
+        }
+
+        return o;
     }
 }

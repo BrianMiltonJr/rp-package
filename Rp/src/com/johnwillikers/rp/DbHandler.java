@@ -9,6 +9,7 @@ import java.sql.Statement;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
+import com.johnwillikers.rp.callbacks.MySqlCallback;
 import com.johnwillikers.rp.enums.Codes;
 
 import net.md_5.bungee.api.ChatColor;

@@ -3,7 +3,7 @@ package com.johnwillikers.rp.listeners;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -11,8 +11,8 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.DbHandler;
-import com.johnwillikers.rp.MySqlCallback;
 import com.johnwillikers.rp.PlayerBase;
+import com.johnwillikers.rp.callbacks.MySqlCallback;
 import com.johnwillikers.rp.enums.Codes;
 
 public class EntryListener implements Listener{
@@ -21,6 +21,8 @@ public class EntryListener implements Listener{
 	public void onPlayerJoin(PlayerJoinEvent e){
 		if(Core.dataMethod.equalsIgnoreCase("mysql")) {
 			String query = "SELECT * FROM players WHERE uuid='" + e.getPlayer().getUniqueId().toString() + "';";
+			@SuppressWarnings("unused")
+			final Player p = e.getPlayer();
 			DbHandler.executeQuery(Core.plugin, query, Core.name, "EntryListener.onPlayerJoinEvent", new MySqlCallback() {
 
 				@Override
@@ -48,6 +50,31 @@ public class EntryListener implements Listener{
 										Core.log(Core.name, Codes.ENTRYLISTENER.toString(), player[0] + " " + player[1] + " has been updated in the PlayerBase [MySql]");
 										Core.debug(Core.name, "EntryListener.onPlayerJoin", "PlayerBase Entry successfully updated. [MySql]");
 										e.getPlayer().setDisplayName(player[0] + " " + player[1]);
+										e.getPlayer().setPlayerListName(player[0] + " " + player[1]);
+										
+										/*Broken NMS Code left for later reference
+										 * for(Player online : Bukkit.getOnlinePlayers()) {
+											if(!(online.equals(p))) {
+												PacketPlayOutEntityDestroy despawn = new PacketPlayOutEntityDestroy(p.getEntityId());
+												PacketPlayOutNamedEntitySpawn spawn = new PacketPlayOutNamedEntitySpawn(((CraftPlayer) p).getHandle());
+												try {
+													EntityPlayer ep = ((CraftPlayer)p).getHandle();
+													GameProfile gp = ep.getProfile();
+													PropertyMap pm = gp.getProperties();
+													Property property = pm.get("textures").iterator().next();
+													GameProfile gameProfile = new GameProfile(UUID.randomUUID(), player[0] + " " + player[1]);
+													PropertyMap newPm = gameProfile.getProperties();
+													newPm.put("textures", property);
+													Field b = spawn.getClass().getDeclaredField("b");
+													b.setAccessible(true);
+													b.set(spawn, gameProfile.getId());
+												}catch(Exception e) {
+													e.printStackTrace();
+												}
+												((CraftPlayer) online).getHandle().playerConnection.sendPacket(despawn);
+												((CraftPlayer) online).getHandle().playerConnection.sendPacket(spawn);
+											}
+										}*/
 									}
 									}catch(SQLException e) {
 										e.printStackTrace();

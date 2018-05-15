@@ -13,9 +13,9 @@ import org.bukkit.entity.Player;
 
 import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.DbHandler;
-import com.johnwillikers.rp.MySqlCallback;
 import com.johnwillikers.rp.PlayerBase;
 import com.johnwillikers.rp.Utilities;
+import com.johnwillikers.rp.callbacks.MySqlCallback;
 import com.johnwillikers.rp.conversations.EntryPrompt;
 import com.johnwillikers.rp.enums.Codes;
 

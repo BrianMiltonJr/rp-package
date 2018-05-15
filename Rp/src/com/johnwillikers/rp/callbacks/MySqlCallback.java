@@ -1,4 +1,4 @@
-package com.johnwillikers.rp;
+package com.johnwillikers.rp.callbacks;
 
 import java.sql.ResultSet;
 
