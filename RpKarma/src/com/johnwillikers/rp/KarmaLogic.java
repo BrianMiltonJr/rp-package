@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import com.johnwillikers.rp.enums.Codes;
+import com.johnwillikers.rp.callbacks.MySqlCallback;
 
 import net.md_5.bungee.api.ChatColor;
 

@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.DbHandler;
 import com.johnwillikers.rp.Karma;
-import com.johnwillikers.rp.MySqlCallback;
+import com.johnwillikers.rp.callbacks.MySqlCallback;
 import com.johnwillikers.rp.Utilities;
 
 public class NegateConfirmPrompt extends StringPrompt{

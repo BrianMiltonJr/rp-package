@@ -14,7 +14,7 @@ import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.DbHandler;
 import com.johnwillikers.rp.Karma;
 import com.johnwillikers.rp.KarmaLogic;
-import com.johnwillikers.rp.MySqlCallback;
+import com.johnwillikers.rp.callbacks.MySqlCallback;
 import com.johnwillikers.rp.conversations.NegateConfirmPrompt;
 import com.johnwillikers.rp.enums.Codes;
 
