@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.johnwillikers.rp.callbacks.MySqlCallback;
+
 public class Weapon {
 
 	public Weapon(String type, int id, Player player) {

@@ -8,10 +8,15 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collection;
 
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.json.JSONObject;
 
 import com.johnwillikers.rp.enums.Codes;
+import com.johnwillikers.rp.callbacks.MySqlCallback;
 
 public class ToonBaseLocal {
 	
@@ -172,5 +177,36 @@ public class ToonBaseLocal {
 			dir.mkdirs();
 			Core.log(Mmo.name, Codes.FIRST_LAUNCH.toString(), "Created " + dir.toString());
 		}
+	}
+	
+	public static void registerOnlinePlayersToLocalDb(final Collection<? extends Player> players, Plugin plugin) {
+		Bukkit.getScheduler().runTaskAsynchronously(plugin, new Runnable() {
+
+			@Override
+			public void run() {
+				for(final Player player : players) {
+					String query = "SELECT id FROM players WHERE uuid='" + player.getUniqueId().toString() +"';";
+
+					DbHandler.executeQuery(Mmo.plugin, query, Mmo.name, "ToonBaseLocal.registerOnlinePlayersToLocalDb", new MySqlCallback() {
+
+						@Override
+						public void onQueryDone(ResultSet rs) {
+							try {
+								if(rs.next()) {
+									final int id = rs.getInt(1);
+									rs.close();
+									storeToon(id, player.getUniqueId().toString());
+									Core.log(Mmo.name, Codes.STARTUP.toString(), player.getDisplayName() + " has been stored in the local DB");
+								}
+							} catch (SQLException e) {
+								e.printStackTrace();
+							}
+						}
+						
+					});
+				}
+			}
+			
+		});
 	}
 }

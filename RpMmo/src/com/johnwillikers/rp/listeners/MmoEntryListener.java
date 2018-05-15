@@ -13,7 +13,7 @@ import org.json.JSONObject;
 
 import com.johnwillikers.rp.DbHandler;
 import com.johnwillikers.rp.Mmo;
-import com.johnwillikers.rp.MySqlCallback;
+import com.johnwillikers.rp.callbacks.MySqlCallback;
 import com.johnwillikers.rp.ToonBaseLocal;
 
 public class MmoEntryListener implements Listener {

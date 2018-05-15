@@ -7,7 +7,9 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.json.JSONObject;
 
 import com.johnwillikers.rp.Core;
+import com.johnwillikers.rp.NMSUtils.Type;
 import com.johnwillikers.rp.commands.MmoCommands;
+import com.johnwillikers.rp.entities.TestZombie;
 import com.johnwillikers.rp.enums.Codes;
 import com.johnwillikers.rp.listeners.DamageListener;
 import com.johnwillikers.rp.listeners.MmoEntryListener;
@@ -26,7 +28,7 @@ public class Mmo extends JavaPlugin{
 	/**
 	 * Rp_Mmo's dir
 	 */
-	public static String dir = Core.dir + "Mmo";
+	public static String dir = Core.dir + "Mmo/";
 	public ConversationFactory factory = new ConversationFactory(this);
 	
 	@Override
@@ -51,6 +53,9 @@ public class Mmo extends JavaPlugin{
 			getServer().getPluginManager().registerEvents(new DamageListener(), this);
 			getServer().getPluginManager().registerEvents(new MmoEntryListener(), this);
 			getServer().getPluginManager().registerEvents(new MmoInventoryListener(), this);
+			NMSUtils.registerEntity("test_zombie", Type.ZOMBIE, TestZombie.class, false);
+			Core.log(name, Codes.STARTUP.toString(), "Loading all online players into Live DB");
+			ToonBaseLocal.registerOnlinePlayersToLocalDb(Bukkit.getOnlinePlayers(), plugin);
 			Core.log(name, Codes.STARTUP.toString(), "Initialization Completed.");
 			Core.isInit[3] = true;
 		}
