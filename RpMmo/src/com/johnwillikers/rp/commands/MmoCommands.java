@@ -107,6 +107,53 @@ public class MmoCommands implements CommandExecutor {
 				}
 			}
 		}else if(cmd.getName().equalsIgnoreCase("item")) {
+			if(args.length==1) {
+				String query = "SELECT * FROM " + args[0] + "s;";
+				DbHandler.executeQuery(Mmo.plugin, query, Mmo.name, "MmoCommands.onCommand(/item {item_type})", new MySqlCallback() {
+
+					@Override
+					public void onQueryDone(ResultSet rs) {
+						try {
+							if(rs.next()) {
+								//Grabs the Size of the ResultSet
+								rs.last();
+								int size = rs.getRow();
+								Core.debug(Mmo.name, "MmoCommands.onCommand(/item {item_type})", "Size of ResultSet = " + size);
+								//Resets the Position of the ResultSet
+								rs.beforeFirst();
+								rs.next();
+								//Create a new MultiDimentsional String array
+								String[][] weapons = new String[size][2];
+								//Load the first result by hand
+								weapons[0][0] = rs.getString(1);
+								weapons[0][1] = rs.getString(4);
+								//Loop through the rest of the Result set and fill the rest of the Array
+								int i = 1;
+								while(rs.next()) {
+									weapons[i][0] = rs.getString(1);
+									weapons[i][1] = rs.getString(4);
+									i++;
+								}
+								//Close the Result Set
+								rs.close();
+								//Build the Message
+								String msg = args[0] + " Items:\n";
+								for(String[] weapon : weapons) {
+									msg = msg + "* " + weapon[1] + " - " + weapon[0] + "\n";
+								}
+								//Send the Msg to the player
+								player.sendMessage(msg);
+							}else {
+								player.sendMessage("There are no " + finalArgs[0] + " items, create some!");
+							}
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+					}
+					
+				});
+				return true;
+			}
 			if(args.length==2) {
 				if(args[0].equalsIgnoreCase("sword")) {
 					new Weapon("swords", Integer.valueOf(args[1]), player);
