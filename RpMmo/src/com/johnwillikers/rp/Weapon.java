@@ -80,18 +80,7 @@ public class Weapon {
 			}
 		}
 		if(type[0].equalsIgnoreCase("bow")) {
-			switch(type[1]){
-				case "wood":
-					return Material.WOOD_AXE;
-				case "iron":
-					return Material.IRON_AXE;
-				case "gold":
-					return Material.GOLD_AXE;
-				case "diamond":
-					return Material.DIAMOND_AXE;
-				default:
-					return Material.STICK;
-			}
+			return Material.BOW;
 		}
 		return Material.STICK;
 	}

@@ -10,6 +10,5 @@
 	<classpathentry kind="lib" path="G:/dependencies/java/mysql-connector-java-5.1.46.jar"/>
 	<classpathentry kind="lib" path="G:/dependencies/java/jsoup-1.11.3.jar" sourcepath="G:/dependencies/java/jsoup-1.11.3-sources.jar"/>
 	<classpathentry kind="lib" path="G:/dependencies/java/jsoup-1.11.3-sources.jar"/>
-	<classpathentry kind="lib" path="G:/dependencies/java/json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

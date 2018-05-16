@@ -12,6 +12,5 @@
 			<attribute name="javadoc_location" value="file:/C:/Brian/Server/doc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="G:/dependencies/java/json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
