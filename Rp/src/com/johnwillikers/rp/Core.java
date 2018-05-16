@@ -172,7 +172,7 @@ public class Core extends JavaPlugin{
 	            actionBar = new Actionbar_1_12_R1();
 	        }
 	}
-	
+	//TODO work on getting this going 
 	public void isCurrent() {
 		try {
             HttpURLConnection con = (HttpURLConnection) new URL(
