@@ -1,11 +1,15 @@
 package com.johnwillikers.rp;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Server;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.conversations.ConversationFactory;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import com.johnwillikers.rp.actionbar.Actionbar;
 import com.johnwillikers.rp.actionbar.Actionbar_1_12_R1;
 import com.johnwillikers.rp.commands.Commands;
@@ -142,6 +146,8 @@ public class Core extends JavaPlugin{
 		this.getCommand("rp").setExecutor(new Commands(this));
 		log(name, Codes.LISTENERS.toString(), "Registering Listeners");
 		getServer().getPluginManager().registerEvents(new EntryListener(), this);
+		log(name, Codes.STARTUP.toString(), "Checking if Rp_Core is up to date");
+		isCurrent();
 		log(name, Codes.STARTUP.toString(), "Initializtion Completed.");
 		isInit[0]=true;
 	}
@@ -165,5 +171,29 @@ public class Core extends JavaPlugin{
 	            //server is running 1.8-1.8.1 so we need to use the 1.8 R1 NMS class
 	            actionBar = new Actionbar_1_12_R1();
 	        }
+	}
+	
+	public void isCurrent() {
+		try {
+            HttpURLConnection con = (HttpURLConnection) new URL(
+                    "http://www.spigotmc.org/api/general.php").openConnection();
+            con.setDoOutput(true);
+            con.setRequestMethod("POST");
+            con.getOutputStream()
+                    .write(("key=98BE0FE67F88AB82B4C197FAF1DC3B69206EFDCC4D3B80FC83A00037510B99B4&resource=42348")
+                            .getBytes("UTF-8"));
+            String version = new BufferedReader(new InputStreamReader(
+                    con.getInputStream())).readLine();
+            debug(name, Codes.DEBUG.toString() + "Core.isCurrent", "Latest Version = " + version);
+            if (version.length() <= 7) {
+                if(!version.equalsIgnoreCase(this.getDescription().getVersion())) {
+                	log(Core.name, Codes.STARTUP.toString(), "The Rp_plugins are out of date. Grab the latest update at");
+                	log(Core.name, Codes.STARTUP.toString(), "https://www.spigotmc.org/resources/johns-rp-bundle.42348/");
+                }
+            }
+        } catch (Exception ex) {
+        	ex.printStackTrace();
+           log(name, Codes.ERROR.toString(), "Failed to check for a update on spigot.");
+        }
 	}
 }

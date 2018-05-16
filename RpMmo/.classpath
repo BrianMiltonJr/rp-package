@@ -14,5 +14,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="G:/Servers/Minecraft/Latest/plugins/rp_karma.jar"/>
 	<classpathentry kind="lib" path="G:/dependencies/java/mysql-connector-java-5.1.46.jar"/>
+	<classpathentry kind="lib" path="G:/dependencies/java/json.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

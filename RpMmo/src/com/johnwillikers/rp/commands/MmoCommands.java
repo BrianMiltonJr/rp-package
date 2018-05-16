@@ -14,10 +14,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.json.JSONObject;
 
+import com.johnwillikers.rp.Core;
 import com.johnwillikers.rp.DbHandler;
 import com.johnwillikers.rp.Mmo;
 import com.johnwillikers.rp.MmoFormulas;
 import com.johnwillikers.rp.callbacks.MySqlCallback;
+import com.johnwillikers.rp.enums.Codes;
 import com.johnwillikers.rp.ToonBaseLocal;
 import com.johnwillikers.rp.Utilities;
 import com.johnwillikers.rp.Weapon;
@@ -45,7 +47,7 @@ public class MmoCommands implements CommandExecutor {
 								@SuppressWarnings("unused")
 								final int id = rs.getInt(1);
 								rs.close();
-								//TODO Add Gui that shows player stats
+								//TODO Add Gui that shows gm a player's stats
 							}else {
 								player.sendMessage(finalArgs[0] + " " + finalArgs[1] + " does not exist.");
 							}
@@ -67,7 +69,6 @@ public class MmoCommands implements CommandExecutor {
 								if(rs.next()) {
 									final String uuid = rs.getString(1);
 									rs.close();
-									//TODO Fix this to actually check if the user is online before we try accessing them in the live DB
 									if(Bukkit.getServer().getPlayer(uuid).isOnline()) {
 										JSONObject toonData = ToonBaseLocal.readToon(uuid);
 										int oldLevel = toonData.getInt("level");
@@ -122,19 +123,38 @@ public class MmoCommands implements CommandExecutor {
 			}
 			
 			if(args[0].equalsIgnoreCase("create")) {
-				String name = "";
+				String a = "";
 				for(int i=6; i<args.length; i++) {
-					name = name + " " + args[i];
+					a = a + " " + args[i];
 				}
-				name = name.substring(1);
+				final String name = a.substring(1);
 				String query = "INSERT INTO " + args[1] + "s ( type, material, strength, agility, dexterity, name ) VALUE ( '" + args[1] + "', '" + args[2] + "', " + args[3] + ", " + args[4] + ", " + args[5] + ", '" 
 						+ name + "' );";
 				DbHandler.executeUpdate(query, Mmo.name);
+				String idQuery = "SELECT id FROM " + args[1] + "s WHERE name='" + name + "' AND strength=" + args[3] + ";";
+				DbHandler.executeQuery(Mmo.plugin, idQuery, Mmo.name, "MmoCommands.onCommand (/item create)", new MySqlCallback() {
+
+					@Override
+					public void onQueryDone(ResultSet rs) {
+						try {
+							if(rs.next()) {
+								int id = rs.getInt(1);
+								player.sendMessage("Your item was generated successfully. It's Id = " + id);
+							}else {
+								player.sendMessage("Item creation was not successful. Please check your command.");
+							}
+						} catch (SQLException e) {
+							//TODO Move this to the prior query
+							Core.log(Mmo.name, Codes.ERROR.toString(), "An item was not generated successfully.");
+							Core.log(Mmo.name, Codes.ERROR.toString(), "This was the command /item create " + args[1] + " " + args[2] + " " + args[3] + " " + args[4] + " " + args[5] + " " + name);
+						}
+					}
+					
+				});
 				return true;
 			}
 		}else if(cmd.getName().equalsIgnoreCase("character")) {
 			int[] toonData = ToonBaseLocal.getToonDataIntArray(ToonBaseLocal.readToon(player.getUniqueId().toString()));
-			//TODO add a way to figure how to play ' in plural cases
 			Inventory characterInv = Bukkit.getServer().createInventory(player, 18, Utilities.ownership(player.getDisplayName()) + " Character Sheet");
 			characterInv.addItem(Utilities.createGuiItem("Strength", new ArrayList<String>(Arrays.asList("Level " + String.valueOf(toonData[4]), "Affects Melee Damage")), Material.ANVIL));
 			characterInv.addItem(Utilities.createGuiItem("Agility", new ArrayList<String>(Arrays.asList("Level " + String.valueOf(toonData[5]), "Affects Ranged Damage")), Material.BOW));
